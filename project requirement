@@ -69,272 +69,358 @@ public class Main {
         app.delete("/product/:id", ProductController::deleteProduct);
     }
 }
-1xx Informational:
 
-These status codes indicate that the request has been received and understood and that processing is continuing.
-Examples:
+Git 
+ 
+•	What is Git? 
 
-100 Continue: The server has received the initial part of the request, and the client can continue with the request.
-101 Switching Protocols: The server is switching protocols according to the Upgrade header sent by the client.
-2xx Success:
+Is version control system that is used to track changes in the source code (source code mgt)
+•	Why do we use Git?
 
-These status codes indicate that the request was received, understood, and processed successfully.
-Examples:
+Tracking changes, source code mgt, allows multiple developers to work together, nonlinear dev through parallel branches.
 
-200 OK: The request was successful.
-201 Created: The request has been fulfilled, resulting in the creation of a new resource.
-204 No Content: The server successfully processed the request, but there is no content to send in the response.
-3xx Redirection:
+•	What is a commit? 
+Saves changes to local repo. Git needs to know explicitly what change is made. 
 
-These status codes indicate that further action needs to be taken by the client to complete the request.
-Examples:
+•	What is GitHub? 
+•	
+It’s a code hosting platform for version control and collaboration.
 
-300 Multiple Choices: The requested resource has multiple representations, each with its own specific location.
-301 Moved Permanently: The requested resource has been permanently moved to a new location.
-4xx Client Error:
+•	What does push do?
+Used to upload local repo to remote. 
 
-These status codes indicate that the client made a request that cannot be fulfilled, either due to client error or because the requested resource does not exist on the server.
-Examples:
+•	What does pull do? 
+Fetch/download content from remote and update local repo.
 
-400 Bad Request: The server cannot process the request due to a client error, such as malformed syntax.
-404 Not Found: The server cannot find the requested resource.
-5xx Server Error:
+•	What does clone do?
+Points to an existing repo and copy of that repo at another location. 
 
-These status codes indicate that the server encountered an unexpected condition that prevented it from fulfilling the request.
-Examples:
+•	What does branch do? 
+A pointer to a snapshot of changes 
 
-500 Internal Server Error: A generic error message indicating that something has gone wrong on the server.
-503 Service Unavailable: The server is currently unable to handle the request due to temporary overloading or maintenance of the server.
-These status codes are important for understanding the outcome of an HTTP request and are used by both clients and servers to communicate the result of the request.
+•	What does checkout do? 
+It tells Git which branch or commit you want your changes applied.
 
-Path Parameter:
-A path parameter is a parameterized part of a URL path segment that is used to identify a specific resource or endpoint. It is typically denoted by a placeholder within curly braces {} in the URL path. Path parameters are used to pass data values directly within the URL structure itself, rather than as part of the query string.
+•	What does merge do? 
 
-For example, in the URL /users/{id}, {id} is a path parameter that represents the unique identifier of a user. When a request is made to this URL with a specific value for the id parameter, the server can use that value to retrieve or manipulate the corresponding user resource.
+All changes in a featured branch are combined into a single commit to the master. branch.
 
-Example:
+•	What is a merge conflict? 
+An issue when Git unable to resolve differences in code b/n two commits.
 
-URL: /users/123
-Here, 123 is the value of the id path parameter.
-Query Parameter:
-A query parameter is a key-value pair appended to the end of a URL after a question mark ?. Query parameters are used to provide additional information or parameters to a request, such as filtering, sorting, or pagination parameters. Multiple query parameters can be included in a URL by separating them with ampersands &.
 
-For example, in the URL /search?q=apple&category=fruits, q and category are query parameters, and apple and fruits are their respective values. These parameters can be used by the server to perform a search operation and filter results based on the specified category.
 
-Example:
+ 	
 
-URL: /search?q=apple&category=fruits
-Here, q=apple and category=fruits are query parameters.
 
 
 
-Request Body:
+Java basics 
+ 
+•	What is compilation? 
 
-The request body is the part of an HTTP request that contains data or parameters sent by the client to the server. It typically follows the request headers and is separated from them by a blank line. The request body is used to send additional information to the server, such as form data, JSON or XML payloads, or file uploads.
-Response Body:
+The process of translating source code into byte code. Performed by java compiler (part of A JDK)
 
-The response body is the part of an HTTP response that contains the data or content sent by the server back to the client. It typically follows the response headers and is separated from them by a blank line. The response body contains the actual content requested by the client, such as HTML, JSON, XML, or binary data.
-Headers:
+•	What does it mean for Java to be strongly typed? 
 
-Headers are key-value pairs included in both HTTP requests and responses to provide additional information about the message. They consist of a header name followed by a colon and a value. Headers can convey various details such as the content type, content length, caching directives, authentication credentials, and more. HTTP headers are used by both clients and servers to communicate and negotiate parameters for the request and response.
-JSON (JavaScript Object Notation):
+The type of variable is checked at compile-time - once a variable is declared as a certain type it can not be used as if it were another. Also, java demands the declaration of every variable with a data type.
 
-JSON is a lightweight data-interchange format that is easy for humans to read and write and easy for machines to parse and generate. It is based on a subset of the JavaScript programming language and is often used to transmit structured data between a server and a client in web applications. JSON consists of key-value pairs enclosed in curly braces {}, with keys and string values separated by colons :. Arrays and nested objects are also supported in JSON.
-It is commonly used in HTTP requests and responses as a format for sending and receiving data, especially in RESTful APIs.
+•	What are primitive types? 
 
-Let's address each question:
+Basic data types that represent simple values 
 
-1. **What is REST?**
-   - REST stands for Representational State Transfer. It is an architectural style for designing networked applications, particularly 
-web services, that focuses on creating scalable, stateless, and standardized interfaces between systems. 
-RESTful systems typically use the HTTP protocol for communication and rely on a set of principles to define how resources are addressed and manipulated.
+•	What are the 8 primitive types in Java? 
+•	
+Byte   8 bit signed integer    Short  16 bit signed int       Int  32 bit signed int
+Long  64 bit      Float  32 bit floating point number  Double  64 bit floating point number
+Char  Unicode character    Boolean  true or false
 
-2. **Why do we use REST?**
-   - REST provides a set of architectural principles that promote scalability, simplicity, and reliability in web services. 
-By adhering to RESTful principles, developers can design APIs that are easy to understand, maintain, and extend. 
-RESTful APIs also benefit from widespread support and compatibility with existing web infrastructure and tools.
+•	What is a method? 
+A block of code that, when called, perform a specific action specified in it. It allows code reusability
+Helps to break a complex program into smaller chunks. Increases code readability.
 
-3. **What is a resource in REST?**
-   - In REST, a resource is an abstraction of an entity or object that can be accessed and manipulated by clients through 
-a unique identifier, typically represented by a URI (Uniform Resource Identifier). Resources can represent any concept or data entity,
-such as users, products, orders, or documents.
+•	What does ‘return’ do? 
+It sends the result of the method and serves as an exit to the method.
 
-4. **What do we need to do to make an endpoint RESTful?**
-   - To make an endpoint RESTful, it should adhere to the following principles:
-     - Use standard HTTP methods (GET, POST, PUT, DELETE) to perform CRUD operations on resources.
-     - Use meaningful and hierarchical URIs to represent resources.
-     - Use appropriate HTTP status codes to indicate the outcome of operations.
-     - Support content negotiation for handling different data formats (e.g., JSON, XML).
-     - Be stateless and allow clients to maintain session state on their end.
+•	What is a return type? 
+The type specified as return type in the method.  public int add will return integer.
 
-5. **What does it mean to have a uniform interface?**
-   - Having a uniform interface in REST means that the communication between clients and servers follows a standardized set of 
-conventions. This includes using standard HTTP methods, well-defined resource identifiers (URIs), consistent data formats
-(such as JSON or XML), and appropriate use of HTTP status codes. 
-A uniform interface promotes simplicity, scalability, and interoperability in RESTful systems.
+•	What does the return type ‘void’ mean? 
+The method is not expected to return anything.
 
-6. **What does it mean to be stateless?**
-   - Being stateless in the context of REST means that each request from a client to a server contains all the information necessary 
-for the server to understand and fulfill the request. The server does not maintain any client state between requests. 
-This simplifies server implementation, improves scalability, and enables better fault tolerance. Client state, if needed, 
+•	What is a method parameter? 
+Are variables specified in a method’s signature.
 
+•	What are the different boolean operators? 
+&& AND returns true if both are true otherwise false || LOGICAL OR   returns true if at least one is true (true || false) true ! NOT negates the value of its operand
+== EQUALS   !==     ^  EXCLUSIVE OR 
+•	What are Strings in Java? 
+Is                   a class  represents a sequence of characters. Strings in java are immutable (their value can’t be changed after they are created. String class provides methods like Length() charAt() substring() toLower and toUpper () .String pool  special memory area to store unique string literals. 
 
-To build a server using Javalin, you first need to set up your project and dependencies, then create an instance of the Javalin server, and finally define your endpoints. Here's a step-by-step guide:
 
-1. **Set Up Your Project**:
-   - Create a new Maven or Gradle project, or add Javalin as a dependency to your existing project.
-   - Add the Javalin dependency to your `pom.xml` (for Maven) or `build.gradle` (for Gradle) file:
+•	What is a stack trace? 
+          A report of active stack frames @ a particular point in the execution of a program.when an exception is thrown JVM generates a stack trace to help developers identify the source of the problem.
 
-   For Maven:
-   ```xml
-   <dependency>
-       <groupId>io.javalin</groupId>
-       <artifactId>javalin</artifactId>
-       <version>4.0.0</version> <!-- Replace with the latest version -->
-   </dependency>
-   ```
+•	What is the main method? What is its syntax? 
+The main method serves as entry point for a stand alone java application. When running a java program JVM looks for “Main” method to start the execution of the prgrm.
+Public static void main (string[] args) 
+Java architecture 
+ 
+•	What is the JDK? 
+Java dev kit –is a software dev kit includes tools , executables and binaries for dev, compiling, debugging and running applications.
 
-   For Gradle:
-   ```groovy
-   implementation 'io.javalin:javalin:4.0.0' // Replace with the latest version
-   ```
+•	What is the JRE? 
+Is an env that provides the necessary runtime support for executing. 
+•	What is the JVM?
+An abstract computing machine provides the runtime env for executing java bytecode,
+Interprets bytecode into java machine code . 
+•	What terminal command is used to compile a Java file? 
+ javac
+•	What is contained in stack memory? 
+Method specific local variables and method call infos  each time a method is called a new frame is created on the stack to store info related to that method call. Includes local variables, parameters and return address. LOCAL VARIABLES declared within the method are stored in stack(these variables are only accessible within the scope of this method)REFERENCE VARS if an object is created within a method, the reference var to that object is stored in the stack. But the actual object is stored in the heap. Primitive datatypes are also stored in stack. LIFO the last item stored in the method will be removed first when method call is completed.
 
-2. **Create an Instance of Javalin Server**:
-   - In your Java code, create a new instance of the Javalin server:
+•	What is contained in heap memory? 
+The region of computer’s memory used for dynamic memory allocation. Heap stores objects, arrays and other data structures created during the program execution.
 
-   ```java
-   import io.javalin.Javalin;
+•	What is the String Pool & does it belong to stack or heap memory? 
+is a Special area in heap to store collection of literal strings. For optimization 
 
-   public class Main {
-       public static void main(String[] args) {
-           Javalin app = Javalin.create().start(7000); // Starts the server on port 7000
-       }
-   }
-   ```
+What is garbage collection? 
+Objects that are no longer reachable that are removed periodically by JVM to free memory occupied by them.
+ 
 
-3. **Define Endpoints**:
-   - Define your endpoints by calling the `get()`, `post()`, `put()`, `delete()`, etc., methods on the Javalin app instance:
 
-   ```java
-   app.get("/", ctx -> ctx.result("Hello, Javalin!")); // Defines a GET endpoint at the root path
-   ```
 
-   This creates a simple endpoint that responds with "Hello, Javalin!" when accessed.
 
-   You can add more endpoints by chaining additional `get()`, `post()`, etc., methods as needed.
 
-Here's an example demonstrating how to create a simple Javalin server with an endpoint:
 
-```java
-import io.javalin.Javalin;
+OOP 
+ 
+•	What is OOP? 
+It’s a programming paradigm that organizes software design around the concept of physical objects.
 
-public class Main {
-    public static void main(String[] args) {
-        Javalin app = Javalin.create().start(7000);
-        
-        app.get("/", ctx -> ctx.result("Hello, Javalin!"));
-    }
-}
-```
+•	What are Objects? 
+Objects are instances of classes. Object is self-contained entity that has attributes (data) and bhvr(method).
 
-This code creates a Javalin server that listens on port 7000 and defines a single endpoint at the root path ("/") that responds with "Hello, Javalin!" when accessed via a GET request.
+•	What makes an Object different from a primitive type? 
+Objects are complex data types with attributes and methods while primitive data types are basic data types like storing single data types with no method and attributes.
 
-To create additional endpoints, you can simply add more `.get()`, `.post()`, etc., methods with the desired paths and handler functions.
+•	What is the relationship between a Class and an Object in Java? 
+Class is a blueprint of an object that defines properties and bhrvs common to all objects of that type. While an object is an instance of a class, created based on the blueprint (Class). 
 
+What are constructors? 
+Special methods applied to instantiate an object. They are called when an object is created.
 
-is maintained entirely on the client side.
+•	What is the default constructor? 
+Default constructor is a constructor provided by compiler if a class doesn’t explicitly define a constructor.
 
-In Javalin, the `Context` object represents the context of an HTTP request and response. It provides methods and properties that allow you to interact with the request and response details, such as headers, query parameters, request body, response status, and content.
+Control flow 
+ 
+•	What is an Array? 
+An array is a data structure that allows you to store multiple values of the same type in a single variable. Each element is accessed through index( an index starts from 0).
+ 
+•	How do I get an element of an array? 
 
-The `Context` object is typically passed as a parameter to handler functions defined for each endpoint, allowing you to access and manipulate the request and response within the scope of the handler function.
+int findIndex(int[],int target) {For (int  I = 0; I < arr.length; i++ { if (arr[i] == target) {return I;}} return -1;}
+Changeelement (int[] arr, int index , int newvalue) { arr[index] = newvalue;}
+removeElement (int[] arr, int index) { for (int I = index; I < arr.length – 1; ++i{ arr[i] = arr[I + 1];}
+AddElement Size, isEmpty,get, set, iterator, listIterator, add etc methods
 
-Here are some common uses of the `Context` object in Javalin:
+•	What are the different flow control statements in Java? 
+If-else  used for decision making. Executes block of code if certain condition is true other wise will execute the other block of code.
+Switch Statement provides a way to handle multiple conditions based on the value of an expression.
+While loop  repeatedly executes a block of code if the while condition is true
+Do- while similar to while but guarantees the execution of a block of code at least once even if the condition is false.
+Forloop  a concise loop structure iterating over a range of values/elements
+For-each-loop simplifies iterating over arrays or collections 
+Break statement used to exit loop or switch statement prematurely.
+Continue Statement skip the rest of the loop’s code and continues with the next iteration.
 
-1. **Accessing Request Information**:
-   - You can use methods like `path()`, `queryParam()`, `formParam()`, and `body()` to access information from the HTTP request, such as the request path, query parameters, form parameters, and request body.
+•	How is a for loop written in Java? 
+For (datatype element :arrayofcollection ) { code to execute} For (int I = 0; I < 10; i++) { (if I == 5) { }
+      
+Testing 
+ 
+•	What is JUnit? 
+JUnit is a unit testing open-source framework for the Java programming language. Java Developers use this framework to write and execute automated tests. In Java, there are test cases that have to be re-executed every time a new code is added. This is done to make sure that nothing in the code is broken. 
+
+•	What is a unit test? 
+
+Unit testing, as the name suggests, refers to the testing of small segments of code. Here, a unit indicates the smallest bit of code that can be fetched out of the system. This small bit can be a line of the code, a method, or a class. The smaller the chunk of code, the better it is, as smaller chunks will tend to run faster. And this provides a better insight into the code and its performance. 
+
+•	What are some of the annotations used in JUnit? 
+@before @after @beforeclass @afterclass @test @ignores 
+
+•	What is TDD? 
+In layman’s terms, Test Driven Development (TDD) is a software development practice that focuses on creating unit test cases before developing the actual code. It is an iterative approach combining programming, unit test creation, and refactoring.
+ 
+Exceptions 
+ 
+•	What are exceptions in Java? 
+
+When a program violates the semantic constraints of the Java programming language, the Java virtual machine signals this error to the program as an exception. An example of such a violation is an attempt to index outside the bounds of an array.
+
+•	How are errors different from exceptions? 
+
+An error is when something wrong or invalid happens in the code. It can cause a memory error, it is something that should never happen and can't be treated. Whereas an exception throws something when certain conditions are met in the code. It may not correspond to a real error.
+
+•	What is the difference between checked and unchecked exceptions? 
+
+A checked exception is caught at compile time whereas a runtime or unchecked exception is, as it states, at runtime. A checked exception must be handled either by re-throwing or with a try catch block, whereas an unchecked isn't required to be handled.
+
+•	What might cause a NullPointerException? 
+
+In Java, a NullPointerException occurs when a variable that is being accessed has not yet been assigned to an object, in other words, the variable is assigned as null.Therefore, a null pointer exception will occur when the code is pointing to something in memory that does not exist. scenarios where this exception could be invoked:
+•	Calling the instance method of a null object.
+•	Accessing or modifying the field of a null object.
+•	Taking the length of null as if it were an array.
+•	Accessing or modifying the slots of null as if it were an array.
+•	Throwing null as if it were a Throwable value.
+•	Is ArrayIndexOutOfBoundsException a runtime exception? 
+The ArrayIndexOutOfBoundsException is a runtime exception in Java that occurs when an array is accessed with an illegal index. The index is either negative or greater than or equal to the size of the array.
+
+•	Is FileNotFoundException a runtime exception? 
+FileNotFoundException is a checked exception in Java that occurs when an attempt to open a file denoted by a specified pathname fails.
+
+•	How do I find where an exception was thrown within the program? 
+To find out what line of code caused an exception in Java, you can use the stack trace of the exception. A stack trace is a list of method calls that were executed leading up to the exception.
+
+•	What does ‘throws’ do? 
+The throw statement throws a user-defined exception. Execution of the current function will stop (the statements after throw won't be executed), and control will be passed to the first catch block in the call stack. If no catch block exists among caller functions, the program will terminate.
+
+•	What does try/catch do? 
+A try block is the block of code (contains a set of statements) in which exceptions can occur; it's used to enclose the code that might throw an exception. The try block is always followed by a catch block, which handles the exception that occurs in the associated try block. A try block must be used within the method and it must be followed by a catch block(s) or finally block or both.
+The catch block catches and handles the try block exceptions by declaring the type of exception within the parameter. The catch block includes the code and it is executed if an exception inside the try block occurs. The catch block is where you handle the exceptions; so this block must be follow the try block.The declared exception in catch block must be the parent class exception ( i.e., Exception) or the generated exception type. However, the best approach is to declare the generated type of exception. In the Java language, you can use a try block without a catch block but you can’t use the catch block without a try block.
+•	Can I have multiple catch blocks? Multiple try blocks?  yes
+ A try block can be followed by one or more catch blocks.
+ 
+Java keywords & features 
+ 
+•	What do access modifiers do? 
+Access modifiers are keywords that can be used to control the visibility of fields, methods, and constructors in a class. The four access modifiers in Java are public, protected, default, and private.
+•	What are the 4 access modifiers? 
+Private: We can access the private modifier only within the same class and not from outside the class.
+•	Default: We can access the default modifier only within the same package and not from outside the package. And also, if we do not specify any access modifier it will automatically consider it as default.
+•	Protected: We can access the protected modifier within the same package and also from outside the package with the help of the child class. If we do not make the child class, we cannot access it from outside the package. So inheritance is a must for accessing it from outside the package.
+•	Public: We can access the public modifier from anywhere. We can access public modifiers from within the class as well as from outside the class and also within the package and outside the package.
+
+•	What are the non-access modifiers in Java? 
+
+Static, final, abstract, synchronized, volatile, transient, native.
+
+•	What does Static do? 
+ Static keyword is mainly used for memory management. It can be used with variables, methods, blocks and nested classes. It is a keyword which is used to share the same variable or method of a given class. Basically, static is used for a constant variable or a method that is same for every instance of a class.
+•	What does final do? 
+the final keyword is used to denote constants. It can be used with variables, methods, and classes. Once any entity (variable, method or class) is declared final, it can be assigned only once.
+
+•	What is Scope in programming languages? 
+Scope in programming language means the region or context in a program where a particular identifier (variable, function etc) is valid and can be accessed.
+
+•	What are the different scopes in Java? 
+Class Level Scope These variables must be declared inside class (outside any function). They can be directly accessed anywhere in class.
+Variables declared inside a method have method level scope and can’t be accessed outside the method. A variable declared inside pair of brackets “{” and “}” in a method has scope within the brackets only.
+
+
+
+ 
+Maven 
+ 
+•	What is Maven? 
+Apache Maven is a popular build tool, that takes your project's Java source code, compiles it, tests it and converts it into an executable Java program: either a . jar or a . war file.
+•	What file should be changed to add new Maven dependencies?  Pom xml
+•	What is the Maven lifecycle? 
+Maven is built around the concept of a build lifecycle, which defines the order of execution for goals.The default Maven lifecycle consists of 8 major phases: Validate, Compile, Test, Package, Integration Test, Verify, Install, and Deploy.
+
+•	How do I find & add a new dependency to Maven? 
+Open your POM in the editor.
+Press Alt Insert to open the Generate context menu.
+From the context menu, select Dependency.
+In the Maven Artifact Search tool window, in the search field, start typing the name of your dependency. In the list of results select the one you need and click Add.
+
+Advanced OOP 
+•	What are the 4 pillars of OOP?  
+•	Can you explain Inheritance?      Extends 
+ It is the mechanism in Java by which one class is allowed to inherit the features(fields and methods) of another class. In Java, Inheritance means creating new classes based on existing ones.
+•	Can you explain Polymorphism? 
+Polymorphism means "many forms", and it occurs when we have many classes that are related to each other by inheritance. Like we specified in the previous chapter; Inheritance lets us inherit attributes and methods from another class. Polymorphism uses those methods to perform different tasks.
+It is useful for code reusability: reuse attributes and methods of an existing class when you create a new class.
+•	Can you explain Encapsulation? 
+Encapsulation is defined as the wrapping up of data under a single unit. It is the mechanism that binds together code and the data it manipulates. Another way to think about encapsulation is, that it is a protective shield that prevents the data from being accessed by the code outside this shield. 
+Technically in encapsulation, the variables or data of a class is hidden from any other class and can be accessed only through any member function of its own class in which it is declared.
+As in encapsulation, the data in a class is hidden from other classes using the data hiding concept which is achieved by making the members or methods of a class private, and the class is exposed to the end-user or the world without providing any details behind implementation using the abstraction concept, so it is also known as a combination of data-hiding and abstraction.
+Encapsulation can be achieved by Declaring all the variables in the class as private and writing public methods in the class to set and get the values of variables.
+It is more defined with the setter and getter method.
+
+•	Can you explain Abstraction? 
+is the process in which we only show essential details/functionality to the user. The non-essential implementation details are not displayed to the user. 
+
+•	What is the Object class in Java?
+Is the top most class (parent class for all the classes). Meaning all classes in Java are derived classes and their base class is the Object Class. 
+
+•	What methods does the Object class contain? 
+•	toString() Method
+•	This method obtains the object’s string representation, offering flexibility for customization. For instance, in a class such as “Office,” you have the option to adjust how the branch head with location appears when utilizing this method. The object itself determines its representation, proving valuable particularly during debugging. This functionality is part of the Object class methods in Java.
+•	hash code() Method
+•	A hash code is a numeric value generated by a specific method known as a hashing algorithm. In Java, every object possesses a distinct and unique hash code. This code is derived by applying the algorithm to the internal address of the object. It’s crucial to note that the hash code is not the real memory address; rather, it serves as a numerical representation of that address.
+•	equals() Method
+•	This method compares two objects and indicates whether they are equal or not. It is used to compare the value of the object on which the method is executed to the value of the object passed as a parameter.
+•	get() Method
+•	Java’s get() function, associated with objects, retrieves the value of a designated field represented by a Field object. If the field is of a primitive type, the procedure encapsulates the value in an object automatically. Additionally, the get() method serves to retrieve the runtime class object and gather metadata about the field, enhancing its utility.
+•	finalize() Method
+•	The garbage collector triggers the finalize() method when removing an object from memory, specifically when there are no remaining references to that object.
+•	Clone() Method
+•	In a subclass that implements the Cloneable Interface, it is expected to override the clone() method of the Object class. This method is utilized for creating a clone, essentially a duplicate of the object along with its member variable values, using the syntax aobj.clone(). If a class fails to implement the Cloneable interface, attempting this process results in a thrown CloneNotSupportedException.
+wait() Method
+By using this technique, the current thread is made to wait for a notification from another thread. Within the function, you must provide the time in milliseconds for which the thread will remain in this waiting state.
+notify() Method
+By using this technique, notifications are sent to a single thread at a time, waking it up while it is waiting for a certain item.
+notifyAll() Method
+•	This function awakens all threads that are currently waiting for an object and sends notifications to all threads at the same time.
+
+•	What are Generics in Java? 
+Generics means parameterized types. The idea is to allow type (Integer, String, … etc., and user-defined types) to be a parameter to methods, classes, and interfaces. Using Generics, it is possible to create classes that work with different data types. An entity such as class, interface, or method that operates on a parameterized type is a generic entity.
+
+•	What are interfaces in Java? 
+An interface is a completely "abstract class" that is used to group related methods with empty bodies. To access the interface methods, the interface must be "implemented" (kinda like inherited) by another class with the implements keyword (instead of extends). The body of the interface method is provided by the "implement" class:
+
+•	What does extending a class do? 
+The extends keyword extends a class (indicates that a class is inherited from another class).In Java, it is possible to inherit attributes and methods from one class to another. We group the "inheritance concept" into two categories:subclass (child) - the class that inherits from another class. superclass (parent) - the class being inherited from. To inherit from a class, use the extends keyword.
+•	What does implementing an interface do? 
+A class implements an interface if it declares the interface in its implements clause, and provides method bodies for all of the interface's methods. So one way to define an abstract data type in Java is as an interface, with its implementation as a class implementing that interface.
+
+•	What is the difference between runtime and compile time polymorphism? 
+the method executed is decided at compile time (method overloading) while the other is method overriding (is determined at run time)
+•	
+•	What is method overloading? 
+•	What is method overriding? 
+•	Can I extend multiple classes?  No
+•	Can I implement multiple interfaces? Yes
+
+•	How might access modifiers help us achieve Encapsulation? 
+Private  members marked as Private are accessible only within the same class. This ensures the internal implementation details of a class are hidden from external classes. If no access modifier(default) is implemented members are accessible within the same package. Protected are accessible from the same package or sub classes this allows access to certain members while restricting access to general public. Public access modifiers can be accessed from any where that helps for code reusability.
+
+•	How might interfaces help us achieve Abstraction? 
+
+Week 3 
+ 
+Collections 
+ 
+•	What are collections in Java? 
+•	What is the difference between a List and a Set? 
+The primary difference between list and set is that a list allows duplicate elements and maintains their order, while a set ensures element uniqueness without any guaranteed order. Since lists are ordered, position indexing is allowed in them. However, in unordered items like sets, positional indexing is not possible.
+
+•	What is the difference between a Set and a Map? 
+A set is a non-sequenced (no indexes) collection of distinct objects (no duplicates). The presence or not of an object is important. A map is a collection of key-value pairs. Each ordered pair contains a key and a value.
+
+•	What is the difference between a Stack and a Queue? 
+The primary difference between Stack and Queue Data Structures is that Stack follows LIFO while Queue follows FIFO data structure type. LIFO refers to Last In First Out. It means that when we put data in a Stack, it processes the last entry first. Conversely, FIFO refers to First In First Out.
+
+•	What is the difference between an ArrayList and LinkedList? 
+The main difference between ArrayList and LinkedList in Java is the underlying data structure they use and performance characteristics.ArrayList uses an array, which allows for fast random access but slow insertion and deletion. While LinkedList uses a doubly linked list, which allows for fast insertion and deletion but slow random access.
+
+•	Are maps part of the collection interface?  No
+
+•	What is a wrapper class? 
+
+Wrapper classes provide a way to use primitive data types (int, boolean, etc..) as objects.
 
-2. **Setting Response Details**:
-   - You can use methods like `status()`, `header()`, and `contentType()` to set details of the HTTP response, such as the status code, response headers, and content type.
-
-3. **Sending Response Content**:
-   - You can use methods like `result()`, `json()`, and `html()` to send content in the response body. For example, you can send plain text, JSON objects, HTML content, etc.
-
-4. **Handling Exceptions**:
-   - You can use the `Context` object to handle exceptions thrown within your handler functions. Javalin provides methods like `exception()` and `error()` to define exception handlers that can handle various types of exceptions and errors.
-
-5. **Accessing Session and Attributes**:
-   - Javalin supports session management and attribute storage. You can use methods like `sessionAttribute()`, `sessionAttributeMap()`, `attribute()`, and `attributes()` to access and manipulate session attributes and request attributes.
-
-Overall, the `Context` object in Javalin serves as a bridge between the incoming HTTP request and the outgoing HTTP response, allowing you to handle and process the request and generate an appropriate response. It provides a convenient and expressive API for working with HTTP requests and responses in your Javalin application.
-
-In Javalin, you can extract path parameters, access the request body, produce a response body, and set the response status code using the `Context` object provided in your handler functions. Here's how you can do each of these tasks:
-
-1. **Extracting Path Parameters**:
-   - Path parameters are variables embedded within the URI path. You can extract path parameters using the `pathParam()` method of the `Context` object. Here's an example:
-
-   ```java
-   app.get("/user/:id", ctx -> {
-       String userId = ctx.pathParam("id");
-       // Use the userId variable...
-   });
-   ```
-
-   In this example, `:id` is a path parameter in the URI `/user/:id`. The `pathParam("id")` method retrieves the value of the `id` parameter from the request URI.
-
-2. **Accessing the Request Body**:
-   - You can access the request body using the `body()` method of the `Context` object. Here's an example:
-
-   ```java
-   app.post("/user", ctx -> {
-       String requestBody = ctx.body();
-       // Process the request body...
-   });
-   ```
-
-   This example retrieves the request body as a string. If the body contains JSON data, you can parse it into an object using a JSON library like Jackson or Gson.
-
-3. **Producing a Response Body**:
-   - You can produce a response body using methods like `result()`, `json()`, and `html()` of the `Context` object. Here's an example:
-
-   ```java
-   app.get("/", ctx -> {
-       ctx.result("Hello, Javalin!");
-   });
-   ```
-
-   This example sets the response body to "Hello, Javalin!".
-
-4. **Producing a Response Status Code**:
-   - You can set the response status code using the `status()` method of the `Context` object. Here's an example:
-
-   ```java
-   app.get("/", ctx -> {
-       ctx.status(200); // Sets the response status code to 200 OK
-   });
-   ```
-
-   This example sets the response status code to 200 OK. You can specify any valid HTTP status code using this method.
-
-These are the basic operations you can perform using the `Context` object in Javalin to handle requests and produce responses.
-Let's clarify each term:
-
-1. **Sessions in HTTP**:
-   - Sessions in HTTP are a way to maintain stateful interactions between a client (such as a web browser) and a server across multiple requests. When a user visits a website, the server creates a unique session for that user, typically identified by a session ID. This session ID is often stored as a cookie on the client's browser and sent back to the server with each subsequent request, allowing the server to associate subsequent requests with the same session.
-
-2. **Cookies**:
-   - Cookies are small pieces of data stored on the client's browser by websites. They are used to track user activity, maintain session state, and store user preferences. Cookies are sent by the client to the server with each request, allowing the server to identify and personalize the user's experience.
-
-3. **Handlers**:
-   - Handlers in the context of web frameworks like Javalin or Express.js are functions that define how to respond to incoming HTTP requests. Each handler typically corresponds to a specific route or endpoint and is responsible for processing the request, executing the necessary logic, and generating an appropriate response.
-
-4. **Sessions (again)**:
-   - In the context of web applications, sessions refer to the stateful interactions between a client and a server over a period of time. Sessions typically involve the creation of a unique session ID for each user, which is used to maintain state information across multiple requests.
-
-5. **Session Management**:
-   - Session management refers to the process of creating, maintaining, and destroying sessions in a web application. This includes tasks such as generating session IDs, associating session data with users, storing session data securely, and handling session timeouts and expiration.
-
-6. **Authorization vs Authentication**:
-   - Authentication is the process of verifying the identity of a user, typically through credentials such as usernames and passwords. It answers the question, "Who are you?" Once authenticated, the user is granted access to resources or functionalities based on their permissions.
-   - Authorization, on the other hand, is the process of determining what actions or resources a user is allowed to access. It answers the question, "What are you allowed to do?" Authorization is based on the user's identity and permissions, which are typically managed through roles, groups, or access control lists (ACLs).
-
-In summary, sessions in HTTP are used to maintain stateful interactions between a client and a server, cookies are used to store data on the client's browser, handlers are functions that define how to respond to HTTP requests, session management involves creating and managing sessions in web applications, and authentication and authorization are processes related to verifying user identity and determining access rights, respectively.
