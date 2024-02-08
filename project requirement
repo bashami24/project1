@@ -107,6 +107,234 @@ Examples:
 503 Service Unavailable: The server is currently unable to handle the request due to temporary overloading or maintenance of the server.
 These status codes are important for understanding the outcome of an HTTP request and are used by both clients and servers to communicate the result of the request.
 
+Path Parameter:
+A path parameter is a parameterized part of a URL path segment that is used to identify a specific resource or endpoint. It is typically denoted by a placeholder within curly braces {} in the URL path. Path parameters are used to pass data values directly within the URL structure itself, rather than as part of the query string.
+
+For example, in the URL /users/{id}, {id} is a path parameter that represents the unique identifier of a user. When a request is made to this URL with a specific value for the id parameter, the server can use that value to retrieve or manipulate the corresponding user resource.
+
+Example:
+
+URL: /users/123
+Here, 123 is the value of the id path parameter.
+Query Parameter:
+A query parameter is a key-value pair appended to the end of a URL after a question mark ?. Query parameters are used to provide additional information or parameters to a request, such as filtering, sorting, or pagination parameters. Multiple query parameters can be included in a URL by separating them with ampersands &.
+
+For example, in the URL /search?q=apple&category=fruits, q and category are query parameters, and apple and fruits are their respective values. These parameters can be used by the server to perform a search operation and filter results based on the specified category.
+
+Example:
+
+URL: /search?q=apple&category=fruits
+Here, q=apple and category=fruits are query parameters.
 
 
 
+Request Body:
+
+The request body is the part of an HTTP request that contains data or parameters sent by the client to the server. It typically follows the request headers and is separated from them by a blank line. The request body is used to send additional information to the server, such as form data, JSON or XML payloads, or file uploads.
+Response Body:
+
+The response body is the part of an HTTP response that contains the data or content sent by the server back to the client. It typically follows the response headers and is separated from them by a blank line. The response body contains the actual content requested by the client, such as HTML, JSON, XML, or binary data.
+Headers:
+
+Headers are key-value pairs included in both HTTP requests and responses to provide additional information about the message. They consist of a header name followed by a colon and a value. Headers can convey various details such as the content type, content length, caching directives, authentication credentials, and more. HTTP headers are used by both clients and servers to communicate and negotiate parameters for the request and response.
+JSON (JavaScript Object Notation):
+
+JSON is a lightweight data-interchange format that is easy for humans to read and write and easy for machines to parse and generate. It is based on a subset of the JavaScript programming language and is often used to transmit structured data between a server and a client in web applications. JSON consists of key-value pairs enclosed in curly braces {}, with keys and string values separated by colons :. Arrays and nested objects are also supported in JSON.
+It is commonly used in HTTP requests and responses as a format for sending and receiving data, especially in RESTful APIs.
+
+Let's address each question:
+
+1. **What is REST?**
+   - REST stands for Representational State Transfer. It is an architectural style for designing networked applications, particularly 
+web services, that focuses on creating scalable, stateless, and standardized interfaces between systems. 
+RESTful systems typically use the HTTP protocol for communication and rely on a set of principles to define how resources are addressed and manipulated.
+
+2. **Why do we use REST?**
+   - REST provides a set of architectural principles that promote scalability, simplicity, and reliability in web services. 
+By adhering to RESTful principles, developers can design APIs that are easy to understand, maintain, and extend. 
+RESTful APIs also benefit from widespread support and compatibility with existing web infrastructure and tools.
+
+3. **What is a resource in REST?**
+   - In REST, a resource is an abstraction of an entity or object that can be accessed and manipulated by clients through 
+a unique identifier, typically represented by a URI (Uniform Resource Identifier). Resources can represent any concept or data entity,
+such as users, products, orders, or documents.
+
+4. **What do we need to do to make an endpoint RESTful?**
+   - To make an endpoint RESTful, it should adhere to the following principles:
+     - Use standard HTTP methods (GET, POST, PUT, DELETE) to perform CRUD operations on resources.
+     - Use meaningful and hierarchical URIs to represent resources.
+     - Use appropriate HTTP status codes to indicate the outcome of operations.
+     - Support content negotiation for handling different data formats (e.g., JSON, XML).
+     - Be stateless and allow clients to maintain session state on their end.
+
+5. **What does it mean to have a uniform interface?**
+   - Having a uniform interface in REST means that the communication between clients and servers follows a standardized set of 
+conventions. This includes using standard HTTP methods, well-defined resource identifiers (URIs), consistent data formats
+(such as JSON or XML), and appropriate use of HTTP status codes. 
+A uniform interface promotes simplicity, scalability, and interoperability in RESTful systems.
+
+6. **What does it mean to be stateless?**
+   - Being stateless in the context of REST means that each request from a client to a server contains all the information necessary 
+for the server to understand and fulfill the request. The server does not maintain any client state between requests. 
+This simplifies server implementation, improves scalability, and enables better fault tolerance. Client state, if needed, 
+
+
+To build a server using Javalin, you first need to set up your project and dependencies, then create an instance of the Javalin server, and finally define your endpoints. Here's a step-by-step guide:
+
+1. **Set Up Your Project**:
+   - Create a new Maven or Gradle project, or add Javalin as a dependency to your existing project.
+   - Add the Javalin dependency to your `pom.xml` (for Maven) or `build.gradle` (for Gradle) file:
+
+   For Maven:
+   ```xml
+   <dependency>
+       <groupId>io.javalin</groupId>
+       <artifactId>javalin</artifactId>
+       <version>4.0.0</version> <!-- Replace with the latest version -->
+   </dependency>
+   ```
+
+   For Gradle:
+   ```groovy
+   implementation 'io.javalin:javalin:4.0.0' // Replace with the latest version
+   ```
+
+2. **Create an Instance of Javalin Server**:
+   - In your Java code, create a new instance of the Javalin server:
+
+   ```java
+   import io.javalin.Javalin;
+
+   public class Main {
+       public static void main(String[] args) {
+           Javalin app = Javalin.create().start(7000); // Starts the server on port 7000
+       }
+   }
+   ```
+
+3. **Define Endpoints**:
+   - Define your endpoints by calling the `get()`, `post()`, `put()`, `delete()`, etc., methods on the Javalin app instance:
+
+   ```java
+   app.get("/", ctx -> ctx.result("Hello, Javalin!")); // Defines a GET endpoint at the root path
+   ```
+
+   This creates a simple endpoint that responds with "Hello, Javalin!" when accessed.
+
+   You can add more endpoints by chaining additional `get()`, `post()`, etc., methods as needed.
+
+Here's an example demonstrating how to create a simple Javalin server with an endpoint:
+
+```java
+import io.javalin.Javalin;
+
+public class Main {
+    public static void main(String[] args) {
+        Javalin app = Javalin.create().start(7000);
+        
+        app.get("/", ctx -> ctx.result("Hello, Javalin!"));
+    }
+}
+```
+
+This code creates a Javalin server that listens on port 7000 and defines a single endpoint at the root path ("/") that responds with "Hello, Javalin!" when accessed via a GET request.
+
+To create additional endpoints, you can simply add more `.get()`, `.post()`, etc., methods with the desired paths and handler functions.
+
+
+is maintained entirely on the client side.
+
+In Javalin, the `Context` object represents the context of an HTTP request and response. It provides methods and properties that allow you to interact with the request and response details, such as headers, query parameters, request body, response status, and content.
+
+The `Context` object is typically passed as a parameter to handler functions defined for each endpoint, allowing you to access and manipulate the request and response within the scope of the handler function.
+
+Here are some common uses of the `Context` object in Javalin:
+
+1. **Accessing Request Information**:
+   - You can use methods like `path()`, `queryParam()`, `formParam()`, and `body()` to access information from the HTTP request, such as the request path, query parameters, form parameters, and request body.
+
+2. **Setting Response Details**:
+   - You can use methods like `status()`, `header()`, and `contentType()` to set details of the HTTP response, such as the status code, response headers, and content type.
+
+3. **Sending Response Content**:
+   - You can use methods like `result()`, `json()`, and `html()` to send content in the response body. For example, you can send plain text, JSON objects, HTML content, etc.
+
+4. **Handling Exceptions**:
+   - You can use the `Context` object to handle exceptions thrown within your handler functions. Javalin provides methods like `exception()` and `error()` to define exception handlers that can handle various types of exceptions and errors.
+
+5. **Accessing Session and Attributes**:
+   - Javalin supports session management and attribute storage. You can use methods like `sessionAttribute()`, `sessionAttributeMap()`, `attribute()`, and `attributes()` to access and manipulate session attributes and request attributes.
+
+Overall, the `Context` object in Javalin serves as a bridge between the incoming HTTP request and the outgoing HTTP response, allowing you to handle and process the request and generate an appropriate response. It provides a convenient and expressive API for working with HTTP requests and responses in your Javalin application.
+
+In Javalin, you can extract path parameters, access the request body, produce a response body, and set the response status code using the `Context` object provided in your handler functions. Here's how you can do each of these tasks:
+
+1. **Extracting Path Parameters**:
+   - Path parameters are variables embedded within the URI path. You can extract path parameters using the `pathParam()` method of the `Context` object. Here's an example:
+
+   ```java
+   app.get("/user/:id", ctx -> {
+       String userId = ctx.pathParam("id");
+       // Use the userId variable...
+   });
+   ```
+
+   In this example, `:id` is a path parameter in the URI `/user/:id`. The `pathParam("id")` method retrieves the value of the `id` parameter from the request URI.
+
+2. **Accessing the Request Body**:
+   - You can access the request body using the `body()` method of the `Context` object. Here's an example:
+
+   ```java
+   app.post("/user", ctx -> {
+       String requestBody = ctx.body();
+       // Process the request body...
+   });
+   ```
+
+   This example retrieves the request body as a string. If the body contains JSON data, you can parse it into an object using a JSON library like Jackson or Gson.
+
+3. **Producing a Response Body**:
+   - You can produce a response body using methods like `result()`, `json()`, and `html()` of the `Context` object. Here's an example:
+
+   ```java
+   app.get("/", ctx -> {
+       ctx.result("Hello, Javalin!");
+   });
+   ```
+
+   This example sets the response body to "Hello, Javalin!".
+
+4. **Producing a Response Status Code**:
+   - You can set the response status code using the `status()` method of the `Context` object. Here's an example:
+
+   ```java
+   app.get("/", ctx -> {
+       ctx.status(200); // Sets the response status code to 200 OK
+   });
+   ```
+
+   This example sets the response status code to 200 OK. You can specify any valid HTTP status code using this method.
+
+These are the basic operations you can perform using the `Context` object in Javalin to handle requests and produce responses.
+Let's clarify each term:
+
+1. **Sessions in HTTP**:
+   - Sessions in HTTP are a way to maintain stateful interactions between a client (such as a web browser) and a server across multiple requests. When a user visits a website, the server creates a unique session for that user, typically identified by a session ID. This session ID is often stored as a cookie on the client's browser and sent back to the server with each subsequent request, allowing the server to associate subsequent requests with the same session.
+
+2. **Cookies**:
+   - Cookies are small pieces of data stored on the client's browser by websites. They are used to track user activity, maintain session state, and store user preferences. Cookies are sent by the client to the server with each request, allowing the server to identify and personalize the user's experience.
+
+3. **Handlers**:
+   - Handlers in the context of web frameworks like Javalin or Express.js are functions that define how to respond to incoming HTTP requests. Each handler typically corresponds to a specific route or endpoint and is responsible for processing the request, executing the necessary logic, and generating an appropriate response.
+
+4. **Sessions (again)**:
+   - In the context of web applications, sessions refer to the stateful interactions between a client and a server over a period of time. Sessions typically involve the creation of a unique session ID for each user, which is used to maintain state information across multiple requests.
+
+5. **Session Management**:
+   - Session management refers to the process of creating, maintaining, and destroying sessions in a web application. This includes tasks such as generating session IDs, associating session data with users, storing session data securely, and handling session timeouts and expiration.
+
+6. **Authorization vs Authentication**:
+   - Authentication is the process of verifying the identity of a user, typically through credentials such as usernames and passwords. It answers the question, "Who are you?" Once authenticated, the user is granted access to resources or functionalities based on their permissions.
+   - Authorization, on the other hand, is the process of determining what actions or resources a user is allowed to access. It answers the question, "What are you allowed to do?" Authorization is based on the user's identity and permissions, which are typically managed through roles, groups, or access control lists (ACLs).
+
+In summary, sessions in HTTP are used to maintain stateful interactions between a client and a server, cookies are used to store data on the client's browser, handlers are functions that define how to respond to HTTP requests, session management involves creating and managing sessions in web applications, and authentication and authorization are processes related to verifying user identity and determining access rights, respectively.
