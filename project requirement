@@ -69,3 +69,44 @@ public class Main {
         app.delete("/product/:id", ProductController::deleteProduct);
     }
 }
+1xx Informational:
+
+These status codes indicate that the request has been received and understood and that processing is continuing.
+Examples:
+
+100 Continue: The server has received the initial part of the request, and the client can continue with the request.
+101 Switching Protocols: The server is switching protocols according to the Upgrade header sent by the client.
+2xx Success:
+
+These status codes indicate that the request was received, understood, and processed successfully.
+Examples:
+
+200 OK: The request was successful.
+201 Created: The request has been fulfilled, resulting in the creation of a new resource.
+204 No Content: The server successfully processed the request, but there is no content to send in the response.
+3xx Redirection:
+
+These status codes indicate that further action needs to be taken by the client to complete the request.
+Examples:
+
+300 Multiple Choices: The requested resource has multiple representations, each with its own specific location.
+301 Moved Permanently: The requested resource has been permanently moved to a new location.
+4xx Client Error:
+
+These status codes indicate that the client made a request that cannot be fulfilled, either due to client error or because the requested resource does not exist on the server.
+Examples:
+
+400 Bad Request: The server cannot process the request due to a client error, such as malformed syntax.
+404 Not Found: The server cannot find the requested resource.
+5xx Server Error:
+
+These status codes indicate that the server encountered an unexpected condition that prevented it from fulfilling the request.
+Examples:
+
+500 Internal Server Error: A generic error message indicating that something has gone wrong on the server.
+503 Service Unavailable: The server is currently unable to handle the request due to temporary overloading or maintenance of the server.
+These status codes are important for understanding the outcome of an HTTP request and are used by both clients and servers to communicate the result of the request.
+
+
+
+
