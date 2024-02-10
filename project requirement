@@ -328,4 +328,101 @@ Apologies for the oversight. Let's provide a detailed breakdown with implementat
            ctx.status(204);
        }
    }
-   
+
+
+/////////////////////////////////////
+import io.javalin.http.Context;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ProductService {
+    private static List<Product> products = new ArrayList<>();
+
+    public List<Product> getAllProducts() {
+        return products;
+    }
+
+    public Product getProductById(String productId) {
+        return products.stream()
+                .filter(p -> p.getProductId().equals(productId))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public void addProduct(Product product) {
+        products.add(product);
+    }
+
+    public void updateProduct(Product product) {
+        Product existingProduct = getProductById(product.getProductId());
+        if (existingProduct != null) {
+            existingProduct.setProductName(product.getProductName());
+            existingProduct.setPrice(product.getPrice());
+            existingProduct.setSellerName(product.getSellerName());
+        }
+    }
+
+    public void deleteProduct(String productId) {
+        products.removeIf(p -> p.getProductId().equals(productId));
+    }
+}
+
+public class SellerService {
+    private static List<Seller> sellers = new ArrayList<>();
+
+    public List<Seller> getAllSellers() {
+        return sellers;
+    }
+
+    public void addSeller(Seller seller) {
+        sellers.add(seller);
+    }
+
+    public boolean sellerExists(String sellerName) {
+        return sellers.stream()
+                .anyMatch(s -> s.getSellerName().equals(sellerName));
+    }
+}
+///////////////////////////////////////////////////////////
+import io.javalin.http.Context;
+
+public class ProductController {
+    private ProductService productService;
+
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+
+    public void getAllProducts(Context ctx) {
+        ctx.json(productService.getAllProducts());
+    }
+
+    public void getProductById(Context ctx) {
+        String productId = ctx.pathParam("id");
+        Product product = productService.getProductById(productId);
+        if (product != null) {
+            ctx.json(product);
+        } else {
+            ctx.status(404).result("Product not found");
+        }
+    }
+
+    public void addProduct(Context ctx) {
+        Product product = ctx.bodyAsClass(Product.class);
+        productService.addProduct(product);
+        ctx.status(201);
+    }
+
+    public void updateProduct(Context ctx) {
+        Product product = ctx.bodyAsClass(Product.class);
+        productService.updateProduct(product);
+        ctx.status(204);
+    }
+
+    public void deleteProduct(Context ctx) {
+        String productId = ctx.pathParam("id");
+        productService.deleteProduct(productId);
+        ctx.status(204);
+    }
+}
+
