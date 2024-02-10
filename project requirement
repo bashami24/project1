@@ -35,394 +35,274 @@ CRUD functionality on Product
 Unit testing of service classes
 Logging within service classes
 
-Javalin
+Sure, let's adapt the project to work with books and authors instead. We'll need to adjust the model classes, service classes, controller classes, and the main class accordingly. Here's how we can do it:
 
-public class Product {
-    private String productId;
-    private String productName;
-    private double price;
-    private String sellerName;
-
-    // Constructors, getters, and setters
-}
-
-public class Seller {
-    private String sellerName;
-
-    // Constructors, getters, and setters
-}
-
-
-public class Main {
-    public static void main(String[] args) {
-        Javalin app = Javalin.create().start(7000);
-
-        // Seller endpoints
-        app.get("/seller", SellerController::getAllSellers);
-        app.post("/seller", SellerController::createSeller);
-
-        // Product endpoints
-        app.get("/product", ProductController::getAllProducts);
-        app.get("/product/:id", ProductController::getProductById);
-        app.post("/product", ProductController::createProduct);
-        app.put("/product/:id", ProductController::updateProduct);
-        app.delete("/product/:id", ProductController::deleteProduct);
-    }
-}
-
-Sure, let's provide an example of how you can implement the methods in the controller and service classes for both `Seller` and `Product`.
-
-### SellerController:
+### Model Classes
 
 ```java
-public class SellerController {
-    private final SellerService sellerService;
+// Author.java
+package org.example.model;
 
-    public SellerController(SellerService sellerService) {
-        this.sellerService = sellerService;
+import java.util.Objects;
+
+public class Author {
+    private String name;
+
+    public Author() {
     }
 
-    public void getAllSellers(Context ctx) {
-        List<Seller> sellers = sellerService.getAllSellers();
-        ctx.json(sellers);
+    public Author(String name) {
+        this.name = name;
     }
 
-    public void createSeller(Context ctx) {
-        Seller seller = ctx.bodyAsClass(Seller.class);
-        try {
-            sellerService.createSeller(seller);
-            ctx.status(201); // Created
-        } catch (SellerServiceException e) {
-            ctx.status(400).result(e.getMessage());
-        }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Author author = (Author) o;
+        return Objects.equals(name, author.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
+
+    @Override
+    public String toString() {
+        return "Author{" +
+                "name='" + name + '\'' +
+                '}';
+    }
+}
+
+// Book.java
+package org.example.model;
+
+import java.util.Objects;
+
+public class Book {
+    private long id;
+    private String title;
+    private Author author;
+
+    public Book() {
+    }
+
+    public Book(String title, Author author) {
+        this.title = title;
+        this.author = author;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return id == book.id &&
+                Objects.equals(title, book.title) &&
+                Objects.equals(author, book.author);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, author);
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", author=" + author +
+                '}';
     }
 }
 ```
 
-### SellerService:
+### Service Classes
 
 ```java
-public class SellerService {
-    private final SellerDao sellerDao;
+// AuthorService.java
+package org.example.service;
 
-    public SellerService(SellerDao sellerDao) {
-        this.sellerDao = sellerDao;
-    }
+import org.example.model.Author;
 
-    public List<Seller> getAllSellers() {
-        return sellerDao.getAllSellers();
-    }
-
-    public void createSeller(Seller seller) throws SellerServiceException {
-        if (seller == null || seller.getSellerName() == null || seller.getSellerName().isEmpty()) {
-            throw new SellerServiceException("Seller name cannot be null or empty.");
-        }
-        if (sellerDao.getSellerByName(seller.getSellerName()) != null) {
-            throw new SellerServiceException("Seller with the same name already exists.");
-        }
-        sellerDao.createSeller(seller);
-    }
-}
-```
-
-### ProductController:
-
-```java
-public class ProductController {
-    private final ProductService productService;
-
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
-
-    public void getAllProducts(Context ctx) {
-        List<Product> products = productService.getAllProducts();
-        ctx.json(products);
-    }
-
-    public void getProductById(Context ctx) {
-        String productId = ctx.pathParam("id");
-        try {
-            Product product = productService.getProductById(productId);
-            if (product == null) {
-                ctx.status(404); // Not found
-            } else {
-                ctx.json(product);
-            }
-        } catch (ProductServiceException e) {
-            ctx.status(400).result(e.getMessage());
-        }
-    }
-
-    // Similar methods for createProduct, updateProduct, and deleteProduct
-}
-```
-
-### ProductService:
-
-```java
-public class ProductService {
-    private final ProductDao productDao;
-
-    public ProductService(ProductDao productDao) {
-        this.productDao = productDao;
-    }
-
-    public List<Product> getAllProducts() {
-        return productDao.getAllProducts();
-    }
-
-    public Product getProductById(String productId) throws ProductServiceException {
-        return productDao.getProductById(productId);
-    }
-
-    // Similar methods for createProduct, updateProduct, and deleteProduct
-}
-```
-
-### Exception Classes:
-
-```java
-public class SellerServiceException extends Exception {
-    public SellerServiceException(String message) {
-        super(message);
-    }
-}
-
-public class ProductServiceException extends Exception {
-    public ProductServiceException(String message) {
-        super(message);
-    }
-}
-```
-
-//
-
-Apologies for the oversight. Let's provide a detailed breakdown with implementations for each component as per the requirements:
-
-1. **Model Classes**:
-   ```java
-   // Product.java
-   public class Product {
-       private String productId;
-       private String productName;
-       private double price;
-       private String sellerName;
-
-       // Constructor, getters, setters
-   }
-   
-   // Seller.java
-   public class Seller {
-       private String sellerName;
-
-       // Constructor, getters, setters
-   }
-   ```
-
-2. **Service Classes**:
-   ```java
-   import java.util.List;
-
-   public class ProductService {
-       // Dummy database or repository to store products
-       private List<Product> products;
-
-       // Method to get all products
-       public List<Product> getAllProducts() {
-           return products;
-       }
-
-       // Method to get a product by id
-       public Product getProductById(String productId) {
-           // Implement logic to retrieve product by id from the database
-           return null; // Placeholder for demonstration
-       }
-
-       // Method to add a new product
-       public void addProduct(Product product) {
-           // Implement logic to add product to the database
-       }
-
-       // Method to update a product
-       public void updateProduct(Product product) {
-           // Implement logic to update product in the database
-       }
-
-       // Method to delete a product
-       public void deleteProduct(String productId) {
-           // Implement logic to delete product from the database
-       }
-   }
-
-   public class SellerService {
-       // Dummy database or repository to store sellers
-       private List<Seller> sellers;
-
-       // Method to get all sellers
-       public List<Seller> getAllSellers() {
-           return sellers;
-       }
-
-       // Method to add a new seller
-       public void addSeller(Seller seller) {
-           // Implement logic to add seller to the database
-       }
-
-       // Method to check if a seller exists
-       public boolean sellerExists(String sellerName) {
-           // Implement logic to check if the seller already exists in the database
-           return false; // Placeholder for demonstration
-       }
-   }
-   ```
-
-3. **Controller Class**:
-   ```java
-   import io.javalin.http.Context;
-   import java.util.List;
-
-   public class ProductController {
-       private ProductService productService;
-
-       public ProductController(ProductService productService) {
-           this.productService = productService;
-       }
-
-       // Route handler for GET /product/
-       public void getAllProducts(Context ctx) {
-           List<Product> products = productService.getAllProducts();
-           ctx.json(products);
-       }
-
-       // Route handler for GET /product/{id}
-       public void getProductById(Context ctx) {
-           String productId = ctx.pathParam("id");
-           Product product = productService.getProductById(productId);
-           if (product != null) {
-               ctx.json(product);
-           } else {
-               ctx.status(404).result("Product not found");
-           }
-       }
-
-       // Route handler for POST /product/
-       public void addProduct(Context ctx) {
-           Product product = ctx.bodyAsClass(Product.class);
-           productService.addProduct(product);
-           ctx.status(201);
-       }
-
-       // Route handler for PUT /product/{id}
-       public void updateProduct(Context ctx) {
-           String productId = ctx.pathParam("id");
-           Product product = ctx.bodyAsClass(Product.class);
-           productService.updateProduct(product);
-           ctx.status(204);
-       }
-
-       // Route handler for DELETE /product/{id}
-       public void deleteProduct(Context ctx) {
-           String productId = ctx.pathParam("id");
-           productService.deleteProduct(productId);
-           ctx.status(204);
-       }
-   }
-
-
-/////////////////////////////////////
-import io.javalin.http.Context;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductService {
-    private static List<Product> products = new ArrayList<>();
+public class AuthorService {
+    private List<Author> authors = new ArrayList<>();
 
-    public List<Product> getAllProducts() {
-        return products;
+    public List<Author> getAllAuthors() {
+        return authors;
     }
 
-    public Product getProductById(String productId) {
-        return products.stream()
-                .filter(p -> p.getProductId().equals(productId))
-                .findFirst()
-                .orElse(null);
-    }
-
-    public void addProduct(Product product) {
-        products.add(product);
-    }
-
-    public void updateProduct(Product product) {
-        Product existingProduct = getProductById(product.getProductId());
-        if (existingProduct != null) {
-            existingProduct.setProductName(product.getProductName());
-            existingProduct.setPrice(product.getPrice());
-            existingProduct.setSellerName(product.getSellerName());
-        }
-    }
-
-    public void deleteProduct(String productId) {
-        products.removeIf(p -> p.getProductId().equals(productId));
+    public void addAuthor(Author author) {
+        authors.add(author);
     }
 }
 
-public class SellerService {
-    private static List<Seller> sellers = new ArrayList<>();
+// BookService.java
+package org.example.service;
 
-    public List<Seller> getAllSellers() {
-        return sellers;
+import org.example.model.Book;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class BookService {
+    private List<Book> books = new ArrayList<>();
+
+    public List<Book> getAllBooks() {
+        return books;
     }
 
-    public void addSeller(Seller seller) {
-        sellers.add(seller);
-    }
-
-    public boolean sellerExists(String sellerName) {
-        return sellers.stream()
-                .anyMatch(s -> s.getSellerName().equals(sellerName));
+    public void addBook(Book book) {
+        books.add(book);
     }
 }
-///////////////////////////////////////////////////////////
+```
+
+### Controller Classes
+
+```java
+// AuthorController.java
+package org.example.controller;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
+import org.example.model.Author;
+import org.example.service.AuthorService;
 
-public class ProductController {
-    private ProductService productService;
+import java.util.List;
 
-    public ProductController(ProductService productService) {
-        this.productService = productService;
+public class AuthorController {
+    private final AuthorService authorService;
+
+    public AuthorController(AuthorService authorService) {
+        this.authorService = authorService;
     }
 
-    public void getAllProducts(Context ctx) {
-        ctx.json(productService.getAllProducts());
+    public void getAllAuthors(Context ctx) {
+        List<Author> authors = authorService.getAllAuthors();
+        ctx.json(authors);
     }
 
-    public void getProductById(Context ctx) {
-        String productId = ctx.pathParam("id");
-        Product product = productService.getProductById(productId);
-        if (product != null) {
-            ctx.json(product);
-        } else {
-            ctx.status(404).result("Product not found");
+    public void createAuthor(Context ctx) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Author author = objectMapper.readValue(ctx.body(), Author.class);
+            authorService.addAuthor(author);
+            ctx.status(201);
+        } catch (Exception e) {
+            ctx.status(400);
         }
-    }
-
-    public void addProduct(Context ctx) {
-        Product product = ctx.bodyAsClass(Product.class);
-        productService.addProduct(product);
-        ctx.status(201);
-    }
-
-    public void updateProduct(Context ctx) {
-        Product product = ctx.bodyAsClass(Product.class);
-        productService.updateProduct(product);
-        ctx.status(204);
-    }
-
-    public void deleteProduct(Context ctx) {
-        String productId = ctx.pathParam("id");
-        productService.deleteProduct(productId);
-        ctx.status(204);
     }
 }
 
+// BookController.java
+package org.example.controller;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.javalin.http.Context;
+import org.example.model.Book;
+import org.example.service.BookService;
+
+import java.util.List;
+
+public class BookController {
+    private final BookService bookService;
+
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
+
+    public void getAllBooks(Context ctx) {
+        List<Book> books = bookService.getAllBooks();
+        ctx.json(books);
+    }
+
+    public void createBook(Context ctx) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Book book = objectMapper.readValue(ctx.body(), Book.class);
+            bookService.addBook(book);
+            ctx.status(201);
+        } catch (Exception e) {
+            ctx.status(400);
+        }
+    }
+}
+```
+
+### Main Class
+
+
+
+```java
+package org.example;
+
+import io.javalin.Javalin;
+import org.example.controller.AuthorController;
+import org.example.controller.BookController;
+import org.example.service.AuthorService;
+import org.example.service.BookService;
+
+public class Main {
+    public static void main(String[] args) {
+        // Instantiate services
+        AuthorService authorService = new AuthorService();
+        BookService bookService = new BookService();
+
+        // Instantiate controllers and inject services
+        AuthorController authorController = new AuthorController(authorService);
+        BookController bookController = new BookController(bookService);
+
+        // Create Javalin app
+        Javalin app = Javalin.create();
+
+        // Configure routes
+        app.get("/authors", authorController::getAllAuthors);
+        app.post("/authors", authorController::createAuthor);
+
+        app.get("/books", bookController::getAllBooks);
+        app.post("/books", bookController::createBook);
+
+        // Start the server
+        app.start(7000);
+    }
+}
+```
