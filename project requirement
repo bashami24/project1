@@ -306,3 +306,77 @@ public class Main {
     }
 }
 ```
+
+
+
+////////////////
+package org.example.controller;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.javalin.Javalin;
+import org.example.exception.BookException;
+import org.example.model.Book;
+import org.example.service.BookService;
+
+import java.util.List;
+
+public class BookController {
+
+    private final BookService bookService;
+
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
+
+    public Javalin createEndpoints(Javalin app) {
+        app.get("/books", ctx -> {
+            List<Book> books = bookService.getAllBooks();
+            ctx.json(books);
+        });
+
+        app.get("/books/:id", ctx -> {
+            long id = ctx.pathParam("id", Long.class).get();
+            Book book = bookService.getBookById(id);
+            if (book != null) {
+                ctx.json(book);
+            } else {
+                ctx.status(404);
+            }
+        });
+
+        app.post("/books", ctx -> {
+            try {
+                Book newBook = ctx.bodyAsClass(Book.class);
+                Book createdBook = bookService.addBook(newBook);
+                ctx.status(201).json(createdBook);
+            } catch (JsonProcessingException e) {
+                ctx.status(400).result("Invalid book data");
+            } catch (BookException e) {
+                ctx.status(400).result(e.getMessage());
+            }
+        });
+
+        app.put("/books/:id", ctx -> {
+            long id = ctx.pathParam("id", Long.class).get();
+            try {
+                Book updatedBook = ctx.bodyAsClass(Book.class);
+                updatedBook.setId(id); // Ensure the ID is set
+                Book book = bookService.updateBook(updatedBook);
+                ctx.json(book);
+            } catch (JsonProcessingException e) {
+                ctx.status(400).result("Invalid book data");
+            } catch (BookException e) {
+                ctx.status(400).result(e.getMessage());
+            }
+        });
+
+        app.delete("/books/:id", ctx -> {
+            long id = ctx.pathParam("id", Long.class).get();
+            bookService.deleteBook(id);
+            ctx.status(204);
+        });
+
+        return app;
+    }
+}
