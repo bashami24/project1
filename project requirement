@@ -70,3 +70,262 @@ public class Main {
     }
 }
 
+Sure, let's provide an example of how you can implement the methods in the controller and service classes for both `Seller` and `Product`.
+
+### SellerController:
+
+```java
+public class SellerController {
+    private final SellerService sellerService;
+
+    public SellerController(SellerService sellerService) {
+        this.sellerService = sellerService;
+    }
+
+    public void getAllSellers(Context ctx) {
+        List<Seller> sellers = sellerService.getAllSellers();
+        ctx.json(sellers);
+    }
+
+    public void createSeller(Context ctx) {
+        Seller seller = ctx.bodyAsClass(Seller.class);
+        try {
+            sellerService.createSeller(seller);
+            ctx.status(201); // Created
+        } catch (SellerServiceException e) {
+            ctx.status(400).result(e.getMessage());
+        }
+    }
+}
+```
+
+### SellerService:
+
+```java
+public class SellerService {
+    private final SellerDao sellerDao;
+
+    public SellerService(SellerDao sellerDao) {
+        this.sellerDao = sellerDao;
+    }
+
+    public List<Seller> getAllSellers() {
+        return sellerDao.getAllSellers();
+    }
+
+    public void createSeller(Seller seller) throws SellerServiceException {
+        if (seller == null || seller.getSellerName() == null || seller.getSellerName().isEmpty()) {
+            throw new SellerServiceException("Seller name cannot be null or empty.");
+        }
+        if (sellerDao.getSellerByName(seller.getSellerName()) != null) {
+            throw new SellerServiceException("Seller with the same name already exists.");
+        }
+        sellerDao.createSeller(seller);
+    }
+}
+```
+
+### ProductController:
+
+```java
+public class ProductController {
+    private final ProductService productService;
+
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+
+    public void getAllProducts(Context ctx) {
+        List<Product> products = productService.getAllProducts();
+        ctx.json(products);
+    }
+
+    public void getProductById(Context ctx) {
+        String productId = ctx.pathParam("id");
+        try {
+            Product product = productService.getProductById(productId);
+            if (product == null) {
+                ctx.status(404); // Not found
+            } else {
+                ctx.json(product);
+            }
+        } catch (ProductServiceException e) {
+            ctx.status(400).result(e.getMessage());
+        }
+    }
+
+    // Similar methods for createProduct, updateProduct, and deleteProduct
+}
+```
+
+### ProductService:
+
+```java
+public class ProductService {
+    private final ProductDao productDao;
+
+    public ProductService(ProductDao productDao) {
+        this.productDao = productDao;
+    }
+
+    public List<Product> getAllProducts() {
+        return productDao.getAllProducts();
+    }
+
+    public Product getProductById(String productId) throws ProductServiceException {
+        return productDao.getProductById(productId);
+    }
+
+    // Similar methods for createProduct, updateProduct, and deleteProduct
+}
+```
+
+### Exception Classes:
+
+```java
+public class SellerServiceException extends Exception {
+    public SellerServiceException(String message) {
+        super(message);
+    }
+}
+
+public class ProductServiceException extends Exception {
+    public ProductServiceException(String message) {
+        super(message);
+    }
+}
+```
+
+//
+
+Apologies for the oversight. Let's provide a detailed breakdown with implementations for each component as per the requirements:
+
+1. **Model Classes**:
+   ```java
+   // Product.java
+   public class Product {
+       private String productId;
+       private String productName;
+       private double price;
+       private String sellerName;
+
+       // Constructor, getters, setters
+   }
+   
+   // Seller.java
+   public class Seller {
+       private String sellerName;
+
+       // Constructor, getters, setters
+   }
+   ```
+
+2. **Service Classes**:
+   ```java
+   import java.util.List;
+
+   public class ProductService {
+       // Dummy database or repository to store products
+       private List<Product> products;
+
+       // Method to get all products
+       public List<Product> getAllProducts() {
+           return products;
+       }
+
+       // Method to get a product by id
+       public Product getProductById(String productId) {
+           // Implement logic to retrieve product by id from the database
+           return null; // Placeholder for demonstration
+       }
+
+       // Method to add a new product
+       public void addProduct(Product product) {
+           // Implement logic to add product to the database
+       }
+
+       // Method to update a product
+       public void updateProduct(Product product) {
+           // Implement logic to update product in the database
+       }
+
+       // Method to delete a product
+       public void deleteProduct(String productId) {
+           // Implement logic to delete product from the database
+       }
+   }
+
+   public class SellerService {
+       // Dummy database or repository to store sellers
+       private List<Seller> sellers;
+
+       // Method to get all sellers
+       public List<Seller> getAllSellers() {
+           return sellers;
+       }
+
+       // Method to add a new seller
+       public void addSeller(Seller seller) {
+           // Implement logic to add seller to the database
+       }
+
+       // Method to check if a seller exists
+       public boolean sellerExists(String sellerName) {
+           // Implement logic to check if the seller already exists in the database
+           return false; // Placeholder for demonstration
+       }
+   }
+   ```
+
+3. **Controller Class**:
+   ```java
+   import io.javalin.http.Context;
+   import java.util.List;
+
+   public class ProductController {
+       private ProductService productService;
+
+       public ProductController(ProductService productService) {
+           this.productService = productService;
+       }
+
+       // Route handler for GET /product/
+       public void getAllProducts(Context ctx) {
+           List<Product> products = productService.getAllProducts();
+           ctx.json(products);
+       }
+
+       // Route handler for GET /product/{id}
+       public void getProductById(Context ctx) {
+           String productId = ctx.pathParam("id");
+           Product product = productService.getProductById(productId);
+           if (product != null) {
+               ctx.json(product);
+           } else {
+               ctx.status(404).result("Product not found");
+           }
+       }
+
+       // Route handler for POST /product/
+       public void addProduct(Context ctx) {
+           Product product = ctx.bodyAsClass(Product.class);
+           productService.addProduct(product);
+           ctx.status(201);
+       }
+
+       // Route handler for PUT /product/{id}
+       public void updateProduct(Context ctx) {
+           String productId = ctx.pathParam("id");
+           Product product = ctx.bodyAsClass(Product.class);
+           productService.updateProduct(product);
+           ctx.status(204);
+       }
+
+       // Route handler for DELETE /product/{id}
+       public void deleteProduct(Context ctx) {
+           String productId = ctx.pathParam("id");
+           productService.deleteProduct(productId);
+           ctx.status(204);
+       }
+   }
+   
