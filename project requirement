@@ -310,17 +310,6 @@ public class Main {
 
 
 ////////////////
-package org.example.controller;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.javalin.Javalin;
-import org.example.exception.BookException;
-import org.example.model.Book;
-import org.example.service.BookService;
-
-import java.util.List;
-
 public class BookController {
 
     private final BookService bookService;
@@ -380,3 +369,4 @@ public class BookController {
         return app;
     }
 }
+
