@@ -35,23 +35,15 @@ CRUD functionality on Product
 Unit testing of service classes
 Logging within service classes
 
-package org.example;
+Exception in thread "main" java.lang.IllegalArgumentException: Path 'authors/:name' invalid - Javalin 4 switched from ':param' to '{param}'.
+	at io.javalin.routing.PathParser.<init>(PathParser.kt:10)
+	at io.javalin.routing.HandlerEntry.<init>(HandlerEntry.kt:16)
+	at io.javalin.Javalin.addHandler(Javalin.java:364)
+	at io.javalin.Javalin.addHandler(Javalin.java:376)
+	at io.javalin.Javalin.put(Javalin.java:403)
+	at org.example.Controller.Controller.getAPI(Controller.java:49)
+	at org.example.Main.main(Main.java:17)
+log4j:WARN No appenders could be found for logger (io.javalin.Javalin).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
 
-import io.javalin.Javalin;
-import org.example.Controller.ArtController;
-import org.example.Model.Author;
-import org.example.Service.AuthorService;
-import org.example.Service.PaintingService;
-
-public class Main {
-    public static void main(String[] args) {
-//        instantiate & inject all dependencies of our project
-
-        AuthorService authorService = new AuthorService();
-        PaintingService paintingService = new PaintingService(authorService);
-        ArtController artController = new ArtController(authorService, paintingService);
-
-        Javalin api = artController.getAPI();
-        api.start(9004);
-    }
-}
