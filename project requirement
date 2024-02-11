@@ -280,3 +280,228 @@ public class ArtController {
 
         return api;
     }
+package org.example.controller;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.javalin.Javalin;
+import org.example.exception.AuthorNotFoundException;
+import org.example.exception.BookNotFoundException;
+import org.example.model.Author;
+import org.example.model.Book;
+import org.example.service.AuthorService;
+import org.example.service.BookService;
+
+import java.util.List;
+
+public class ArtController {
+
+    private final AuthorService authorService;
+    private final BookService bookService;
+
+    public ArtController(AuthorService authorService, BookService bookService) {
+        this.authorService = authorService;
+        this.bookService = bookService;
+    }
+
+    public Javalin getAPI() {
+        Javalin api = Javalin.create();
+
+        api.get("health", context -> {
+            context.result("Server is UP");
+        });
+
+        // CRUD operations for Authors
+        api.get("authors", context -> {
+            List<Author> authorList = authorService.getAllAuthors();
+            context.json(authorList);
+        });
+
+        api.post("authors", context -> {
+            try {
+                ObjectMapper om = new ObjectMapper();
+                Author author = om.readValue(context.body(), Author.class);
+                authorService.addAuthor(author);
+                context.status(201);
+            } catch (JsonProcessingException e) {
+                context.status(400);
+            }
+        });
+
+        api.put("authors/:name", context -> {
+            String name = context.pathParam("name");
+            try {
+                ObjectMapper om = new ObjectMapper();
+                Author updatedAuthor = om.readValue(context.body(), Author.class);
+                authorService.updateAuthor(name, updatedAuthor);
+                context.status(200);
+            } catch (JsonProcessingException | AuthorNotFoundException e) {
+                context.status(400);
+            }
+        });
+
+        api.delete("authors/:name", context -> {
+            String name = context.pathParam("name");
+            try {
+                authorService.deleteAuthor(name);
+                context.status(200);
+            } catch (AuthorNotFoundException e) {
+                context.status(404);
+            }
+        });
+
+        // CRUD operations for Books
+        api.get("books", context -> {
+            List<Book> bookList = bookService.getAllBooks();
+            context.json(bookList);
+        });
+
+        api.post("books", context -> {
+            try {
+                ObjectMapper om = new ObjectMapper();
+                Book book = om.readValue(context.body(), Book.class);
+                bookService.addBook(book);
+                context.status(201);
+            } catch (JsonProcessingException e) {
+                context.status(400);
+            }
+        });
+
+        api.put("books/:id", context -> {
+            long id = Long.parseLong(context.pathParam("id"));
+            try {
+                ObjectMapper om = new ObjectMapper();
+                Book updatedBook = om.readValue(context.body(), Book.class);
+                bookService.updateBook(id, updatedBook);
+                context.status(200);
+            } catch (JsonProcessingException | BookNotFoundException e) {
+                context.status(400);
+            }
+        });
+
+        api.delete("books/:id", context -> {
+            long id = Long.parseLong(context.pathParam("id"));
+            try {
+                bookService.deleteBook(id);
+                context.status(200);
+            } catch (BookNotFoundException e) {
+                context.status(404);
+            }
+        });
+
+        return api;
+    }
+}
+//////////////////////////
+package org.example.controller;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.javalin.Javalin;
+import org.example.exception.AuthorNotFoundException;
+import org.example.exception.BookNotFoundException;
+import org.example.model.Author;
+import org.example.model.Book;
+import org.example.service.AuthorService;
+import org.example.service.BookService;
+
+import java.util.List;
+
+public class ArtController {
+
+    private final AuthorService authorService;
+    private final BookService bookService;
+
+    public ArtController(AuthorService authorService, BookService bookService) {
+        this.authorService = authorService;
+        this.bookService = bookService;
+    }
+
+    public Javalin getAPI() {
+        Javalin api = Javalin.create();
+
+        api.get("health", context -> {
+            context.result("Server is UP");
+        });
+
+        // CRUD operations for Authors
+        api.get("authors", context -> {
+            List<Author> authorList = authorService.getAllAuthors();
+            context.json(authorList);
+        });
+
+        api.post("authors", context -> {
+            try {
+                ObjectMapper om = new ObjectMapper();
+                Author author = om.readValue(context.body(), Author.class);
+                authorService.addAuthor(author);
+                context.status(201);
+            } catch (JsonProcessingException e) {
+                context.status(400);
+            }
+        });
+
+        api.put("authors/:name", context -> {
+            String name = context.pathParam("name");
+            try {
+                ObjectMapper om = new ObjectMapper();
+                Author updatedAuthor = om.readValue(context.body(), Author.class);
+                authorService.updateAuthor(name, updatedAuthor);
+                context.status(200);
+            } catch (JsonProcessingException | AuthorNotFoundException e) {
+                context.status(400);
+            }
+        });
+
+        api.delete("authors/:name", context -> {
+            String name = context.pathParam("name");
+            try {
+                authorService.deleteAuthor(name);
+                context.status(200);
+            } catch (AuthorNotFoundException e) {
+                context.status(404);
+            }
+        });
+
+        // CRUD operations for Books
+        api.get("books", context -> {
+            List<Book> bookList = bookService.getAllBooks();
+            context.json(bookList);
+        });
+
+        api.post("books", context -> {
+            try {
+                ObjectMapper om = new ObjectMapper();
+                Book book = om.readValue(context.body(), Book.class);
+                bookService.addBook(book);
+                context.status(201);
+            } catch (JsonProcessingException e) {
+                context.status(400);
+            }
+        });
+
+        api.put("books/:id", context -> {
+            long id = Long.parseLong(context.pathParam("id"));
+            try {
+                ObjectMapper om = new ObjectMapper();
+                Book updatedBook = om.readValue(context.body(), Book.class);
+                bookService.updateBook(id, updatedBook);
+                context.status(200);
+            } catch (JsonProcessingException | BookNotFoundException e) {
+                context.status(400);
+            }
+        });
+
+        api.delete("books/:id", context -> {
+            long id = Long.parseLong(context.pathParam("id"));
+            try {
+                bookService.deleteBook(id);
+                context.status(200);
+            } catch (BookNotFoundException e) {
+                context.status(404);
+            }
+        });
+
+        return api;
+    }
+}
