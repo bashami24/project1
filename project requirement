@@ -140,3 +140,59 @@ public class AuthorService {
     }
 }
 
+//////////////////////
+package org.example.service;
+
+import org.example.model.Book;
+import org.example.exception.BookNotFoundException;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class BookService {
+
+    private final List<Book> bookList;
+
+    public BookService() {
+        this.bookList = new ArrayList<>();
+    }
+
+    public List<Book> getAllBooks() {
+        return bookList;
+    }
+
+    public void addBook(Book book) {
+        bookList.add(book);
+    }
+
+    public Book getBookById(long id) throws BookNotFoundException {
+        for (Book book : bookList) {
+            if (book.getId() == id) {
+                return book;
+            }
+        }
+        throw new BookNotFoundException("Book not found with id: " + id);
+    }
+
+    public void updateBook(long id, Book updatedBook) throws BookNotFoundException {
+        boolean found = false;
+        for (int i = 0; i < bookList.size(); i++) {
+            Book book = bookList.get(i);
+            if (book.getId() == id) {
+                bookList.set(i, updatedBook);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            throw new BookNotFoundException("Book not found with id: " + id);
+        }
+    }
+
+    public void deleteBook(long id) throws BookNotFoundException {
+        boolean removed = bookList.removeIf(book -> book.getId() == id);
+        if (!removed) {
+            throw new BookNotFoundException("Book not found with id: " + id);
+        }
+    }
+}
