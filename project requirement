@@ -84,297 +84,59 @@ public class Author {
     }
 }
 
-// Book.java
-package org.example.model;
-
-import java.util.Objects;
-
-public class Book {
-    private long id;
-    private String title;
-    private Author author;
-
-    public Book() {
-    }
-
-    public Book(String title, Author author) {
-        this.title = title;
-        this.author = author;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Author getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Author author) {
-        this.author = author;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Book book = (Book) o;
-        return id == book.id &&
-                Objects.equals(title, book.title) &&
-                Objects.equals(author, book.author);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, title, author);
-    }
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", author=" + author +
-                '}';
-    }
-}
-```
-
-### Service Classes
-
-```java
-// AuthorService.java
 package org.example.service;
 
 import org.example.model.Author;
+import org.example.exception.AuthorNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AuthorService {
-    private List<Author> authors = new ArrayList<>();
+
+    private final List<Author> authorList;
+
+    public AuthorService() {
+        this.authorList = new ArrayList<>();
+    }
 
     public List<Author> getAllAuthors() {
-        return authors;
+        return authorList;
     }
 
     public void addAuthor(Author author) {
-        authors.add(author);
-    }
-}
-
-// BookService.java
-package org.example.service;
-
-import org.example.model.Book;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class BookService {
-    private List<Book> books = new ArrayList<>();
-
-    public List<Book> getAllBooks() {
-        return books;
+        authorList.add(author);
     }
 
-    public void addBook(Book book) {
-        books.add(book);
-    }
-}
-```
-
-### Controller Classes
-
-```java
-// AuthorController.java
-package org.example.controller;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.javalin.http.Context;
-import org.example.model.Author;
-import org.example.service.AuthorService;
-
-import java.util.List;
-
-public class AuthorController {
-    private final AuthorService authorService;
-
-    public AuthorController(AuthorService authorService) {
-        this.authorService = authorService;
+    public Author getAuthorByName(String name) throws AuthorNotFoundException {
+        for (Author author : authorList) {
+            if (author.getName().equals(name)) {
+                return author;
+            }
+        }
+        throw new AuthorNotFoundException("Author not found with name: " + name);
     }
 
-    public void getAllAuthors(Context ctx) {
-        List<Author> authors = authorService.getAllAuthors();
-        ctx.json(authors);
+    public void updateAuthor(String name, Author updatedAuthor) throws AuthorNotFoundException {
+        boolean found = false;
+        for (int i = 0; i < authorList.size(); i++) {
+            Author author = authorList.get(i);
+            if (author.getName().equals(name)) {
+                authorList.set(i, updatedAuthor);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            throw new AuthorNotFoundException("Author not found with name: " + name);
+        }
     }
 
-    public void createAuthor(Context ctx) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            Author author = objectMapper.readValue(ctx.body(), Author.class);
-            authorService.addAuthor(author);
-            ctx.status(201);
-        } catch (Exception e) {
-            ctx.status(400);
+    public void deleteAuthor(String name) throws AuthorNotFoundException {
+        boolean removed = authorList.removeIf(author -> author.getName().equals(name));
+        if (!removed) {
+            throw new AuthorNotFoundException("Author not found with name: " + name);
         }
     }
 }
-
-// BookController.java
-package org.example.controller;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.javalin.http.Context;
-import org.example.model.Book;
-import org.example.service.BookService;
-
-import java.util.List;
-
-public class BookController {
-    private final BookService bookService;
-
-    public BookController(BookService bookService) {
-        this.bookService = bookService;
-    }
-
-    public void getAllBooks(Context ctx) {
-        List<Book> books = bookService.getAllBooks();
-        ctx.json(books);
-    }
-
-    public void createBook(Context ctx) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            Book book = objectMapper.readValue(ctx.body(), Book.class);
-            bookService.addBook(book);
-            ctx.status(201);
-        } catch (Exception e) {
-            ctx.status(400);
-        }
-    }
-}
-```
-
-### Main Class
-
-
-
-```java
-package org.example;
-
-import io.javalin.Javalin;
-import org.example.controller.AuthorController;
-import org.example.controller.BookController;
-import org.example.service.AuthorService;
-import org.example.service.BookService;
-
-public class Main {
-    public static void main(String[] args) {
-        // Instantiate services
-        AuthorService authorService = new AuthorService();
-        BookService bookService = new BookService();
-
-        // Instantiate controllers and inject services
-        AuthorController authorController = new AuthorController(authorService);
-        BookController bookController = new BookController(bookService);
-
-        // Create Javalin app
-        Javalin app = Javalin.create();
-
-        // Configure routes
-        app.get("/authors", authorController::getAllAuthors);
-        app.post("/authors", authorController::createAuthor);
-
-        app.get("/books", bookController::getAllBooks);
-        app.post("/books", bookController::createBook);
-
-        // Start the server
-        app.start(7000);
-    }
-}
-```
-
-
-
-////////////////
-public class BookController {
-
-    private final BookService bookService;
-
-    public BookController(BookService bookService) {
-        this.bookService = bookService;
-    }
-
-    public Javalin createEndpoints(Javalin app) {
-        app.get("/books", ctx -> {
-            List<Book> books = bookService.getAllBooks();
-            ctx.json(books);
-        });
-
-        app.get("/books/:id", ctx -> {
-            long id = ctx.pathParam("id", Long.class).get();
-            Book book = bookService.getBookById(id);
-            if (book != null) {
-                ctx.json(book);
-            } else {
-                ctx.status(404);
-            }
-        });
-
-        app.post("/books", ctx -> {
-            try {
-                Book newBook = ctx.bodyAsClass(Book.class);
-                Book createdBook = bookService.addBook(newBook);
-                ctx.status(201).json(createdBook);
-            } catch (JsonProcessingException e) {
-                ctx.status(400).result("Invalid book data");
-            } catch (BookException e) {
-                ctx.status(400).result(e.getMessage());
-            }
-        });
-
-        app.put("/books/:id", ctx -> {
-            long id = ctx.pathParam("id", Long.class).get();
-            try {
-                Book updatedBook = ctx.bodyAsClass(Book.class);
-                updatedBook.setId(id); // Ensure the ID is set
-                Book book = bookService.updateBook(updatedBook);
-                ctx.json(book);
-            } catch (JsonProcessingException e) {
-                ctx.status(400).result("Invalid book data");
-            } catch (BookException e) {
-                ctx.status(400).result(e.getMessage());
-            }
-        });
-
-        app.delete("/books/:id", ctx -> {
-            long id = ctx.pathParam("id", Long.class).get();
-            bookService.deleteBook(id);
-            ctx.status(204);
-        });
-
-        return app;
-    }
-}
-package org.example.controller;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.javalin.Javalin;
-import org.example.exception.BookException;
-import org.example.model.Book;
-import org.example.service.BookService;
 
