@@ -196,3 +196,87 @@ public class BookService {
         }
     }
 }
+////////////
+package org.example.Controller;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.javalin.Javalin;
+import org.example.Exception.PaintingException;
+import org.example.Model.Author;
+import org.example.Model.Painting;
+import org.example.Service.AuthorService;
+import org.example.Service.PaintingService;
+
+import java.util.List;
+
+public class ArtController {
+
+    AuthorService authorService;
+    PaintingService paintingService;
+
+    public ArtController(AuthorService authorService, PaintingService paintingService){
+        this.authorService = authorService;
+        this.paintingService = paintingService;
+    }
+
+    public Javalin getAPI(){
+        Javalin api = Javalin.create();
+
+        api.get("health", context -> {context.result("Server is UP");});
+//        a get for both author and painting
+//        a post for both author and painting
+//        I'll showcase a endpoint that requires usage of both the author and painting service
+//        I'll showcase exception handling within the controller
+//        Test case/logging
+        api.get("author", context -> {
+            List<Author> authorList = authorService.getAuthorList();
+            context.json(authorList);
+        });
+        api.get("painting", context -> {
+            List<Painting> paintingList = paintingService.getPaintingList();
+            context.json(paintingList);
+        });
+        api.post("author", context -> {
+            try{
+                ObjectMapper om = new ObjectMapper();
+                Author a = om.readValue(context.body(), Author.class);
+                authorService.addAuthor(a);
+                context.status(201);
+            }catch(JsonProcessingException e){
+                context.status(400);
+            }
+        });
+        api.post("painting", context -> {
+            try{
+                ObjectMapper om = new ObjectMapper();
+                Painting p = om.readValue(context.body(), Painting.class);
+                Painting newPainting = paintingService.addPainting(p);
+                context.status(201);
+                context.json(newPainting);
+            }catch(JsonProcessingException e){
+                context.status(400);
+            }catch(PaintingException e){
+                context.result(e.getMessage());
+                context.status(400);
+            }
+        });
+        /**
+         * case 1: the painting id is found
+         *  - respond with the painting JSON status 200
+         *  case 2: the painting is not found
+         *  - respond with no body status 404
+         */
+        api.get("painting/{id}", context -> {
+            long id = Long.parseLong(context.pathParam("id"));
+           Painting p = paintingService.getPaintingById(id);
+           if(p == null){
+               context.status(404);
+           }else{
+               context.json(p);
+               context.status(200);
+           }
+        });
+
+        return api;
+    }
