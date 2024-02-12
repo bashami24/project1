@@ -56,3 +56,29 @@ Logging within service classes
                 context.status(404);
             }
         });
+
+///////////////////import java.util.ArrayList;
+import java.util.List;
+
+public class SellerService {
+
+    private List<String> existingNames;
+
+    public SellerService() {
+        this.existingNames = new ArrayList<>();
+    }
+
+    public List<String> getAllSellerNames() {
+        return new ArrayList<>(existingNames); // Return a copy to avoid direct modification of the list
+    }
+
+    public void addSellerName(String name) throws SellerNameNotUniqueException {
+        if (existingNames.contains(name)) {
+            throw new SellerNameNotUniqueException("Seller name must be unique");
+        }
+        existingNames.add(name);
+    }
+
+    // Other methods for CRUD operations on sellers can be added here
+}
+
