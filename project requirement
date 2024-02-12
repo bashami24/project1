@@ -35,50 +35,24 @@ CRUD functionality on Product
 Unit testing of service classes
 Logging within service classes
 
-package org.example.Service;
-
-import org.example.Model.Author;
-import org.example.exception.AuthorNotFoundException;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class AuthorService {
-
-    private List<Author> authorList;
-    private List<String> existingNames;
-
-    public AuthorService() {
-        this.authorList = new ArrayList<>();
-        this.existingNames = new ArrayList<>();
-    }
-
-    public AuthorService(List<Author> authorList) {
-        this.authorList = authorList;
-        this.existingNames = new ArrayList<>();
-        for (Author author : authorList) {
-            existingNames.add(author.getName());
-        }
-    }
-
-    public List<Author> getAllAuthors() {
-        return authorList;
-    }
-
-    public void addAuthor(Author author) throws IllegalArgumentException {
-        if (existingNames.contains(author.getName())) {
-            throw new IllegalArgumentException("Author name must be unique");
-        }
-        authorList.add(author);
-        existingNames.add(author.getName());
-    }
-
-    public Author getAuthorByName(String name) throws AuthorNotFoundException {
-        for (Author author : authorList) {
-            if (author.getName().equals(name)) {
-                return author;
+        api.put("books/{id}", context -> {
+            long id = Long.parseLong(context.pathParam("id"));
+            try {
+                ObjectMapper om = new ObjectMapper();
+                Book updatedBook = om.readValue(context.body(), Book.class);
+                bookService.updateBook(id, updatedBook);
+                context.status(200);
+            } catch (JsonProcessingException | BookNotFoundException e) {
+                context.status(400);
             }
-        }
-        throw new AuthorNotFoundException("Author with name '" + name + "' not found");
-    }
-}
+        });
+
+        api.delete("books/{id}", context -> {
+            long id = Long.parseLong(context.pathParam("id"));
+            try {
+                bookService.deleteBook(id);
+                context.status(200);
+            } catch (BookNotFoundException e) {
+                context.status(404);
+            }
+        });
