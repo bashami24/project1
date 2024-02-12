@@ -237,3 +237,42 @@ public class Main {
     }
 }
 
+////////////
+
+app.post("/books", ctx -> {
+    try {
+        ObjectMapper om = new ObjectMapper();
+        Book newBook = om.readValue(ctx.body(), Book.class);
+
+        // Check if the book ID is non-null and unique
+        if (newBook.getId() == null || bookService.getBookById(newBook.getId()) != null) {
+            ctx.status(400).result("Book ID should be non-null and unique");
+            return;
+        }
+
+        // Check if the book name is non-null
+        if (newBook.getName() == null) {
+            ctx.status(400).result("Book name should be non-null");
+            return;
+        }
+
+        // Check if the price is over 0
+        if (newBook.getPrice() <= 0) {
+            ctx.status(400).result("Price should be over 0");
+            return;
+        }
+
+        // Check if the seller name refers to an existing seller
+        if (sellerService.getSellerByName(newBook.getSellerName()) == null) {
+            ctx.status(400).result("Seller name should refer to an existing seller");
+            return;
+        }
+
+        // Add the book if all criteria are met
+        bookService.addBook(newBook);
+        ctx.status(201);
+    } catch (JsonProcessingException e) {
+        ctx.status(400).result("Invalid book data");
+    }
+});
+
