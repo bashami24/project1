@@ -276,3 +276,12 @@ app.post("/books", ctx -> {
     }
 });
 
+
+public Seller getSellerByName(String name) {
+    for (Seller seller : sellerList) {
+        if (seller.getName().equals(name)) {
+            return seller;
+        }
+    }
+    return null; // Seller not found
+}
