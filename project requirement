@@ -110,3 +110,94 @@ public class SellerService {
         return new HashSet<>(sellerNames);
     }
 }
+//////////////////////////////////
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.javalin.Javalin;
+import org.example.exception.BookNotFoundException;
+import org.example.exception.SellerAlreadyExistsException;
+import org.example.model.Book;
+import org.example.model.Seller;
+import org.example.service.BookService;
+import org.example.service.SellerService;
+
+import java.util.List;
+import java.util.UUID;
+
+public class BookController {
+
+    private final BookService bookService;
+    private final SellerService sellerService;
+
+    public BookController(BookService bookService, SellerService sellerService) {
+        this.bookService = bookService;
+        this.sellerService = sellerService;
+    }
+
+    public Javalin createEndpoints(Javalin app) {
+        // Endpoints for books
+        app.get("/books", ctx -> {
+            List<Book> books = bookService.getAllBooks();
+            ctx.json(books);
+        });
+
+        app.get("/books/:id", ctx -> {
+            UUID id = UUID.fromString(ctx.pathParam("id"));
+            try {
+                Book book = bookService.getBookById(id);
+                ctx.json(book);
+            } catch (BookNotFoundException e) {
+                ctx.status(404);
+            }
+        });
+
+        app.post("/books", ctx -> {
+            try {
+                ObjectMapper om = new ObjectMapper();
+                Book newBook = om.readValue(ctx.body(), Book.class);
+                bookService.addBook(newBook);
+                ctx.status(201);
+            } catch (JsonProcessingException e) {
+                ctx.status(400).result("Invalid book data");
+            }
+        });
+
+        app.put("/books/:id", ctx -> {
+            UUID id = UUID.fromString(ctx.pathParam("id"));
+            try {
+                ObjectMapper om = new ObjectMapper();
+                Book updatedBook = om.readValue(ctx.body(), Book.class);
+                updatedBook.setId(id);
+                bookService.updateBook(updatedBook);
+                ctx.status(200);
+            } catch (JsonProcessingException | BookNotFoundException e) {
+                ctx.status(400).result("Invalid book data");
+            }
+        });
+
+        app.delete("/books/:id", ctx -> {
+            UUID id = UUID.fromString(ctx.pathParam("id"));
+            bookService.deleteBook(id);
+            ctx.status(200);
+        });
+
+        // Endpoints for sellers
+        app.get("/sellers", ctx -> {
+            List<Seller> sellers = sellerService.getAllSellers();
+            ctx.json(sellers);
+        });
+
+        app.post("/sellers", ctx -> {
+            try {
+                ObjectMapper om = new ObjectMapper();
+                Seller newSeller = om.readValue(ctx.body(), Seller.class);
+                sellerService.addSeller(newSeller);
+                ctx.status(201);
+            } catch (JsonProcessingException | SellerAlreadyExistsException e) {
+                ctx.status(400).result("Invalid seller data");
+            }
+        });
+
+        return app;
+    }
+}
