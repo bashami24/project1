@@ -20,6 +20,9 @@ public List<Seller> getAllSellers(){
 
 }
     public void addSeller(Seller seller) throws SellerAlreadyExistsException {
+        if (seller.getName() == null ) {
+            throw new IllegalArgumentException("Seller Name Cannot be null");
+        }
         if (isSellerNameExists(seller.getName()))  {
             throw new SellerAlreadyExistsException("Seller With name '" + seller.getName() + "'Already Exists.");
         }
@@ -28,6 +31,14 @@ public List<Seller> getAllSellers(){
 
         private boolean isSellerNameExists(String name){
         return sellerList.stream().anyMatch(s ->s.getName().equals(name));
+    }
+    public  Seller getSellerByName(String name) {
+        for (Seller seller : sellerList) {
+            if (seller.getName().equals(name)) {
+                return seller;
+            }
+        }
+        return null;
     }
 
 }

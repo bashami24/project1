@@ -20,10 +20,14 @@ public class BookService {
     }
 
     public Book addBook(Book book) {
-       UUID id = UUID.randomUUID();
-       book.setId(id);
-       bookList.add(book);
-       return book;
+        if (book.getId() == null && isBookNameUnique(book.getName())) {
+            UUID id = UUID.randomUUID();
+            book.setId(id);
+            bookList.add(book);
+            return book;
+        } else {
+            return null;
+        }
     }
 
     public Book getBookById(UUID id) throws BookNotFoundException {
@@ -40,9 +44,14 @@ public class BookService {
         for (int i = 0; i < bookList.size(); i++) {
             Book book = bookList.get(i);
             if (book.getId() == id) {
-                bookList.set(i, updatedBook);
-                found = true;
-                break;
+                if (isBookNameUnique(updatedBook.getName())) {
+                    updatedBook.setId(id);
+                    bookList.set(i, updatedBook);
+                    found = true;
+                    break;
+                } else {
+                    return;
+                }
             }
         }
         if (!found) {
@@ -55,5 +64,13 @@ public class BookService {
         if (!removed) {
             throw new BookNotFoundException("Book not found with id: " + id);
         }
+    }
+    private boolean isBookNameUnique(String name) {
+        for (Book book : bookList) {
+            if (book.getName().equals(name)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -131,7 +131,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Controller {
-
+    SellerService sellerService1 = new SellerService();
     private final BookService bookService;
     private final SellerService sellerService;
 
@@ -159,8 +159,46 @@ public class Controller {
                 ctx.status(404);
             }
         });
+ app.post("/books/{id}", ctx -> {
+    try {
+        ObjectMapper om = new ObjectMapper();
+        Book newBook = om.readValue(ctx.body(), Book.class);
 
-        app.post("/books/{id}", ctx -> {
+        // Check if the book ID is non-null and unique
+        if (newBook.getId() == null || bookService.getBookById(newBook.getId()) != null) {
+            ctx.status(400).result("Book ID should be non-null and unique");
+            return;
+        }
+
+        // Check if the book name is non-null
+        if (newBook.getName() == null) {
+            ctx.status(400).result("Book name should be non-null");
+            return;
+        }
+
+        // Check if the price is over 0
+        if (newBook.getPrice() <= 0) {
+            ctx.status(400).result("Price should be over 0");
+            return;
+        }
+
+        // Check if the seller name refers to an existing seller
+
+        Seller existingSeller = sellerService1.getSellerByName(newBook.getName());
+        if (existingSeller == null) {
+            ctx.status(400).result("Seller Name should refer to an existing Seller");
+            return;
+        }
+
+        // Add the book if all criteria are met
+        bookService.addBook(newBook);
+        ctx.status(201);
+    } catch (JsonProcessingException e) {
+        ctx.status(400).result("Invalid book data");
+    }
+});
+
+      /*  app.post("/books/{id}", ctx -> {
             try {
                 ObjectMapper om = new ObjectMapper();
                 Book newBook = om.readValue(ctx.body(), Book.class);
@@ -178,6 +216,33 @@ public class Controller {
                 Book updatedBook = om.readValue(ctx.body(), Book.class);
                 updatedBook.setId(id);
                 bookService.updateBook(id,updatedBook);
+                ctx.status(200);
+            } catch (JsonProcessingException | BookNotFoundException e) {
+                ctx.status(400).result("Invalid book data");
+            }
+        });*/
+
+        app.put("/books/{id}", ctx -> {
+            UUID id = UUID.fromString(ctx.pathParam("id"));
+            try {
+                ObjectMapper om = new ObjectMapper();
+                Book updatedBook = om.readValue(ctx.body(), Book.class);
+
+                // Check if seller name refers to an existing seller
+                if (sellerService1.getSellerByName(updatedBook.getName()) == null) {
+                    ctx.status(400).result("Seller name should refer to an existing seller");
+                    return;
+                }
+
+                // Check if price is greater than 0
+                if (updatedBook.getPrice() <= 0) {
+                    ctx.status(400).result("Price should be greater than 0");
+                    return;
+                }
+
+                // Update the book
+                updatedBook.setId(id);
+                bookService.updateBook(id, updatedBook);
                 ctx.status(200);
             } catch (JsonProcessingException | BookNotFoundException e) {
                 ctx.status(400).result("Invalid book data");
