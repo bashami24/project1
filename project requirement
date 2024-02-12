@@ -1,3 +1,5 @@
+
+
 HTTP project
 Two models:
     Product
@@ -35,4 +37,203 @@ CRUD functionality on Product
 Unit testing of service classes
 Logging within service classes
 
-Javalin
+        api.put("books/{id}", context -> {
+            long id = Long.parseLong(context.pathParam("id"));
+            try {
+                ObjectMapper om = new ObjectMapper();
+                Book updatedBook = om.readValue(context.body(), Book.class);
+                bookService.updateBook(id, updatedBook);
+                context.status(200);
+            } catch (JsonProcessingException | BookNotFoundException e) {
+                context.status(400);
+            }
+        });
+
+        api.delete("books/{id}", context -> {
+            long id = Long.parseLong(context.pathParam("id"));
+            try {
+                bookService.deleteBook(id);
+                context.status(200);
+            } catch (BookNotFoundException e) {
+                context.status(404);
+            }
+        });
+
+///////////////////import java.util.ArrayList;
+import java.util.List;
+
+public class SellerService {
+
+    private List<String> existingNames;
+
+    public SellerService() {
+        this.existingNames = new ArrayList<>();
+    }
+
+    public List<String> getAllSellerNames() {
+        return new ArrayList<>(existingNames); // Return a copy to avoid direct modification of the list
+    }
+
+    public void addSellerName(String name) throws SellerNameNotUniqueException {
+        if (existingNames.contains(name)) {
+            throw new SellerNameNotUniqueException("Seller name must be unique");
+        }
+        existingNames.add(name);
+    }
+
+    // Other methods for CRUD operations on sellers can be added here
+}
+
+/////////////////////////////
+import org.example.exception.SellerNameNotUniqueException;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class SellerService {
+
+    private final Set<String> sellerNames;
+
+    public SellerService() {
+        this.sellerNames = new HashSet<>();
+    }
+
+    public void addSellerName(String name) throws SellerNameNotUniqueException {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Seller name cannot be null or empty");
+        }
+        if (sellerNames.contains(name)) {
+            throw new SellerNameNotUniqueException("Seller name '" + name + "' already exists");
+        }
+        sellerNames.add(name);
+    }
+
+    public Set<String> getAllSellerNames() {
+        return new HashSet<>(sellerNames);
+    }
+}
+//////////////////////////////////
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.javalin.Javalin;
+import org.example.exception.BookNotFoundException;
+import org.example.exception.SellerAlreadyExistsException;
+import org.example.model.Book;
+import org.example.model.Seller;
+import org.example.service.BookService;
+import org.example.service.SellerService;
+
+import java.util.List;
+import java.util.UUID;
+
+public class BookController {
+
+    private final BookService bookService;
+    private final SellerService sellerService;
+
+    public BookController(BookService bookService, SellerService sellerService) {
+        this.bookService = bookService;
+        this.sellerService = sellerService;
+    }
+
+    public Javalin createEndpoints(Javalin app) {
+        // Endpoints for books
+        app.get("/books", ctx -> {
+            List<Book> books = bookService.getAllBooks();
+            ctx.json(books);
+        });
+
+        app.get("/books/:id", ctx -> {
+            UUID id = UUID.fromString(ctx.pathParam("id"));
+            try {
+                Book book = bookService.getBookById(id);
+                ctx.json(book);
+            } catch (BookNotFoundException e) {
+                ctx.status(404);
+            }
+        });
+
+        app.post("/books", ctx -> {
+            try {
+                ObjectMapper om = new ObjectMapper();
+                Book newBook = om.readValue(ctx.body(), Book.class);
+                bookService.addBook(newBook);
+                ctx.status(201);
+            } catch (JsonProcessingException e) {
+                ctx.status(400).result("Invalid book data");
+            }
+        });
+
+        app.put("/books/:id", ctx -> {
+            UUID id = UUID.fromString(ctx.pathParam("id"));
+            try {
+                ObjectMapper om = new ObjectMapper();
+                Book updatedBook = om.readValue(ctx.body(), Book.class);
+                updatedBook.setId(id);
+                bookService.updateBook(updatedBook);
+                ctx.status(200);
+            } catch (JsonProcessingException | BookNotFoundException e) {
+                ctx.status(400).result("Invalid book data");
+            }
+        });
+
+        app.delete("/books/:id", ctx -> {
+            UUID id = UUID.fromString(ctx.pathParam("id"));
+            bookService.deleteBook(id);
+            ctx.status(200);
+        });
+
+        // Endpoints for sellers
+        app.get("/sellers", ctx -> {
+            List<Seller> sellers = sellerService.getAllSellers();
+            ctx.json(sellers);
+        });
+
+        app.post("/sellers", ctx -> {
+            try {
+                ObjectMapper om = new ObjectMapper();
+                Seller newSeller = om.readValue(ctx.body(), Seller.class);
+                sellerService.addSeller(newSeller);
+                ctx.status(201);
+            } catch (JsonProcessingException | SellerAlreadyExistsException e) {
+                ctx.status(400).result("Invalid seller data");
+            }
+        });
+
+        return app;
+    }
+}
+
+package org.example;
+
+import io.javalin.Javalin;
+import org.example.Controller.BookController;
+import org.example.Controller.SellerController;
+import org.example.Service.AuthorService;
+import org.example.Service.BookService;
+import org.example.Service.SellerService;
+
+public class Main {
+
+    public static void main(String[] args) {
+        // Initialize services
+        AuthorService authorService = new AuthorService();
+        BookService bookService = new BookService();
+        SellerService sellerService = new SellerService();
+
+        // Initialize controllers with services
+        BookController bookController = new BookController(bookService, authorService);
+        SellerController sellerController = new SellerController(sellerService);
+
+        // Create Javalin app
+        Javalin app = Javalin.create();
+
+        // Configure routes using controller methods
+        bookController.createEndpoints(app);
+        sellerController.createEndpoints(app);
+
+        // Start the server
+        app.start(7000);
+    }
+}
+
