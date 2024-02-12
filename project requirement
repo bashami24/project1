@@ -45,31 +45,40 @@ import java.util.List;
 
 public class AuthorService {
 
-    private List<Author> AuthorList;
-    private List<String> ExistingNames;
+    private List<Author> authorList;
+    private List<String> existingNames;
 
     public AuthorService() {
-        this.AuthorList = new ArrayList<>();
-        this.ExistingNames = new ArrayList<>();
+        this.authorList = new ArrayList<>();
+        this.existingNames = new ArrayList<>();
     }
 
     public AuthorService(List<Author> authorList) {
-        this.AuthorList = authorList;
-        this.ExistingNames = new ArrayList<>();
-        for(Author author : authorList) {
-            ExistingNames.add(author.getName());
+        this.authorList = authorList;
+        this.existingNames = new ArrayList<>();
+        for (Author author : authorList) {
+            existingNames.add(author.getName());
         }
     }
 
     public List<Author> getAllAuthors() {
-        return AuthorList;
+        return authorList;
     }
 
-    public void addAuthor(Author author) {
-        AuthorList.add(author);
+    public void addAuthor(Author author) throws IllegalArgumentException {
+        if (existingNames.contains(author.getName())) {
+            throw new IllegalArgumentException("Author name must be unique");
+        }
+        authorList.add(author);
+        existingNames.add(author.getName());
     }
 
     public Author getAuthorByName(String name) throws AuthorNotFoundException {
-        for (Author author : AuthorList) {
+        for (Author author : authorList) {
             if (author.getName().equals(name)) {
                 return author;
+            }
+        }
+        throw new AuthorNotFoundException("Author with name '" + name + "' not found");
+    }
+}
