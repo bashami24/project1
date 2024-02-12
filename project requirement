@@ -113,4 +113,32 @@ public class BookService {
         return true;
     }
 }
+///////////////////////
+public void testUpdateBook() throws BookNotFoundException {
+    // Add a book
+    Book book1 = new Book("12345", "Sample Book", 10.99, "Seller1");
+    Book book2 = new Book("67890", "Another Book", 15.99, "Seller2");
+    bookService.addBook(book1);
+    bookService.addBook(book2);
+
+    // Try updating the book with a name that already exists
+    Book updatedBook = new Book("12345", "Another Book", 15.99, "Seller3");
+
+    // Expect an exception to be thrown since the name is not unique
+    assertThrows(IllegalArgumentException.class, () -> {
+        bookService.updateBook(12345L, updatedBook);
+    });
+
+    // Verify that the book with ID 12345 still has its original details
+    Book retrievedBook = bookService.getBookById(12345L);
+    assertEquals(book1, retrievedBook);
+
+    // Now try updating the book with a unique name
+    updatedBook = new Book("12345", "Updated Book", 15.99, "Seller3");
+    bookService.updateBook(12345L, updatedBook);
+
+    // Verify the book is updated
+    retrievedBook = bookService.getBookById(12345L);
+    assertEquals(updatedBook, retrievedBook);
+}
 
