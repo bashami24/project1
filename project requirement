@@ -285,3 +285,32 @@ public Seller getSellerByName(String name) {
     }
     return null; // Seller not found
 }
+///////////////
+
+
+app.put("/books/{id}", ctx -> {
+    UUID id = UUID.fromString(ctx.pathParam("id"));
+    try {
+        ObjectMapper om = new ObjectMapper();
+        Book updatedBook = om.readValue(ctx.body(), Book.class);
+        
+        // Check if seller name refers to an existing seller
+        if (sellerService.getSellerByName(updatedBook.getSellerName()) == null) {
+            ctx.status(400).result("Seller name should refer to an existing seller");
+            return;
+        }
+        
+        // Check if price is greater than 0
+        if (updatedBook.getPrice() <= 0) {
+            ctx.status(400).result("Price should be greater than 0");
+            return;
+        }
+        
+        // Update the book
+        updatedBook.setId(id);
+        bookService.updateBook(id, updatedBook);
+        ctx.status(200);
+    } catch (JsonProcessingException | BookNotFoundException e) {
+        ctx.status(400).result("Invalid book data");
+    }
+});
