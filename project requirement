@@ -82,3 +82,31 @@ public class SellerService {
     // Other methods for CRUD operations on sellers can be added here
 }
 
+/////////////////////////////
+import org.example.exception.SellerNameNotUniqueException;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class SellerService {
+
+    private final Set<String> sellerNames;
+
+    public SellerService() {
+        this.sellerNames = new HashSet<>();
+    }
+
+    public void addSellerName(String name) throws SellerNameNotUniqueException {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Seller name cannot be null or empty");
+        }
+        if (sellerNames.contains(name)) {
+            throw new SellerNameNotUniqueException("Seller name '" + name + "' already exists");
+        }
+        sellerNames.add(name);
+    }
+
+    public Set<String> getAllSellerNames() {
+        return new HashSet<>(sellerNames);
+    }
+}
