@@ -37,7 +37,80 @@ CRUD functionality on Product
 Unit testing of service classes
 Logging within service classes
 
-<<<<<<< HEAD
-=======
- 
->>>>>>> 909854148041d63969d626f3f755964af6a350ec
+package org.example.Service;
+
+import org.example.Model.Book;
+import org.example.exception.BookNotFoundException;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class BookService {
+
+    private final List<Book> bookList;
+    private long nextId = 1; // Initial ID value
+
+    public BookService() {
+        this.bookList = new ArrayList<>();
+    }
+
+    public List<Book> getAllBooks() {
+        return bookList;
+    }
+
+    public Book addBook(Book book) {
+        if (book.getId() == 0 && isBookNameUnique(book.getName())) {
+            book.setId(nextId++); // Assign the next available ID
+            bookList.add(book);
+            return book;
+        } else {
+            return null;
+        }
+    }
+
+    public Book getBookById(long id) throws BookNotFoundException {
+        for (Book book : bookList) {
+            if (book.getId() == id) {
+                return book;
+            }
+        }
+        throw new BookNotFoundException("Book not found with id: " + id);
+    }
+
+    public void updateBook(long id, Book updatedBook) throws BookNotFoundException {
+        boolean found = false;
+        for (int i = 0; i < bookList.size(); i++) {
+            Book book = bookList.get(i);
+            if (book.getId() == id) {
+                if (isBookNameUnique(updatedBook.getName())) {
+                    updatedBook.setId(id);
+                    bookList.set(i, updatedBook);
+                    found = true;
+                    break;
+                } else {
+                    return;
+                }
+            }
+        }
+        if (!found) {
+            throw new BookNotFoundException("Book not found with id: " + id);
+        }
+    }
+
+    public void deleteBook(long id) throws BookNotFoundException {
+        boolean removed = bookList.removeIf(book -> book.getId() == id);
+        if (!removed) {
+            throw new BookNotFoundException("Book not found with id: " + id);
+        }
+    }
+
+    private boolean isBookNameUnique(String name) {
+        for (Book book : bookList) {
+            if (book.getName().equals(name)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
