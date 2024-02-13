@@ -34,32 +34,34 @@ CRUD functionality on Product
         - DELETE should always return 200, regardless of if the item existed
             at the start or not. This is convention.
 
-public class RockGame {
+public static int rockGame(int b, int s, int t) {
+    int rocksLeft = b;
+    int steveTotal = 0;
+    int tommyTotal = 0;
 
-    public static void main(String[] args) {
-        System.out.println(rockGame(10, 2, 3)); // Output: 8
-        System.out.println(rockGame(20, 3, 4)); // Output: 11
-    }
-
-    public static int rockGame(int b, int s, int t) {
-        int steveTotal = 0;
-        int tommyTotal = 0;
-        boolean steveTurn = true;
-
-        while (b > 0) {
-            if (steveTurn) {
+    while (rocksLeft > 0) {
+        if (steveTotal <= tommyTotal) {
+            if (rocksLeft >= s) {
                 steveTotal += s;
-                b -= s;
+                rocksLeft -= s;
             } else {
-                tommyTotal += t;
-                b -= t;
+                steveTotal += rocksLeft;
+                rocksLeft = 0;
             }
-            steveTurn = !steveTurn;
+        } else {
+            if (rocksLeft >= t) {
+                tommyTotal += t;
+                rocksLeft -= t;
+            } else {
+                tommyTotal += rocksLeft;
+                rocksLeft = 0;
+            }
         }
-
-        return steveTurn ? steveTotal : tommyTotal;
     }
+
+    return (steveTotal > tommyTotal) ? steveTotal : tommyTotal;
 }
 
-
-
+public static void main(String[] args) {
+    System.out.println(rockGame(10, 2, 3)); // Output should be 6
+}
