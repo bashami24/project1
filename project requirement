@@ -34,17 +34,12 @@ CRUD functionality on Product
         - DELETE should always return 200, regardless of if the item existed
             at the start or not. This is convention.
 
-C:\dev\zulu11.68.17-ca-jdk11.0Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStoreType=Windows-ROOT
-Exception in thread "main" java.lang.IllegalArgumentException: Path '/books/:{id}' invalid - Javalin 4 switched from ':param' to '{param}'.
-	at io.javalin.routing.PathParser.<init>(PathParser.kt:10)
-	at io.javalin.routing.HandlerEntry.<init>(HandlerEntry.kt:16)
-	at io.javalin.Javalin.addHandler(Javalin.java:364)
-	at io.javalin.Javalin.addHandler(Javalin.java:376)
-	at io.javalin.Javalin.get(Javalin.java:385)
-	at org.example.Controller.Controller.getAPI(Controller.java:311)
-	at org.example.Main.main(Main.java:17)
+Steve and Tommy are playing a game where they take rocks out of a bag. The bag has a certain number of rocks, and each child can take a certain number of rocks out of the bag. Steve will always go first and then the two children take turns taking rocks out of the bag. It is your job to figure out which child will empty the bag (reduce the number of rocks in the bag to 0), and how many rocks that same child has taken total.
 
-Process finished with exit code 1
-found = false
+The rockGame() method takes in 3 arguments in this order:
+b - the total number of rocks in the bag, this will be between 0-1000
+s - the number of rocks Steve will take out every turn, this will be between 0-1000
+t - the number of rocks Tommy will take out every turn, this will be between 0-1000
+After figuring out who empties the bag, you are required to return the total number of rocks that the child who went has total.
 
 
