@@ -74,3 +74,11 @@ org.example.exception.BookNotFoundException: Book not found with id: 1
 
 Process finished with exit code -1
 
+found = false
+this = {BookService@1172} 
+this = {BookService@1172} 
+id = 1
+updatedBook = {Book@1171} "Book{id=0, name='null', price=0.0, authorName='null'}"
+found = false
+
+
