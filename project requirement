@@ -34,12 +34,32 @@ CRUD functionality on Product
         - DELETE should always return 200, regardless of if the item existed
             at the start or not. This is convention.
 
-Steve and Tommy are playing a game where they take rocks out of a bag. The bag has a certain number of rocks, and each child can take a certain number of rocks out of the bag. Steve will always go first and then the two children take turns taking rocks out of the bag. It is your job to figure out which child will empty the bag (reduce the number of rocks in the bag to 0), and how many rocks that same child has taken total.
+public class RockGame {
 
-The rockGame() method takes in 3 arguments in this order:
-b - the total number of rocks in the bag, this will be between 0-1000
-s - the number of rocks Steve will take out every turn, this will be between 0-1000
-t - the number of rocks Tommy will take out every turn, this will be between 0-1000
-After figuring out who empties the bag, you are required to return the total number of rocks that the child who went has total.
+    public static void main(String[] args) {
+        System.out.println(rockGame(10, 2, 3)); // Output: 8
+        System.out.println(rockGame(20, 3, 4)); // Output: 11
+    }
+
+    public static int rockGame(int b, int s, int t) {
+        int steveTotal = 0;
+        int tommyTotal = 0;
+        boolean steveTurn = true;
+
+        while (b > 0) {
+            if (steveTurn) {
+                steveTotal += s;
+                b -= s;
+            } else {
+                tommyTotal += t;
+                b -= t;
+            }
+            steveTurn = !steveTurn;
+        }
+
+        return steveTurn ? steveTotal : tommyTotal;
+    }
+}
+
 
 
