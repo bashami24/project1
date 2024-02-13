@@ -1,4 +1,3 @@
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.example.Model.Book;
 import org.example.Model.Seller;
 import org.example.Service.BookService;
@@ -8,14 +7,14 @@ import org.example.exception.SellerAlreadyExistsException;
 import org.junit.Before;
 import org.junit.Test;
 
-
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class ServiceTest {
 
-    UUID id = UUID.randomUUID();
+    private long id; // Initialize the id variable
 
     private BookService bookService;
     private SellerService sellerService;
@@ -45,10 +44,10 @@ public class ServiceTest {
 
         // Update the book
         Book updatedBook = new Book(id, "Updated Book", 15.99, "Seller2");
-        bookService.updateBook(UUID.fromString(id), updatedBook);
+        bookService.updateBook(id, updatedBook); // Use id directly
 
         // Verify the book is updated
-        Book retrievedBook = bookService.getBookById(UUID.fromString("12345"));
+        Book retrievedBook = bookService.getBookById(id); // Use id directly
         assertEquals(updatedBook, retrievedBook);
     }
 
@@ -59,10 +58,10 @@ public class ServiceTest {
         bookService.addBook(book);
 
         // Delete the book
-        bookService.deleteBook(UUID.fromString(id));
+        bookService.deleteBook(id); // Use id directly
 
         // Verify the book is deleted
-        bookService.getBookById(UUID.fromString(id));
+        bookService.getBookById(id); // Use id directly
     }
 
     @Test
@@ -84,13 +83,11 @@ public class ServiceTest {
         sellerService.addSeller(seller);
 
         // Update the seller
-       /* Seller updatedSeller = new Seller("Seller2");
+        /* Seller updatedSeller = new Seller("Seller2");
         sellerService.updateSeller("Seller1", updatedSeller);
 
         // Verify the seller is updated
         Seller retrievedSeller = sellerService.getSellerByName("Seller2");
         assertEquals(updatedSeller, retrievedSeller);*/
     }
-
-    // Add more test cases as needed
 }
