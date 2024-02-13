@@ -71,4 +71,3 @@ java.lang.NullPointerException
 	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:55)
 
 
-Process finished with exit code -1
