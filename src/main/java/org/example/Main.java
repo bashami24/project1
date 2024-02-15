@@ -9,9 +9,8 @@ public class Main {
     public static void main(String[] args) {
 
 
-
-        BookService bookService = new BookService();
         SellerService sellerService = new SellerService();
+        BookService bookService = new BookService();
         Controller controller = new Controller(bookService,sellerService);
 
         Javalin api = controller.getAPI();

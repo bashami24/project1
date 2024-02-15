@@ -1,7 +1,6 @@
 package org.example.Model;
 
 import java.util.Objects;
-import java.util.UUID;
 /*
 public class Book {
     private UUID id;
@@ -77,9 +76,6 @@ public class Book {
 }
 */
 
-
-import java.util.Objects;
-
 public class Book {
     private static long nextId = 1; // Static variable to keep track of the next ID
     private long id; // Change from UUID to long
@@ -89,17 +85,17 @@ public class Book {
 
     // Constructors
 
-    public Book() {
-        this.id = nextId++; // Assign the next ID and then increment it
+    public  Book() {
+
     }
-    //public Book() {
-    //}
+
     public Book(String name, double price, String authorName) {
-        this(); // Call the default constructor to assign ID
+        this.id = nextId++;
         this.name = name;
         this.price = price;
         this.authorName = authorName;
     }
+
 
     // Getters and setters
 

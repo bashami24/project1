@@ -294,3 +294,831 @@ INFO	2024-02-12 14:40:14,161	614	io.javalin.Javalin	[main]
 INFO	2024-02-12 14:40:14,170	623	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
 INFO	2024-02-12 14:40:14,185	638	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 497 days old. Consider checking for a newer version.).
 INFO	2024-02-12 14:40:14,185	638	io.javalin.Javalin	[main]	Javalin started in 641ms \o/
+INFO	2024-02-13 13:25:10,593	0	io.javalin.Javalin	[Thread-0]	It looks like you created a Javalin instance, but you never started it.
+INFO	2024-02-13 13:25:10,594	1	io.javalin.Javalin	[Thread-0]	Try: Javalin app = Javalin.create().start();
+INFO	2024-02-13 13:25:10,594	1	io.javalin.Javalin	[Thread-0]	For more help, visit https://javalin.io/documentation#server-setup
+INFO	2024-02-13 13:29:12,973	0	io.javalin.Javalin	[Thread-0]	It looks like you created a Javalin instance, but you never started it.
+INFO	2024-02-13 13:29:12,973	0	io.javalin.Javalin	[Thread-0]	Try: Javalin app = Javalin.create().start();
+INFO	2024-02-13 13:29:12,973	0	io.javalin.Javalin	[Thread-0]	For more help, visit https://javalin.io/documentation#server-setup
+INFO	2024-02-13 14:16:16,354	0	io.javalin.Javalin	[Thread-0]	It looks like you created a Javalin instance, but you never started it.
+INFO	2024-02-13 14:16:16,354	0	io.javalin.Javalin	[Thread-0]	Try: Javalin app = Javalin.create().start();
+INFO	2024-02-13 14:16:16,354	0	io.javalin.Javalin	[Thread-0]	For more help, visit https://javalin.io/documentation#server-setup
+INFO	2024-02-13 14:26:04,796	0	io.javalin.Javalin	[Thread-0]	It looks like you created a Javalin instance, but you never started it.
+INFO	2024-02-13 14:26:04,796	0	io.javalin.Javalin	[Thread-0]	Try: Javalin app = Javalin.create().start();
+INFO	2024-02-13 14:26:04,796	0	io.javalin.Javalin	[Thread-0]	For more help, visit https://javalin.io/documentation#server-setup
+INFO	2024-02-13 14:30:50,105	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-13 14:30:50,204	99	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-13 14:30:50,291	186	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-13 14:30:50,301	196	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-13 14:30:50,619	514	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-13 14:30:50,631	526	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @955ms
+INFO	2024-02-13 14:30:50,631	526	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-13 14:30:50,639	534	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-13 14:30:50,653	548	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 498 days old. Consider checking for a newer version.).
+INFO	2024-02-13 14:30:50,653	548	io.javalin.Javalin	[main]	Javalin started in 550ms \o/
+INFO	2024-02-13 14:41:14,063	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-13 14:41:14,160	97	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-13 14:41:14,263	200	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-13 14:41:14,276	213	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68746f22{/,null,AVAILABLE}
+INFO	2024-02-13 14:41:14,596	533	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-13 14:41:14,609	546	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @1269ms
+INFO	2024-02-13 14:41:14,609	546	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-13 14:41:14,617	554	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-13 14:41:14,628	565	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 498 days old. Consider checking for a newer version.).
+INFO	2024-02-13 14:41:14,628	565	io.javalin.Javalin	[main]	Javalin started in 568ms \o/
+WARN	2024-02-13 15:39:26,249	3492186	io.javalin.Javalin	[JettyServerThreadPool-37]	Uncaught exception
+org.example.exception.BookNotFoundException: Book not found with id: 1
+	at org.example.Service.BookService.getBookById(BookService.java:42)
+	at org.example.Controller.Controller.lambda$getAPI$3(Controller.java:327)
+	at io.javalin.routing.HandlerEntry.handle(HandlerEntry.kt:19)
+	at io.javalin.http.servlet.DefaultTasks.HTTP$lambda-8$lambda-6$lambda-5(DefaultTasks.kt:35)
+	at io.javalin.http.servlet.JavalinServlet.handleTask(JavalinServlet.kt:79)
+	at io.javalin.http.servlet.JavalinServlet.handleSync(JavalinServlet.kt:46)
+	at io.javalin.http.servlet.JavalinServlet.service(JavalinServlet.kt:34)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at io.javalin.jetty.JavalinJettyServlet.service(JavalinJettyServlet.kt:58)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at org.eclipse.jetty.servlet.ServletHolder.handle(ServletHolder.java:764)
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:529)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1571)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at io.javalin.jetty.JettyServer$start$wsAndHttpHandler$1.doHandle(JettyServer.kt:57)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:176)
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:484)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1544)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:174)
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1302)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:129)
+	at org.eclipse.jetty.server.handler.StatisticsHandler.handle(StatisticsHandler.java:173)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:122)
+	at org.eclipse.jetty.server.Server.handle(Server.java:563)
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$0(HttpChannel.java:505)
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:762)
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:497)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:282)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:314)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:100)
+	at org.eclipse.jetty.io.SelectableChannelEndPoint$1.run(SelectableChannelEndPoint.java:53)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.runTask(AdaptiveExecutionStrategy.java:421)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.consumeTask(AdaptiveExecutionStrategy.java:390)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.tryProduce(AdaptiveExecutionStrategy.java:277)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.lambda$new$0(AdaptiveExecutionStrategy.java:139)
+	at org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:411)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:933)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:1077)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+WARN	2024-02-13 15:39:50,211	3516148	io.javalin.Javalin	[JettyServerThreadPool-47]	Uncaught exception
+org.example.exception.BookNotFoundException: Book not found with id: 1
+	at org.example.Service.BookService.getBookById(BookService.java:42)
+	at org.example.Controller.Controller.lambda$getAPI$3(Controller.java:327)
+	at io.javalin.routing.HandlerEntry.handle(HandlerEntry.kt:19)
+	at io.javalin.http.servlet.DefaultTasks.HTTP$lambda-8$lambda-6$lambda-5(DefaultTasks.kt:35)
+	at io.javalin.http.servlet.JavalinServlet.handleTask(JavalinServlet.kt:79)
+	at io.javalin.http.servlet.JavalinServlet.handleSync(JavalinServlet.kt:46)
+	at io.javalin.http.servlet.JavalinServlet.service(JavalinServlet.kt:34)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at io.javalin.jetty.JavalinJettyServlet.service(JavalinJettyServlet.kt:58)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at org.eclipse.jetty.servlet.ServletHolder.handle(ServletHolder.java:764)
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:529)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1571)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at io.javalin.jetty.JettyServer$start$wsAndHttpHandler$1.doHandle(JettyServer.kt:57)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:176)
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:484)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1544)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:174)
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1302)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:129)
+	at org.eclipse.jetty.server.handler.StatisticsHandler.handle(StatisticsHandler.java:173)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:122)
+	at org.eclipse.jetty.server.Server.handle(Server.java:563)
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$0(HttpChannel.java:505)
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:762)
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:497)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:282)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:314)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:100)
+	at org.eclipse.jetty.io.SelectableChannelEndPoint$1.run(SelectableChannelEndPoint.java:53)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.runTask(AdaptiveExecutionStrategy.java:421)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.consumeTask(AdaptiveExecutionStrategy.java:390)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.tryProduce(AdaptiveExecutionStrategy.java:277)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.lambda$new$0(AdaptiveExecutionStrategy.java:139)
+	at org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:411)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:933)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:1077)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+INFO	2024-02-13 16:07:52,359	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-13 16:07:52,459	100	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-13 16:07:52,547	188	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-13 16:07:52,558	199	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-13 16:07:52,893	534	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-13 16:07:52,907	548	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @1010ms
+INFO	2024-02-13 16:07:52,907	548	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-13 16:07:52,916	557	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-13 16:07:52,930	571	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 498 days old. Consider checking for a newer version.).
+INFO	2024-02-13 16:07:52,930	571	io.javalin.Javalin	[main]	Javalin started in 574ms \o/
+INFO	2024-02-13 16:13:29,066	1	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-13 16:13:29,164	99	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-13 16:13:29,259	194	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-13 16:13:29,270	205	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-13 16:13:29,604	539	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-13 16:13:29,616	551	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @1044ms
+INFO	2024-02-13 16:13:29,616	551	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-13 16:13:29,624	559	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-13 16:13:29,637	572	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 498 days old. Consider checking for a newer version.).
+INFO	2024-02-13 16:13:29,637	572	io.javalin.Javalin	[main]	Javalin started in 575ms \o/
+INFO	2024-02-13 16:16:24,547	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-13 16:16:24,664	117	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-13 16:16:24,782	235	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-13 16:16:24,797	250	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-13 16:16:25,201	654	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-13 16:16:25,217	670	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @1242ms
+INFO	2024-02-13 16:16:25,217	670	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-13 16:16:25,229	682	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-13 16:16:25,243	696	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 498 days old. Consider checking for a newer version.).
+INFO	2024-02-13 16:16:25,243	696	io.javalin.Javalin	[main]	Javalin started in 700ms \o/
+INFO	2024-02-13 16:29:01,732	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-13 16:29:01,833	101	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-13 16:29:01,932	200	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-13 16:29:01,945	213	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-13 16:29:02,303	571	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-13 16:29:02,319	587	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @1094ms
+INFO	2024-02-13 16:29:02,319	587	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-13 16:29:02,330	598	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-13 16:29:02,344	612	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 499 days old. Consider checking for a newer version.).
+INFO	2024-02-13 16:29:02,344	612	io.javalin.Javalin	[main]	Javalin started in 616ms \o/
+INFO	2024-02-13 16:31:46,456	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-13 16:31:46,574	118	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-13 16:31:46,690	234	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-13 16:31:46,704	248	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-13 16:31:47,109	653	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-13 16:31:47,128	672	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @1326ms
+INFO	2024-02-13 16:31:47,128	672	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-13 16:31:47,140	684	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-13 16:31:47,157	701	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 499 days old. Consider checking for a newer version.).
+INFO	2024-02-13 16:31:47,157	701	io.javalin.Javalin	[main]	Javalin started in 706ms \o/
+INFO	2024-02-14 08:55:05,269	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-14 08:55:05,384	115	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-14 08:55:05,502	233	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-14 08:55:05,518	249	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-14 08:55:05,942	673	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-14 08:55:05,956	687	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @1249ms
+INFO	2024-02-14 08:55:05,956	687	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-14 08:55:05,964	695	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-14 08:55:05,979	710	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 499 days old. Consider checking for a newer version.).
+INFO	2024-02-14 08:55:05,979	710	io.javalin.Javalin	[main]	Javalin started in 713ms \o/
+INFO	2024-02-14 09:03:52,043	1	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-14 09:03:52,140	98	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-14 09:03:52,228	186	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-14 09:03:52,239	197	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-14 09:03:52,567	525	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-14 09:03:52,580	538	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @996ms
+INFO	2024-02-14 09:03:52,580	538	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-14 09:03:52,590	548	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-14 09:03:52,605	563	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 499 days old. Consider checking for a newer version.).
+INFO	2024-02-14 09:03:52,606	564	io.javalin.Javalin	[main]	Javalin started in 566ms \o/
+INFO	2024-02-14 09:39:52,899	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-14 09:39:52,993	94	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-14 09:39:53,107	208	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-14 09:39:53,118	219	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-14 09:39:53,500	601	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-14 09:39:53,514	615	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @1145ms
+INFO	2024-02-14 09:39:53,514	615	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-14 09:39:53,521	622	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-14 09:39:53,534	635	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 499 days old. Consider checking for a newer version.).
+INFO	2024-02-14 09:39:53,534	635	io.javalin.Javalin	[main]	Javalin started in 638ms \o/
+INFO	2024-02-14 12:04:12,070	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-14 12:04:12,172	102	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-14 12:04:12,271	201	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-14 12:04:12,282	212	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-14 12:04:12,662	592	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-14 12:04:12,674	604	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @1093ms
+INFO	2024-02-14 12:04:12,675	605	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-14 12:04:12,683	613	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-14 12:04:12,696	626	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 499 days old. Consider checking for a newer version.).
+INFO	2024-02-14 12:04:12,696	626	io.javalin.Javalin	[main]	Javalin started in 629ms \o/
+INFO	2024-02-14 12:21:48,490	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-14 12:21:48,575	85	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-14 12:21:48,663	173	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-14 12:21:48,674	184	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-14 12:21:49,002	512	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-14 12:21:49,014	524	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @960ms
+INFO	2024-02-14 12:21:49,014	524	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-14 12:21:49,022	532	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-14 12:21:49,035	545	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 499 days old. Consider checking for a newer version.).
+INFO	2024-02-14 12:21:49,035	545	io.javalin.Javalin	[main]	Javalin started in 548ms \o/
+WARN	2024-02-14 12:45:54,992	1446502	io.javalin.Javalin	[JettyServerThreadPool-26]	Uncaught exception
+java.lang.NumberFormatException: For input string: "id"
+	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.base/java.lang.Long.parseLong(Long.java:692)
+	at java.base/java.lang.Long.parseLong(Long.java:817)
+	at org.example.Controller.Controller.lambda$getAPI$4(Controller.java:91)
+	at io.javalin.routing.HandlerEntry.handle(HandlerEntry.kt:19)
+	at io.javalin.http.servlet.DefaultTasks.HTTP$lambda-8$lambda-6$lambda-5(DefaultTasks.kt:35)
+	at io.javalin.http.servlet.JavalinServlet.handleTask(JavalinServlet.kt:79)
+	at io.javalin.http.servlet.JavalinServlet.handleSync(JavalinServlet.kt:46)
+	at io.javalin.http.servlet.JavalinServlet.service(JavalinServlet.kt:34)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at io.javalin.jetty.JavalinJettyServlet.service(JavalinJettyServlet.kt:58)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at org.eclipse.jetty.servlet.ServletHolder.handle(ServletHolder.java:764)
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:529)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1571)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at io.javalin.jetty.JettyServer$start$wsAndHttpHandler$1.doHandle(JettyServer.kt:57)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:176)
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:484)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1544)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:174)
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1302)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:129)
+	at org.eclipse.jetty.server.handler.StatisticsHandler.handle(StatisticsHandler.java:173)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:122)
+	at org.eclipse.jetty.server.Server.handle(Server.java:563)
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$0(HttpChannel.java:505)
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:762)
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:497)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:282)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:314)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:100)
+	at org.eclipse.jetty.io.SelectableChannelEndPoint$1.run(SelectableChannelEndPoint.java:53)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.runTask(AdaptiveExecutionStrategy.java:421)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.consumeTask(AdaptiveExecutionStrategy.java:390)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.tryProduce(AdaptiveExecutionStrategy.java:277)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.lambda$new$0(AdaptiveExecutionStrategy.java:139)
+	at org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:411)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:933)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:1077)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+WARN	2024-02-14 12:46:38,827	1490337	io.javalin.Javalin	[JettyServerThreadPool-27]	Uncaught exception
+java.lang.NumberFormatException: For input string: "id"
+	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.base/java.lang.Long.parseLong(Long.java:692)
+	at java.base/java.lang.Long.parseLong(Long.java:817)
+	at org.example.Controller.Controller.lambda$getAPI$4(Controller.java:91)
+	at io.javalin.routing.HandlerEntry.handle(HandlerEntry.kt:19)
+	at io.javalin.http.servlet.DefaultTasks.HTTP$lambda-8$lambda-6$lambda-5(DefaultTasks.kt:35)
+	at io.javalin.http.servlet.JavalinServlet.handleTask(JavalinServlet.kt:79)
+	at io.javalin.http.servlet.JavalinServlet.handleSync(JavalinServlet.kt:46)
+	at io.javalin.http.servlet.JavalinServlet.service(JavalinServlet.kt:34)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at io.javalin.jetty.JavalinJettyServlet.service(JavalinJettyServlet.kt:58)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at org.eclipse.jetty.servlet.ServletHolder.handle(ServletHolder.java:764)
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:529)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1571)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at io.javalin.jetty.JettyServer$start$wsAndHttpHandler$1.doHandle(JettyServer.kt:57)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:176)
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:484)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1544)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:174)
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1302)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:129)
+	at org.eclipse.jetty.server.handler.StatisticsHandler.handle(StatisticsHandler.java:173)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:122)
+	at org.eclipse.jetty.server.Server.handle(Server.java:563)
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$0(HttpChannel.java:505)
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:762)
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:497)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:282)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:314)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:100)
+	at org.eclipse.jetty.io.SelectableChannelEndPoint$1.run(SelectableChannelEndPoint.java:53)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.runTask(AdaptiveExecutionStrategy.java:421)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.consumeTask(AdaptiveExecutionStrategy.java:390)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.tryProduce(AdaptiveExecutionStrategy.java:277)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.lambda$new$0(AdaptiveExecutionStrategy.java:139)
+	at org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:411)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:933)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:1077)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+WARN	2024-02-14 12:46:50,779	1502289	io.javalin.Javalin	[JettyServerThreadPool-39]	Uncaught exception
+java.lang.NumberFormatException: For input string: "{id}"
+	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.base/java.lang.Long.parseLong(Long.java:692)
+	at java.base/java.lang.Long.parseLong(Long.java:817)
+	at org.example.Controller.Controller.lambda$getAPI$4(Controller.java:91)
+	at io.javalin.routing.HandlerEntry.handle(HandlerEntry.kt:19)
+	at io.javalin.http.servlet.DefaultTasks.HTTP$lambda-8$lambda-6$lambda-5(DefaultTasks.kt:35)
+	at io.javalin.http.servlet.JavalinServlet.handleTask(JavalinServlet.kt:79)
+	at io.javalin.http.servlet.JavalinServlet.handleSync(JavalinServlet.kt:46)
+	at io.javalin.http.servlet.JavalinServlet.service(JavalinServlet.kt:34)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at io.javalin.jetty.JavalinJettyServlet.service(JavalinJettyServlet.kt:58)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at org.eclipse.jetty.servlet.ServletHolder.handle(ServletHolder.java:764)
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:529)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1571)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at io.javalin.jetty.JettyServer$start$wsAndHttpHandler$1.doHandle(JettyServer.kt:57)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:176)
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:484)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1544)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:174)
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1302)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:129)
+	at org.eclipse.jetty.server.handler.StatisticsHandler.handle(StatisticsHandler.java:173)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:122)
+	at org.eclipse.jetty.server.Server.handle(Server.java:563)
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$0(HttpChannel.java:505)
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:762)
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:497)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:282)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:314)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:100)
+	at org.eclipse.jetty.io.SelectableChannelEndPoint$1.run(SelectableChannelEndPoint.java:53)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.runTask(AdaptiveExecutionStrategy.java:421)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.consumeTask(AdaptiveExecutionStrategy.java:390)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.tryProduce(AdaptiveExecutionStrategy.java:277)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.lambda$new$0(AdaptiveExecutionStrategy.java:139)
+	at org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:411)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:933)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:1077)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+WARN	2024-02-14 12:50:00,182	1691692	io.javalin.Javalin	[JettyServerThreadPool-42]	Uncaught exception
+java.lang.NumberFormatException: For input string: "id ={id}"
+	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.base/java.lang.Long.parseLong(Long.java:692)
+	at java.base/java.lang.Long.parseLong(Long.java:817)
+	at org.example.Controller.Controller.lambda$getAPI$4(Controller.java:91)
+	at io.javalin.routing.HandlerEntry.handle(HandlerEntry.kt:19)
+	at io.javalin.http.servlet.DefaultTasks.HTTP$lambda-8$lambda-6$lambda-5(DefaultTasks.kt:35)
+	at io.javalin.http.servlet.JavalinServlet.handleTask(JavalinServlet.kt:79)
+	at io.javalin.http.servlet.JavalinServlet.handleSync(JavalinServlet.kt:46)
+	at io.javalin.http.servlet.JavalinServlet.service(JavalinServlet.kt:34)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at io.javalin.jetty.JavalinJettyServlet.service(JavalinJettyServlet.kt:58)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at org.eclipse.jetty.servlet.ServletHolder.handle(ServletHolder.java:764)
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:529)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1571)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at io.javalin.jetty.JettyServer$start$wsAndHttpHandler$1.doHandle(JettyServer.kt:57)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:176)
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:484)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1544)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:174)
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1302)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:129)
+	at org.eclipse.jetty.server.handler.StatisticsHandler.handle(StatisticsHandler.java:173)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:122)
+	at org.eclipse.jetty.server.Server.handle(Server.java:563)
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$0(HttpChannel.java:505)
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:762)
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:497)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:282)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:314)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:100)
+	at org.eclipse.jetty.io.SelectableChannelEndPoint$1.run(SelectableChannelEndPoint.java:53)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.runTask(AdaptiveExecutionStrategy.java:421)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.consumeTask(AdaptiveExecutionStrategy.java:390)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.tryProduce(AdaptiveExecutionStrategy.java:277)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.lambda$new$0(AdaptiveExecutionStrategy.java:139)
+	at org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:411)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:933)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:1077)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+WARN	2024-02-14 12:51:46,880	1798390	io.javalin.Javalin	[JettyServerThreadPool-43]	Uncaught exception
+java.lang.NumberFormatException: For input string: "{1}"
+	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.base/java.lang.Long.parseLong(Long.java:692)
+	at java.base/java.lang.Long.parseLong(Long.java:817)
+	at org.example.Controller.Controller.lambda$getAPI$4(Controller.java:91)
+	at io.javalin.routing.HandlerEntry.handle(HandlerEntry.kt:19)
+	at io.javalin.http.servlet.DefaultTasks.HTTP$lambda-8$lambda-6$lambda-5(DefaultTasks.kt:35)
+	at io.javalin.http.servlet.JavalinServlet.handleTask(JavalinServlet.kt:79)
+	at io.javalin.http.servlet.JavalinServlet.handleSync(JavalinServlet.kt:46)
+	at io.javalin.http.servlet.JavalinServlet.service(JavalinServlet.kt:34)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at io.javalin.jetty.JavalinJettyServlet.service(JavalinJettyServlet.kt:58)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at org.eclipse.jetty.servlet.ServletHolder.handle(ServletHolder.java:764)
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:529)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1571)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at io.javalin.jetty.JettyServer$start$wsAndHttpHandler$1.doHandle(JettyServer.kt:57)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:176)
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:484)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1544)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:174)
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1302)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:129)
+	at org.eclipse.jetty.server.handler.StatisticsHandler.handle(StatisticsHandler.java:173)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:122)
+	at org.eclipse.jetty.server.Server.handle(Server.java:563)
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$0(HttpChannel.java:505)
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:762)
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:497)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:282)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:314)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:100)
+	at org.eclipse.jetty.io.SelectableChannelEndPoint$1.run(SelectableChannelEndPoint.java:53)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.runTask(AdaptiveExecutionStrategy.java:421)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.consumeTask(AdaptiveExecutionStrategy.java:390)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.tryProduce(AdaptiveExecutionStrategy.java:277)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.lambda$new$0(AdaptiveExecutionStrategy.java:139)
+	at org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:411)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:933)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:1077)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+WARN	2024-02-14 12:52:20,776	1832286	io.javalin.Javalin	[JettyServerThreadPool-26]	Uncaught exception
+java.lang.NumberFormatException: For input string: "{1}"
+	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.base/java.lang.Long.parseLong(Long.java:692)
+	at java.base/java.lang.Long.parseLong(Long.java:817)
+	at org.example.Controller.Controller.lambda$getAPI$4(Controller.java:91)
+	at io.javalin.routing.HandlerEntry.handle(HandlerEntry.kt:19)
+	at io.javalin.http.servlet.DefaultTasks.HTTP$lambda-8$lambda-6$lambda-5(DefaultTasks.kt:35)
+	at io.javalin.http.servlet.JavalinServlet.handleTask(JavalinServlet.kt:79)
+	at io.javalin.http.servlet.JavalinServlet.handleSync(JavalinServlet.kt:46)
+	at io.javalin.http.servlet.JavalinServlet.service(JavalinServlet.kt:34)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at io.javalin.jetty.JavalinJettyServlet.service(JavalinJettyServlet.kt:58)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at org.eclipse.jetty.servlet.ServletHolder.handle(ServletHolder.java:764)
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:529)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1571)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at io.javalin.jetty.JettyServer$start$wsAndHttpHandler$1.doHandle(JettyServer.kt:57)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:176)
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:484)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1544)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:174)
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1302)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:129)
+	at org.eclipse.jetty.server.handler.StatisticsHandler.handle(StatisticsHandler.java:173)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:122)
+	at org.eclipse.jetty.server.Server.handle(Server.java:563)
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$0(HttpChannel.java:505)
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:762)
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:497)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:282)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:314)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:100)
+	at org.eclipse.jetty.io.SelectableChannelEndPoint$1.run(SelectableChannelEndPoint.java:53)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.runTask(AdaptiveExecutionStrategy.java:421)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.consumeTask(AdaptiveExecutionStrategy.java:390)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.tryProduce(AdaptiveExecutionStrategy.java:277)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.lambda$new$0(AdaptiveExecutionStrategy.java:139)
+	at org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:411)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:933)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:1077)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+INFO	2024-02-14 13:04:59,761	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-14 13:04:59,872	111	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-14 13:04:59,974	213	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-14 13:04:59,985	224	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-14 13:05:00,322	561	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-14 13:05:00,334	573	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @1062ms
+INFO	2024-02-14 13:05:00,334	573	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-14 13:05:00,342	581	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-14 13:05:00,354	593	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 499 days old. Consider checking for a newer version.).
+INFO	2024-02-14 13:05:00,354	593	io.javalin.Javalin	[main]	Javalin started in 596ms \o/
+INFO	2024-02-14 13:11:41,975	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-14 13:11:42,069	94	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-14 13:11:42,157	182	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-14 13:11:42,168	193	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-14 13:11:42,507	532	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-14 13:11:42,519	544	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @977ms
+INFO	2024-02-14 13:11:42,519	544	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-14 13:11:42,527	552	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-14 13:11:42,539	564	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 499 days old. Consider checking for a newer version.).
+INFO	2024-02-14 13:11:42,539	564	io.javalin.Javalin	[main]	Javalin started in 566ms \o/
+INFO	2024-02-14 13:23:43,836	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-14 13:23:43,924	88	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-14 13:23:44,004	168	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-14 13:23:44,016	180	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-14 13:23:44,367	531	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-14 13:23:44,380	544	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @987ms
+INFO	2024-02-14 13:23:44,380	544	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-14 13:23:44,389	553	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-14 13:23:44,402	566	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 499 days old. Consider checking for a newer version.).
+INFO	2024-02-14 13:23:44,402	566	io.javalin.Javalin	[main]	Javalin started in 569ms \o/
+INFO	2024-02-14 13:28:35,234	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-14 13:28:35,318	84	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-14 13:28:35,401	167	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-14 13:28:35,412	178	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-14 13:28:35,732	498	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-14 13:28:35,746	512	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @992ms
+INFO	2024-02-14 13:28:35,746	512	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-14 13:28:35,754	520	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-14 13:28:35,766	532	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 499 days old. Consider checking for a newer version.).
+INFO	2024-02-14 13:28:35,766	532	io.javalin.Javalin	[main]	Javalin started in 535ms \o/
+INFO	2024-02-14 19:57:24,941	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-14 19:57:25,042	101	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-14 19:57:25,142	201	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-14 19:57:25,155	214	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-14 19:57:25,526	585	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-14 19:57:25,540	599	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @1138ms
+INFO	2024-02-14 19:57:25,540	599	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-14 19:57:25,550	609	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-14 19:57:25,564	623	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 500 days old. Consider checking for a newer version.).
+INFO	2024-02-14 19:57:25,564	623	io.javalin.Javalin	[main]	Javalin started in 627ms \o/
+INFO	2024-02-14 20:00:01,948	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-14 20:00:02,046	98	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-14 20:00:02,137	189	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-14 20:00:02,147	199	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-14 20:00:02,490	542	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-14 20:00:02,504	556	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @1050ms
+INFO	2024-02-14 20:00:02,504	556	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-14 20:00:02,513	565	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-14 20:00:02,526	578	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 500 days old. Consider checking for a newer version.).
+INFO	2024-02-14 20:00:02,526	578	io.javalin.Javalin	[main]	Javalin started in 581ms \o/
+INFO	2024-02-14 20:01:22,569	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-14 20:01:22,670	101	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-14 20:01:22,793	224	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-14 20:01:22,806	237	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-14 20:01:23,192	623	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-14 20:01:23,207	638	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @1253ms
+INFO	2024-02-14 20:01:23,207	638	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-14 20:01:23,216	647	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-14 20:01:23,230	661	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 500 days old. Consider checking for a newer version.).
+INFO	2024-02-14 20:01:23,231	662	io.javalin.Javalin	[main]	Javalin started in 664ms \o/
+INFO	2024-02-14 20:04:43,252	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-14 20:04:43,375	123	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-14 20:04:43,484	232	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-14 20:04:43,497	245	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-14 20:04:43,922	670	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-14 20:04:43,938	686	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @1239ms
+INFO	2024-02-14 20:04:43,938	686	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-14 20:04:43,950	698	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-14 20:04:43,969	717	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 500 days old. Consider checking for a newer version.).
+INFO	2024-02-14 20:04:43,970	718	io.javalin.Javalin	[main]	Javalin started in 720ms \o/
+INFO	2024-02-14 20:06:19,896	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-14 20:06:19,997	101	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-14 20:06:20,092	196	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-14 20:06:20,104	208	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-14 20:06:20,452	556	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-14 20:06:20,467	571	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @1051ms
+INFO	2024-02-14 20:06:20,467	571	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-14 20:06:20,476	580	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-14 20:06:20,489	593	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 500 days old. Consider checking for a newer version.).
+INFO	2024-02-14 20:06:20,490	594	io.javalin.Javalin	[main]	Javalin started in 597ms \o/
+INFO	2024-02-14 20:07:58,019	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-14 20:07:58,112	93	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-14 20:07:58,207	188	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-14 20:07:58,220	201	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-14 20:07:58,568	549	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-14 20:07:58,583	564	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @1037ms
+INFO	2024-02-14 20:07:58,583	564	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-14 20:07:58,592	573	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-14 20:07:58,607	588	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 500 days old. Consider checking for a newer version.).
+INFO	2024-02-14 20:07:58,607	588	io.javalin.Javalin	[main]	Javalin started in 591ms \o/
+INFO	2024-02-14 20:08:33,708	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-14 20:08:33,801	93	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-14 20:08:33,893	185	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-14 20:08:33,905	197	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-14 20:08:34,250	542	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-14 20:08:34,264	556	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @1046ms
+INFO	2024-02-14 20:08:34,264	556	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-14 20:08:34,275	567	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-14 20:08:34,288	580	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 500 days old. Consider checking for a newer version.).
+INFO	2024-02-14 20:08:34,288	580	io.javalin.Javalin	[main]	Javalin started in 583ms \o/
+INFO	2024-02-14 20:13:43,770	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-14 20:13:43,870	100	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-14 20:13:43,968	198	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-14 20:13:43,981	211	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-14 20:13:44,337	567	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-14 20:13:44,352	582	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @1087ms
+INFO	2024-02-14 20:13:44,352	582	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-14 20:13:44,362	592	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-14 20:13:44,376	606	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 500 days old. Consider checking for a newer version.).
+INFO	2024-02-14 20:13:44,377	607	io.javalin.Javalin	[main]	Javalin started in 609ms \o/
+INFO	2024-02-14 22:10:32,395	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-14 22:10:32,563	168	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-14 22:10:32,710	315	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-14 22:10:32,731	336	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@448c8166{/,null,AVAILABLE}
+INFO	2024-02-14 22:10:33,317	922	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@3315d2d7{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-14 22:10:33,340	945	org.eclipse.jetty.server.Server	[main]	Started Server@15bbf42f{STARTING}[11.0.12,sto=0] @1821ms
+INFO	2024-02-14 22:10:33,340	945	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-14 22:10:33,357	962	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-14 22:10:33,381	986	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 500 days old. Consider checking for a newer version.).
+INFO	2024-02-14 22:10:33,382	987	io.javalin.Javalin	[main]	Javalin started in 990ms \o/
+INFO	2024-02-14 22:18:29,341	0	io.javalin.Javalin	[main]	Starting Javalin ...
+INFO	2024-02-14 22:18:29,454	113	org.eclipse.jetty.server.Server	[main]	jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+9-LTS
+INFO	2024-02-14 22:18:29,567	226	org.eclipse.jetty.server.session.DefaultSessionIdManager	[main]	Session workerName=node0
+INFO	2024-02-14 22:18:29,579	238	org.eclipse.jetty.server.handler.ContextHandler	[main]	Started i.j.j.@68878f6d{/,null,AVAILABLE}
+INFO	2024-02-14 22:18:29,993	652	org.eclipse.jetty.server.AbstractConnector	[main]	Started ServerConnector@67080771{HTTP/1.1, (http/1.1)}{0.0.0.0:9004}
+INFO	2024-02-14 22:18:30,012	671	org.eclipse.jetty.server.Server	[main]	Started Server@5403f35f{STARTING}[11.0.12,sto=0] @1294ms
+INFO	2024-02-14 22:18:30,012	671	io.javalin.Javalin	[main]	
+       __                  ___          ______
+      / /___ __   ______ _/ (_)___     / ____/
+ __  / / __ `/ | / / __ `/ / / __ \   /___ \
+/ /_/ / /_/ /| |/ / /_/ / / / / / /  ____/ /
+\____/\__,_/ |___/\__,_/_/_/_/ /_/  /_____/
+
+       https://javalin.io/documentation
+
+INFO	2024-02-14 22:18:30,025	684	io.javalin.Javalin	[main]	Listening on http://localhost:9004/
+INFO	2024-02-14 22:18:30,041	700	io.javalin.Javalin	[main]	You are running Javalin 5.0.1 (released October 2, 2022. Your Javalin version is 500 days old. Consider checking for a newer version.).
+INFO	2024-02-14 22:18:30,042	701	io.javalin.Javalin	[main]	Javalin started in 704ms \o/
