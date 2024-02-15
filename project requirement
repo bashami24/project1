@@ -34,10 +34,3 @@ CRUD functionality on Product
         - DELETE should always return 200, regardless of if the item existed
             at the start or not. This is convention.
 
-Unit testing of service classes
-Logging within service classes
-
-<<<<<<< HEAD
-=======
- 
->>>>>>> 909854148041d63969d626f3f755964af6a350ec

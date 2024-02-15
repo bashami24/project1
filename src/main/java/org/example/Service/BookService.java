@@ -23,7 +23,7 @@ public class BookService {
     }
 
     public Book addBook(Book book)  {
-            if (/*book.getId() != 0 &&*/ isBookNameUnique(book.getName())) {
+            if (isBookNameUnique(book.getName())) {
                 book.setId(nextId++); // Assign the next available ID
                 bookList.add(book);
                 return book;
