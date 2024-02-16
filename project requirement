@@ -78,4 +78,41 @@ public class BookDAO {
         }
     }
 }
+public class BookDAO {
+    private Connection connection;
+
+    public BookDAO(Connection connection) {
+        this.connection = connection;
+    }
+
+    // Other methods...
+
+    public boolean updateBook(long id, String name, double price, String authorName, long sellerId) {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "UPDATE book SET book_name = ?, price = ?, author_name = ?, seller_id = ? WHERE book_id = ?")) {
+            statement.setString(1, name);
+            statement.setDouble(2, price);
+            statement.setString(3, authorName);
+            statement.setLong(4, sellerId);
+            statement.setLong(5, id);
+            int rowsUpdated = statement.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Error occurred
+        }
+    }
+
+    public boolean deleteBook(long id) {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "DELETE FROM book WHERE book_id = ?")) {
+            statement.setLong(1, id);
+            int rowsDeleted = statement.executeUpdate();
+            return rowsDeleted > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Error occurred
+        }
+    }
+}
 
