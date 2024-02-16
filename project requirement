@@ -33,4 +33,49 @@ CRUD functionality on Product
     DELETE /product/{id} - Delete a single product
         - DELETE should always return 200, regardless of if the item existed
             at the start or not. This is convention.
+public class BookDAO {
+    private Connection connection;
+
+    public BookDAO(Connection connection) {
+        this.connection = connection;
+    }
+
+    public boolean insertSellerAndBooks(String sellerName, List<Book> books) {
+        // Validate seller name
+        if (sellerName == null || sellerName.isEmpty()) {
+            return false;
+        }
+
+        // Insert seller name into the seller table
+        try (PreparedStatement statement = connection.prepareStatement(
+                "INSERT INTO seller (seller_name) VALUES (?)")) {
+            statement.setString(1, sellerName);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Error occurred
+        }
+
+        // Insert books into the books table
+        try (PreparedStatement statement = connection.prepareStatement(
+                "INSERT INTO book (book_name, price, author_name, seller_id) VALUES (?, ?, ?, (SELECT seller_id FROM seller WHERE seller_name = ?))")) {
+            for (Book book : books) {
+                // Validate book name and price
+                if (book.getName() == null || book.getName().isEmpty() || book.getPrice() <= 0) {
+                    return false;
+                }
+                statement.setString(1, book.getName());
+                statement.setDouble(2, book.getPrice());
+                statement.setString(3, book.getAuthorName());
+                statement.setString(4, sellerName);
+                statement.addBatch();
+            }
+            statement.executeBatch();
+            return true; // Insert successful
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Error occurred
+        }
+    }
+}
 
