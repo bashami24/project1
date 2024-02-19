@@ -40,271 +40,29 @@ package DAO;
 import Model.Artist;
 import Service.ArtistService;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+public class BookDAO {
+    private Connection connection;
 
-public class ArtistDAO {
-    Connection conn;
-    public ArtistDAO(Connection conn){
-        this.conn = conn;
-    }
-    public List<Artist> getAllArtist(){
-        List<Artist> artistResults = new ArrayList<>();
-        try{
-            PreparedStatement ps = conn.prepareStatement("select * from Artist");
-            ResultSet resultSet = ps.executeQuery();
-            while(resultSet.next()){
-                int artistId = resultSet.getInt("artist_id");
-                String artistName = resultSet.getString("name");
-                Artist a = new Artist(artistId, artistName);
-                artistResults.add(a);
-            }
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
-        return artistResults;
+    public BookDAO(Connection connection) {
+        this.connection = connection;
     }
 
-    public void insertArtist(Artist a){
-        try{
-            PreparedStatement ps = conn.prepareStatement("insert into " +
-                    "Artist (artist_id, name) values (?, ?)");
-            ps.setInt(1, a.getArtistId());
-            ps.setString(2, a.getName());
-            ps.executeUpdate();
-        }catch(SQLException e){
-            e.printStackTrace();
+    public void updateBook(long bookId, Book updatedBook) throws SQLException {
+        String sql = "UPDATE books SET name = ?, price = ?, authorName = ? WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, updatedBook.getName());
+            statement.setDouble(2, updatedBook.getPrice());
+            statement.setString(3, updatedBook.getAuthorName());
+            statement.setLong(4, bookId);
+            statement.executeUpdate();
         }
     }
 
-    public Artist getArtistById(int id){
-        try{
-            PreparedStatement ps = conn.prepareStatement(
-                    "select * from artist where artist_id = ?");
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                int artistId = rs.getInt("artist_id");
-                String name = rs.getString("name");
-                Artist a = new Artist(artistId, name);
-                return a;
-            }else{
-                return null;
-            }
-        }catch (SQLException e){
-            e.printStackTrace();
+    public void deleteBook(long bookId) throws SQLException {
+        String sql = "DELETE FROM books WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, bookId);
+            statement.executeUpdate();
         }
-        return null;
     }
 }
-
-package DAO;
-
-import Model.Painting;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-public class PaintingDAO {
-    Connection conn;
-    public PaintingDAO(Connection conn){
-        this.conn = conn;
-    }
-    public void insertPainting(Painting p){
-        try{
-            PreparedStatement ps = conn.prepareStatement("insert into PAINTING" +
-                    " (painting_id, title, year_made, painted_by) " +
-                    "values (?, ?, ?, ?)");
-            ps.setInt(1, p.getPaintingId());
-            ps.setString(2, p.getTitle());
-            ps.setInt(3, p.getYearMade());
-            ps.setInt(4, p.getPaintedBy());
-            ps.executeUpdate();
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
-    }
-    public List<Painting> getAllPaintings(){
-        List<Painting> resultPaintings = new ArrayList<>();
-        try{
-            PreparedStatement ps = conn.prepareStatement("select * from painting");
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                int paintingId = rs.getInt("painting_id");
-                String title = rs.getString("title");
-                int yearMade = rs.getInt("year_made");
-                int paintedBy = rs.getInt("painted_by");
-                Painting p = new Painting(paintingId, title, yearMade, paintedBy);
-                resultPaintings.add(p);
-            }
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return resultPaintings;
-    }
-    public Painting getPaintingById(int id){
-        try{
-            PreparedStatement ps = conn.prepareStatement("select * from Painting where painting_id = ?");
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                int paintingId = rs.getInt("painting_id");
-                String title = rs.getString("title");
-                int yearMade = rs.getInt("year_made");
-                int paintedBy = rs.getInt("painted_by");
-                Painting p = new Painting(paintingId, title, yearMade, paintedBy);
-                return p;
-            }
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-}
-
-package Service;
-
-import DAO.ArtistDAO;
-import Exceptions.ArtistNotFoundException;
-import Model.Artist;
-
-import java.util.List;
-
-public class ArtistService {
-    ArtistDAO artistDAO;
-    public ArtistService(ArtistDAO artistDAO){
-        this.artistDAO = artistDAO;
-    }
-
-    public List<Artist> getAllArtist(){
-        List<Artist> artistList = artistDAO.getAllArtist();
-        return artistList;
-    }
-
-    public void saveArtist(Artist a){
-        artistDAO.insertArtist(a);
-    }
-
-    public Artist getArtistById(int id) throws ArtistNotFoundException {
-        Artist a = artistDAO.getArtistById(id);
-        if(a == null){
-            throw new ArtistNotFoundException("no artist with such id found");
-        }else{
-            return a;
-        }
-    }
-
-}
-package Service;
-
-import DAO.PaintingDAO;
-import Exceptions.PaintingAlreadyExistsException;
-import Model.Painting;
-
-import java.util.List;
-
-public class PaintingService {
-    PaintingDAO paintingDAO;
-    public PaintingService(PaintingDAO paintingDAO){
-        this.paintingDAO = paintingDAO;
-    }
-    public void savePainting(Painting p) throws PaintingAlreadyExistsException {
-        int id = p.getPaintingId();
-//        If no painting with that id was found - insert the painting
-        if(paintingDAO.getPaintingById(id) == null){
-            paintingDAO.insertPainting(p);
-        }else{
-            throw new PaintingAlreadyExistsException("painting with id "+id+" already exists");
-        }
-//        Otherwise, throw an exception to inform the controller that there was an
-//        issue inserting the painting
-
-    }
-    public List<Painting> getAllPaintings(){
-        return paintingDAO.getAllPaintings();
-    }
-}
-package Controller;
-
-import Exceptions.ArtistNotFoundException;
-import Exceptions.PaintingAlreadyExistsException;
-import Model.Artist;
-import Model.Painting;
-import Service.ArtistService;
-import Service.PaintingService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.javalin.Javalin;
-import io.javalin.http.Context;
-
-import java.util.List;
-
-
-public class Controller {
-
-    ArtistService artistService;
-    PaintingService paintingService;
-    public Controller(ArtistService artistService, PaintingService paintingService){
-        this.artistService = artistService;
-        this.paintingService = paintingService;
-    }
-
-    public Javalin getAPI() {
-        Javalin app = Javalin.create();
-        app.get("artist", context -> {
-            List<Artist> artistList = artistService.getAllArtist();
-            context.json(artistList);
-        });
-        app.post("artist", context -> {
-            ObjectMapper om = new ObjectMapper();
-            Artist a = om.readValue(context.body(), Artist.class);
-            artistService.saveArtist(a);
-            context.status(201);
-        });
-        app.get("artist/{id}", context -> {
-            int id = Integer.parseInt(context.pathParam("id"));
-            try{
-                Artist a = artistService.getArtistById(id);
-                context.json(a);
-            }catch (ArtistNotFoundException e){
-                context.status(404);
-            }
-        });
-        app.post("painting", context -> {
-           ObjectMapper om = new ObjectMapper();
-           Painting p = om.readValue(context.body(), Painting.class);
-           try{
-               paintingService.savePainting(p);
-               context.status(201);
-           }catch(PaintingAlreadyExistsException e){
-               context.status(400);
-               context.result(e.getMessage());
-           }
-
-        });
-        app.get("painting", context -> {
-            List<Painting> paintings = paintingService.getAllPaintings();
-            context.json(paintings);
-        });
-        /*
-        valid way to get all paintings of an artist
-        GET /artist/{artistId}/painting
-        valid way to post a painting that belongs to a specific artist
-        POST /artist/{artistId}/painting
-
-        GET /painting?artist={artistId}
-        GET /painting/
-        POST /painting/
-         */
-        return app;
-    }
-}
-
-
