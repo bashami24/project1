@@ -35,34 +35,35 @@ CRUD functionality on Product
             at the start or not. This is convention.
 
 
-package DAO;
-
-import Model.Artist;
-import Service.ArtistService;
-
-public class BookDAO {
-    private Connection connection;
-
-    public BookDAO(Connection connection) {
-        this.connection = connection;
-    }
-
-    public void updateBook(long bookId, Book updatedBook) throws SQLException {
-        String sql = "UPDATE books SET name = ?, price = ?, authorName = ? WHERE id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, updatedBook.getName());
-            statement.setDouble(2, updatedBook.getPrice());
-            statement.setString(3, updatedBook.getAuthorName());
-            statement.setLong(4, bookId);
-            statement.executeUpdate();
+public void insertBook(Book b){
+        try{
+            PreparedStatement ps = conn.prepareStatement("insert into Product" +
+                    " (product_id, name, product_price, Seller_id) " +
+                    "values (?, ?, ?, ?)");
+            ps.setLong(1, b.getId());
+            ps.setString(2, b.getName());
+            ps.setDouble(3, b.getPrice());
+            ps.setInt(4, b.getSellerId());
+            ps.executeUpdate();
+        }catch(SQLException e){
+            e.printStackTrace();
         }
     }
-
-    public void deleteBook(long bookId) throws SQLException {
-        String sql = "DELETE FROM books WHERE id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setLong(1, bookId);
-            statement.executeUpdate();
+    public List<Book> getAllBooks(){
+        List<Book> resultBook = new ArrayList<>();
+        try{
+            PreparedStatement ps = conn.prepareStatement("select * from Product");
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                int id = rs.getInt("product_id");
+                String Name = rs.getString("name");
+                double Price = rs.getDouble("product_price");
+                int SellerId = rs.getInt("Seller_id");
+                Book  b = new Book(id, Name, Price, SellerId);
+                resultBook.add(b);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
         }
+        return resultBook;
     }
-}
