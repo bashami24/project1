@@ -35,35 +35,95 @@ CRUD functionality on Product
             at the start or not. This is convention.
 
 
-public void insertBook(Book b){
-        try{
-            PreparedStatement ps = conn.prepareStatement("insert into Product" +
-                    " (product_id, name, product_price, Seller_id) " +
-                    "values (?, ?, ?, ?)");
-            ps.setLong(1, b.getId());
-            ps.setString(2, b.getName());
-            ps.setDouble(3, b.getPrice());
-            ps.setInt(4, b.getSellerId());
-            ps.executeUpdate();
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
+public class BookService {
+    BookDAO bookDAO;
+
+    public BookService(BookDAO bookDAO) {
+        this.bookDAO = bookDAO;
     }
-    public List<Book> getAllBooks(){
-        List<Book> resultBook = new ArrayList<>();
-        try{
-            PreparedStatement ps = conn.prepareStatement("select * from Product");
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                int id = rs.getInt("product_id");
-                String Name = rs.getString("name");
-                double Price = rs.getDouble("product_price");
-                int SellerId = rs.getInt("Seller_id");
-                Book  b = new Book(id, Name, Price, SellerId);
-                resultBook.add(b);
-            }
-        }catch (SQLException e){
-            e.printStackTrace();
+
+    public void saveBook(Book b) throws BookAlreadyExistsException, InvalidBookException {
+        if (b.getId() <= 0) {
+            throw new InvalidBookException("Book ID must be greater than 0");
         }
-        return resultBook;
+
+        if (bookDAO.getBookById(b.getId()) != null) {
+            throw new BookAlreadyExistsException("Book with ID " + b.getId() + " already exists");
+        }
+
+        if (b.getName() == null || b.getName().isEmpty()) {
+            throw new InvalidBookException("Book name cannot be null or empty");
+        }
+
+        if (b.getPrice() <= 0) {
+            throw new InvalidBookException("Book price must be greater than 0");
+        }
+
+        bookDAO.insertBook(b);
     }
+
+    public List<Book> getAllBooks() {
+        return bookDAO.getAllBooks();
+    }
+
+    public void updateBook(int id, Book updatedBook) throws SQLException, BookNotFoundException, InvalidBookException {
+        if (updatedBook.getName() == null || updatedBook.getName().isEmpty()) {
+            throw new InvalidBookException("Book name cannot be null or empty");
+        }
+
+        if (updatedBook.getPrice() <= 0) {
+            throw new InvalidBookException("Book price must be greater than 0");
+        }
+
+        Book existingBook = bookDAO.getBookById(id);
+        if (existingBook == null) {
+            throw new BookNotFoundException("Book with ID " + id + " not found");
+        }
+
+        bookDAO.updateBook(id, updatedBook);
+    }
+
+    public void deleteBook(int bookId) throws SQLException, BookNotFoundException {
+        Book existingBook = bookDAO.getBookById(bookId);
+        if (existingBook == null) {
+            throw new BookNotFoundException("Book with ID " + bookId + " not found");
+        }
+
+        bookDAO.deleteBook(bookId);
+    }
+}
+public class SellerService {
+    SellerDAO sellerDAO;
+
+    public SellerService(SellerDAO sellerDAO) {
+        this.sellerDAO = sellerDAO;
+    }
+
+    public void saveSeller(Seller s) throws SellerAlreadyExistsException, InvalidSellerException {
+        if (s.getId() <= 0) {
+            throw new InvalidSellerException("Seller ID must be greater than 0");
+        }
+
+        if (sellerDAO.getSellerById(s.getId()) != null) {
+            throw new SellerAlreadyExistsException("Seller with ID " + s.getId() + " already exists");
+        }
+
+        if (s.getName() == null || s.getName().isEmpty()) {
+            throw new InvalidSellerException("Seller name cannot be null or empty");
+        }
+
+        sellerDAO.insertSeller(s);
+    }
+
+    public List<Seller> getAllSellers() {
+        return sellerDAO.getAllSellers();
+    }
+
+    public Seller getSellerById(int id) throws SellerNotFoundException {
+        Seller seller = sellerDAO.getSellerById(id);
+        if (seller == null) {
+            throw new SellerNotFoundException("Seller with ID " + id + " not found");
+        }
+        return seller;
+    }
+}
