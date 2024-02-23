@@ -169,76 +169,12 @@ public class DAOTest {
     }
 }
 
-org.h2.jdbc.JdbcSQLDataException: Data conversion error converting "'BiniamAshami' (BOOK: ""PRODUCT_PRICE"" DECIMAL(10, 2) NOT NULL)"; SQL statement:
-UPDATE BOOK SET name = ?, product_price = ?, Seller_Id = ? WHERE product_id = ? [22018-214]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:506)
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
-	at org.h2.message.DbException.get(DbException.java:212)
-	at org.h2.table.Column.getDataConversionError(Column.java:413)
-	at org.h2.table.Column.validateConvertUpdateSequence(Column.java:372)
-	at org.h2.table.Table.convertUpdateRow(Table.java:968)
-	at org.h2.command.dml.SetClauseList.prepareUpdate(SetClauseList.java:140)
-	at org.h2.command.dml.Update.update(Update.java:88)
-	at org.h2.command.dml.DataChangeStatement.update(DataChangeStatement.java:74)
-	at org.h2.command.CommandContainer.update(CommandContainer.java:169)
-	at org.h2.command.Command.executeUpdate(Command.java:252)
-	at org.h2.jdbc.JdbcPreparedStatement.executeUpdateInternal(JdbcPreparedStatement.java:209)
-	at org.h2.jdbc.JdbcPreparedStatement.executeUpdate(JdbcPreparedStatement.java:169)
-	at org.example.DAO.BookDAO.updateBook(BookDAO.java:72)
-	at org.example.Service.BookService.updateBook(BookService.java:55)
-	at org.example.Controller.Controller.lambda$getAPI$4(Controller.java:72)
-	at io.javalin.routing.HandlerEntry.handle(HandlerEntry.kt:19)
-	at io.javalin.http.servlet.DefaultTasks.HTTP$lambda-8$lambda-6$lambda-5(DefaultTasks.kt:35)
-	at io.javalin.http.servlet.JavalinServlet.handleTask(JavalinServlet.kt:79)
-	at io.javalin.http.servlet.JavalinServlet.handleSync(JavalinServlet.kt:46)
-	at io.javalin.http.servlet.JavalinServlet.service(JavalinServlet.kt:34)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
-	at io.javalin.jetty.JavalinJettyServlet.service(JavalinJettyServlet.kt:58)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
-	at org.eclipse.jetty.servlet.ServletHolder.handle(ServletHolder.java:764)
-	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:529)
-	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
-	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1571)
-	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
-	at io.javalin.jetty.JettyServer$start$wsAndHttpHandler$1.doHandle(JettyServer.kt:57)
-	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:176)
-	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:484)
-	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1544)
-	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:174)
-	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1302)
-	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:129)
-	at org.eclipse.jetty.server.handler.StatisticsHandler.handle(StatisticsHandler.java:173)
-	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:122)
-	at org.eclipse.jetty.server.Server.handle(Server.java:563)
-	at org.eclipse.jetty.server.HttpChannel.lambda$handle$0(HttpChannel.java:505)
-	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:762)
-	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:497)
-	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:282)
-	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:314)
-	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:100)
-	at org.eclipse.jetty.io.SelectableChannelEndPoint$1.run(SelectableChannelEndPoint.java:53)
-	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.runTask(AdaptiveExecutionStrategy.java:421)
-	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.consumeTask(AdaptiveExecutionStrategy.java:390)
-	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.tryProduce(AdaptiveExecutionStrategy.java:277)
-	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.produce(AdaptiveExecutionStrategy.java:199)
-	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:933)
-	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:1077)
-	at java.base/java.lang.Thread.run(Thread.java:829)
-Caused by: org.h2.message.DbException: Data conversion error converting "BiniamAshami" [22018-214]
-	at org.h2.message.DbException.get(DbException.java:212)
-	at org.h2.value.ValueStringBase.getBigDecimal(ValueStringBase.java:151)
-	at org.h2.value.Value.convertToNumeric(Value.java:1678)
-	at org.h2.value.Value.convertTo(Value.java:1139)
-	at org.h2.value.Value.convertForAssignTo(Value.java:1092)
-	at org.h2.table.Column.validateConvertUpdateSequence(Column.java:369)
-	... 48 more
-Caused by: org.h2.jdbc.JdbcSQLDataException: Data conversion error converting "BiniamAshami" [22018-214]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:506)
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
-	... 54 more
-Caused by: java.lang.NumberFormatException: Character B is neither a decimal digit number, decimal point, nor "e" notation exponential mark.
-	at java.base/java.math.BigDecimal.<init>(BigDecimal.java:522)
-	at java.base/java.math.BigDecimal.<init>(BigDecimal.java:405)
-	at java.base/java.math.BigDecimal.<init>(BigDecimal.java:838)
-	at org.h2.value.ValueStringBase.getBigDecimal(ValueStringBase.java:149)
-	... 52 more
+public void updateBook(int id, Book updatedBook) throws SQLException {
+        try{  PreparedStatement ps = conn.prepareStatement
+                ("UPDATE BOOK SET name = ?, product_price = ?, Seller_Id = ? WHERE product_id = ?");
+            ps.setInt(1, updatedBook.getId());
+            ps.setString(2, updatedBook.getName());
+            ps.setDouble(3, updatedBook.getPrice());
+            ps.setInt(4, updatedBook.getSellerId());
+            ps.executeUpdate();
+        } catch (SQLException e ) { e.printStackTrace();}
