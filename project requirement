@@ -169,20 +169,5 @@ public class DAOTest {
     }
 }
 
- public void insertBook(Book b){
-        try{
-            PreparedStatement ps = conn.prepareStatement("insert into book" +
-                    " (product_id,name, product_price, Seller_id) " +
-                    "values (?,?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            //ps.setLong(1, b.getId());
-            ps.setString(1, b.getName());
-            ps.setDouble(2, b.getPrice());
-            ps.setInt(3, b.getSellerId());
-            ps.executeUpdate();
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) { int id = rs.getInt(1);
-                b.setId(id);}
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
-    }
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "insert into [*](seller_id, Seller_name) values (?, ?)"; expected "identifier"; SQL statement:
+insert into (seller_id, Seller_name) values (?, ?) [42001-214]
