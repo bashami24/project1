@@ -171,3 +171,12 @@ public class DAOTest {
 
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "insert into [*](seller_id, Seller_name) values (?, ?)"; expected "identifier"; SQL statement:
 insert into (seller_id, Seller_name) values (?, ?) [42001-214]
+ public void insertSeller(Seller s){
+        try{
+            PreparedStatement ps = conn.prepareStatement("insert into " +
+                    "(seller_id, Seller_name) values (?, ?)");
+            ps.setInt(1, s.getId());
+            ps.setString(2, s.getName());
+            ps.executeUpdate();
+        }catch(SQLException e){
+            e.printStackTrace();
