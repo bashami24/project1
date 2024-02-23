@@ -169,12 +169,20 @@ public class DAOTest {
     }
 }
 
-public void updateBook(int id, Book updatedBook) throws SQLException {
-        try{  PreparedStatement ps = conn.prepareStatement
-                ("UPDATE BOOK SET name = ?, product_price = ?, Seller_Id = ? WHERE product_id = ?");
-            ps.setInt(1, updatedBook.getId());
-            ps.setString(2, updatedBook.getName());
-            ps.setDouble(3, updatedBook.getPrice());
-            ps.setInt(4, updatedBook.getSellerId());
+ public void insertBook(Book b){
+        try{
+            PreparedStatement ps = conn.prepareStatement("insert into book" +
+                    " (product_id,name, product_price, Seller_id) " +
+                    "values (?,?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            //ps.setLong(1, b.getId());
+            ps.setString(1, b.getName());
+            ps.setDouble(2, b.getPrice());
+            ps.setInt(3, b.getSellerId());
             ps.executeUpdate();
-        } catch (SQLException e ) { e.printStackTrace();}
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) { int id = rs.getInt(1);
+                b.setId(id);}
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
