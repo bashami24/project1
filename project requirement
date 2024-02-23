@@ -35,88 +35,25 @@ CRUD functionality on Product
             at the start or not. This is convention.
 
 
-public class BookSellerController {
 
-    BookService bookService;
-    SellerService sellerService;
+DROP TABLE Seller IF EXISTS;
+CREATE TABLE Seller (
+    Seller_id int primary key,
+    Seller_Name varchar(255) not null unique
+);
+DROP TABLE Product IF EXISTS;
+CREATE TABLE Product (
+    Product_id int primary key,
+    name varchar(255) not null,
+    Product_Price decimal (10,2) not null,
+    Seller_id int references Seller(Seller_id)
+);
 
-    public BookSellerController(BookService bookService, SellerService sellerService) {
-        this.bookService = bookService;
-        this.sellerService = sellerService;
-    }
+INSERT INTO Seller (seller_id,Seller_Name) VALUES
+(1, 'NAME1'),
+(2, 'NAME2');
 
-    public Javalin getAPI() {
-        Javalin api = Javalin.create();
-
-        api.get("health", context -> {
-            context.result("Server is UP");
-        });
-
-        // Books Endpoints
-        api.get("books", context -> {
-            List<Book> bookList = bookService.getAllBooks();
-            context.json(bookList);
-        });
-
-        api.post("books", context -> {
-            try {
-                ObjectMapper om = new ObjectMapper();
-                Book b = om.readValue(context.body(), Book.class);
-                bookService.saveBook(b);
-                context.status(201);
-            } catch (InvalidBookException e) {
-                context.result(e.getMessage());
-                context.status(400);
-            }
-        });
-
-        api.put("books/:id", context -> {
-            long id = Long.parseLong(context.pathParam("id"));
-            try {
-                ObjectMapper om = new ObjectMapper();
-                Book updatedBook = om.readValue(context.body(), Book.class);
-                bookService.updateBook(id, updatedBook);
-                context.status(200);
-            } catch (SQLException e) {
-                context.status(500);
-            } catch (BookNotFoundException e) {
-                context.status(404);
-            } catch (InvalidBookException e) {
-                context.result(e.getMessage());
-                context.status(400);
-            }
-        });
-
-        api.delete("books/:id", context -> {
-            long id = Long.parseLong(context.pathParam("id"));
-            try {
-                bookService.deleteBook(id);
-                context.status(200);
-            } catch (SQLException e) {
-                context.status(500);
-            } catch (BookNotFoundException e) {
-                context.status(404);
-            }
-        });
-
-        // Sellers Endpoints
-        api.get("sellers", context -> {
-            List<Seller> sellerList = sellerService.getAllSellers();
-            context.json(sellerList);
-        });
-
-        api.post("sellers", context -> {
-            try {
-                ObjectMapper om = new ObjectMapper();
-                Seller s = om.readValue(context.body(), Seller.class);
-                sellerService.saveSeller(s);
-                context.status(201);
-            } catch (InvalidSellerException e) {
-                context.result(e.getMessage());
-                context.status(400);
-            }
-        });
-
-        return api;
-    }
-}
+INSERT INTO Product (product_id, name, product_price, seller_id)
+VALUES
+(1, 'book1', 10.99, 1),
+(2, 'book2', 15.99, 2);
