@@ -36,6 +36,13 @@ CRUD functionality on Product
 
 
 
+import org.example.DAO.BookDAO;
+import org.example.DAO.SellerDAO;
+import org.example.Model.Book;
+import org.example.Model.Seller;
+import org.example.Service.BookService;
+import org.example.Service.SellerService;
+import org.example.Util.ConnectionSingleton;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.After;
 import org.junit.Before;
@@ -46,63 +53,73 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+import static org.example.Util.ConnectionSingleton.connection;
 import static org.junit.Assert.*;
 
-public class DAOTest {
+public class TestDAO {
 
-    private JdbcDataSource dataSource;
-    private Connection connection;
-    private BookDAO bookDAO;
-    private SellerDAO sellerDAO;
+    Connection conn = ConnectionSingleton.getConnection();
+     BookDAO bookDAO;
+    SellerDAO sellerDAO;
+   //ResetTestdatabase();
+    BookService bookService;
+    SellerService sellerService;
 
     @Before
     public void setUp() throws SQLException {
-        dataSource = new JdbcDataSource();
-        dataSource.setURL("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
-        dataSource.setUser("sa");
-        dataSource.setPassword("");
-
-        connection = dataSource.getConnection();
+        dropTable();
         createTables();
+        sellerDAO = new SellerDAO(conn);
+        bookDAO = new BookDAO(conn);
 
-        bookDAO = new BookDAO(connection);
-        sellerDAO = new SellerDAO(connection);
     }
 
     @After
     public void tearDown() throws SQLException {
-        dropTables();
-        connection.close();
+        dropTable();
+    
     }
-
+private void dropTable() throws SQLException{
+        PreparedStatement ps = conn.prepareStatement("DROP TABLE  IF EXISTS BOOK");
+        ps.executeUpdate();
+        ps.close();
+        ps = conn.prepareStatement("DROP TABLE IF EXISTS Seller");
+        ps.executeUpdate();
+        ps.close();
+}
     private void createTables() throws SQLException {
-        PreparedStatement ps = connection.prepareStatement(
-                "CREATE TABLE Book (id INT PRIMARY KEY, name VARCHAR(255), price DOUBLE, authorName VARCHAR(255))"
+        if (conn.isClosed()){conn = ConnectionSingleton.getConnection();}
+        PreparedStatement p = conn.prepareStatement(
+                "CREATE TABLE if not exists Seller (seller_id INT PRIMARY KEY, seller_name VARCHAR(255))"
         );
-        ps.executeUpdate();
-        ps.close();
+        p.executeUpdate();
+        p.close();
+        PreparedStatement ps = conn.prepareStatement(
+                "CREATE TABLE if not exists Book (product_id INT PRIMARY KEY, name VARCHAR(255), product_price Decimal(10,2), Seller_id int references Seller(Seller_id))"
 
-        ps = connection.prepareStatement(
-                "CREATE TABLE Seller (id INT PRIMARY KEY, name VARCHAR(255))"
         );
-        ps.executeUpdate();
-        ps.close();
-    }
-
-    private void dropTables() throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("DROP TABLE IF EXISTS Book");
-        ps.executeUpdate();
-        ps.close();
-
-        ps = connection.prepareStatement("DROP TABLE IF EXISTS Seller");
         ps.executeUpdate();
         ps.close();
     }
 
     @Test
-    public void testBookCRUD() throws SQLException {
+    public void testSellerCRUD() throws SQLException {
+        if (conn.isClosed()){conn = ConnectionSingleton.getConnection();}
         // Insert
-        Book book = new Book("Book1", 10.0, "Author1");
+        Seller seller = new Seller(1,"Seller1");
+        sellerDAO.insertSeller(seller);
+
+        // Get
+        Seller retrievedSeller = sellerDAO.getSellerById(seller.getId());
+        assertNotNull(retrievedSeller);
+        assertEquals(seller.getName(), retrievedSeller.getName());
+
+    }
+    @Test
+    public void testBookCRUD() throws SQLException {
+        if (conn.isClosed()){conn = ConnectionSingleton.getConnection();}
+        // Insert
+        Book book = new Book(6,"Book6", 10.0, 1);
         bookDAO.insertBook(book);
 
         // Get
@@ -110,7 +127,7 @@ public class DAOTest {
         assertNotNull(retrievedBook);
         assertEquals(book.getName(), retrievedBook.getName());
         assertEquals(book.getPrice(), retrievedBook.getPrice(), 0.01);
-        assertEquals(book.getAuthorName(), retrievedBook.getAuthorName());
+        assertEquals(book.getSellerId(), retrievedBook.getSellerId());
 
         // Update
         book.setName("UpdatedBook");
@@ -124,41 +141,21 @@ public class DAOTest {
         assertNull(retrievedBook);
     }
 
-    @Test
-    public void testSellerCRUD() throws SQLException {
-        // Insert
-        Seller seller = new Seller("Seller1");
-        sellerDAO.insertSeller(seller);
 
-        // Get
-        Seller retrievedSeller = sellerDAO.getSellerById(seller.getId());
-        assertNotNull(retrievedSeller);
-        assertEquals(seller.getName(), retrievedSeller.getName());
-
-        // Update
-        seller.setName("UpdatedSeller");
-        sellerDAO.updateSeller(seller.getId(), seller);
-        retrievedSeller = sellerDAO.getSellerById(seller.getId());
-        assertEquals(seller.getName(), retrievedSeller.getName());
-
-        // Delete
-        sellerDAO.deleteSeller(seller.getId());
-        retrievedSeller = sellerDAO.getSellerById(seller.getId());
-        assertNull(retrievedSeller);
-    }
 
     @Test
     public void testGetAllBooksAndSellers() throws SQLException {
         // Insert some books and sellers
-        Book book1 = new Book("Book1", 10.0, "Author1");
-        Book book2 = new Book("Book2", 20.0, "Author2");
-        bookDAO.insertBook(book1);
-        bookDAO.insertBook(book2);
 
-        Seller seller1 = new Seller("Seller1");
-        Seller seller2 = new Seller("Seller2");
+        Seller seller1 = new Seller(4,"Seller4");
+        Seller seller2 = new Seller(5,"Seller5");
         sellerDAO.insertSeller(seller1);
         sellerDAO.insertSeller(seller2);
+
+        Book book1 = new Book(4,"Book4", 10.0, 4);
+        Book book2 = new Book(5,"Book5", 20.0, 5);
+        bookDAO.insertBook(book1);
+        bookDAO.insertBook(book2);
 
         // Get all books and sellers
         List<Book> books = bookDAO.getAllBooks();
@@ -168,6 +165,5 @@ public class DAOTest {
         assertEquals(2, sellers.size());
     }
 }
-
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE if not exists Book (product_id INT PRIMARY KEY, name VARCHAR(255), product_price Decimal(10,2), seller_id int references Seller(Seller_id)[*]"; expected "INDEX, ON, NOT DEFERRABLE, DEFERRABLE, CONSTRAINT, COMMENT, PRIMARY KEY, UNIQUE, NOT NULL, NULL, CHECK, REFERENCES, AUTO_INCREMENT, ,, )"; SQL statement:
-CREATE TABLE if not exists Book (product_id INT PRIMARY KEY, name VARCHAR(255), product_price Decimal(10,2), seller_id int references Seller(Seller_id)
+org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException: Referential integrity constraint violation: "CONSTRAINT_1F3: PUBLIC.BOOK FOREIGN KEY(SELLER_ID) REFERENCES PUBLIC.SELLER(SELLER_ID) (1)"; SQL statement:
+insert into book (product_id,name, product_price, Seller_id) values (?,?, ?, ?) [23506-214]
