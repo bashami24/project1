@@ -180,3 +180,349 @@ insert into (seller_id, Seller_name) values (?, ?) [42001-214]
             ps.executeUpdate();
         }catch(SQLException e){
             e.printStackTrace();
+
+import org.example.DAO.BookDAO;
+import org.example.DAO.SellerDAO;
+import org.example.Model.Book;
+import org.example.Model.Seller;
+import org.example.Service.BookService;
+import org.example.Service.SellerService;
+import org.example.Util.ConnectionSingleton;
+import org.h2.jdbcx.JdbcDataSource;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+
+import static org.example.Util.ConnectionSingleton.connection;
+import static org.junit.Assert.*;
+
+public class TestDAO {
+
+    Connection conn = ConnectionSingleton.getConnection();
+     BookDAO bookDAO;
+    SellerDAO sellerDAO;
+   //ResetTestdatabase();
+    BookService bookService;
+    SellerService sellerService;
+
+    @Before
+    public void setUp() throws SQLException {
+
+
+
+        createTables();
+
+        bookDAO = new BookDAO(conn);
+        sellerDAO = new SellerDAO(conn);
+    }
+
+    @After
+    public void tearDown() throws SQLException {
+        dropTables();
+        conn.close();
+    }
+
+    private void createTables() throws SQLException {
+        PreparedStatement ps = conn.prepareStatement(
+                "CREATE TABLE Book (id INT PRIMARY KEY, name VARCHAR(255), price DOUBLE, authorName VARCHAR(255))"
+        );
+        ps.executeUpdate();
+        ps.close();
+
+        ps = conn.prepareStatement(
+                "CREATE TABLE Seller (id INT PRIMARY KEY, name VARCHAR(255))"
+        );
+        ps.executeUpdate();
+        ps.close();
+    }
+
+    private void dropTables() throws SQLException {
+        PreparedStatement ps = conn.prepareStatement("DROP TABLE IF EXISTS Book");
+        ps.executeUpdate();
+        ps.close();
+
+        ps = conn.prepareStatement("DROP TABLE IF EXISTS Seller");
+        ps.executeUpdate();
+        ps.close();
+    }
+
+    @Test
+    public void testBookCRUD() throws SQLException {
+        // Insert
+        Book book = new Book(1,"Book1", 10.0, 1);
+        bookDAO.insertBook(book);
+
+        // Get
+        Book retrievedBook = bookDAO.getBookById(book.getId());
+        assertNotNull(retrievedBook);
+        assertEquals(book.getName(), retrievedBook.getName());
+        assertEquals(book.getPrice(), retrievedBook.getPrice(), 0.01);
+        assertEquals(book.getSellerId(), retrievedBook.getSellerId());
+
+        // Update
+        book.setName("UpdatedBook");
+        bookDAO.updateBook(book.getId(), book);
+        retrievedBook = bookDAO.getBookById(book.getId());
+        assertEquals(book.getName(), retrievedBook.getName());
+
+        // Delete
+        bookDAO.deleteBook(book.getId());
+        retrievedBook = bookDAO.getBookById(book.getId());
+        assertNull(retrievedBook);
+    }
+
+    @Test
+    public void testSellerCRUD() throws SQLException {
+        // Insert
+        Seller seller = new Seller(1,"Seller1");
+        sellerDAO.insertSeller(seller);
+
+        // Get
+        Seller retrievedSeller = sellerDAO.getSellerById(seller.getId());
+        assertNotNull(retrievedSeller);
+        assertEquals(seller.getName(), retrievedSeller.getName());
+        
+    }
+
+    @Test
+    public void testGetAllBooksAndSellers() throws SQLException {
+        // Insert some books and sellers
+        Book book1 = new Book(1,"Book1", 10.0, 1);
+        Book book2 = new Book(2,"Book2", 20.0, 2);
+        bookDAO.insertBook(book1);
+        bookDAO.insertBook(book2);
+
+        Seller seller1 = new Seller(1,"Seller1");
+        Seller seller2 = new Seller(2,"Seller2");
+        sellerDAO.insertSeller(seller1);
+        sellerDAO.insertSeller(seller2);
+
+        // Get all books and sellers
+        List<Book> books = bookDAO.getAllBooks();
+        List<Seller> sellers = sellerDAO.getAllSellers();
+
+        assertEquals(2, books.size());
+        assertEquals(2, sellers.size());
+    }
+}
+C:\dev\zulu11.68.17-ca-jdk11.0.21-win_x64\bin\java.exe -ea -Didea.test.cyclic.buffer.size=1048576 "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.2\lib\idea_rt.jar=58331:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.2\bin" -Dfile.encoding=UTF-8 -classpath "C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.2\lib\idea_rt.jar;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.2\plugins\junit\lib\junit5-rt.jar;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.2\plugins\junit\lib\junit-rt.jar;C:\Users\A249614\Desktop\Project2\target\test-classes;C:\Users\A249614\Desktop\Project2\target\classes;C:\Users\A249614\geico\m2_repo\junit\junit\4.13.2\junit-4.13.2.jar;C:\Users\A249614\geico\m2_repo\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;C:\Users\A249614\geico\m2_repo\io\javalin\javalin\5.0.1\javalin-5.0.1.jar;C:\Users\A249614\geico\m2_repo\org\slf4j\slf4j-api\1.7.36\slf4j-api-1.7.36.jar;C:\Users\A249614\geico\m2_repo\org\eclipse\jetty\jetty-server\11.0.12\jetty-server-11.0.12.jar;C:\Users\A249614\geico\m2_repo\org\eclipse\jetty\toolchain\jetty-jakarta-servlet-api\5.0.2\jetty-jakarta-servlet-api-5.0.2.jar;C:\Users\A249614\geico\m2_repo\org\eclipse\jetty\jetty-http\11.0.12\jetty-http-11.0.12.jar;C:\Users\A249614\geico\m2_repo\org\eclipse\jetty\jetty-util\11.0.12\jetty-util-11.0.12.jar;C:\Users\A249614\geico\m2_repo\org\eclipse\jetty\jetty-io\11.0.12\jetty-io-11.0.12.jar;C:\Users\A249614\geico\m2_repo\org\eclipse\jetty\jetty-webapp\11.0.12\jetty-webapp-11.0.12.jar;C:\Users\A249614\geico\m2_repo\org\eclipse\jetty\jetty-servlet\11.0.12\jetty-servlet-11.0.12.jar;C:\Users\A249614\geico\m2_repo\org\eclipse\jetty\jetty-security\11.0.12\jetty-security-11.0.12.jar;C:\Users\A249614\geico\m2_repo\org\eclipse\jetty\jetty-xml\11.0.12\jetty-xml-11.0.12.jar;C:\Users\A249614\geico\m2_repo\org\eclipse\jetty\websocket\websocket-jetty-server\11.0.12\websocket-jetty-server-11.0.12.jar;C:\Users\A249614\geico\m2_repo\org\eclipse\jetty\websocket\websocket-jetty-common\11.0.12\websocket-jetty-common-11.0.12.jar;C:\Users\A249614\geico\m2_repo\org\eclipse\jetty\websocket\websocket-core-common\11.0.12\websocket-core-common-11.0.12.jar;C:\Users\A249614\geico\m2_repo\org\eclipse\jetty\websocket\websocket-servlet\11.0.12\websocket-servlet-11.0.12.jar;C:\Users\A249614\geico\m2_repo\org\eclipse\jetty\websocket\websocket-core-server\11.0.12\websocket-core-server-11.0.12.jar;C:\Users\A249614\geico\m2_repo\org\eclipse\jetty\jetty-annotations\11.0.12\jetty-annotations-11.0.12.jar;C:\Users\A249614\geico\m2_repo\org\eclipse\jetty\jetty-plus\11.0.12\jetty-plus-11.0.12.jar;C:\Users\A249614\geico\m2_repo\jakarta\transaction\jakarta.transaction-api\2.0.0\jakarta.transaction-api-2.0.0.jar;C:\Users\A249614\geico\m2_repo\org\eclipse\jetty\jetty-jndi\11.0.12\jetty-jndi-11.0.12.jar;C:\Users\A249614\geico\m2_repo\jakarta\annotation\jakarta.annotation-api\2.1.1\jakarta.annotation-api-2.1.1.jar;C:\Users\A249614\geico\m2_repo\org\ow2\asm\asm\9.3\asm-9.3.jar;C:\Users\A249614\geico\m2_repo\org\ow2\asm\asm-commons\9.3\asm-commons-9.3.jar;C:\Users\A249614\geico\m2_repo\org\ow2\asm\asm-tree\9.3\asm-tree-9.3.jar;C:\Users\A249614\geico\m2_repo\org\ow2\asm\asm-analysis\9.3\asm-analysis-9.3.jar;C:\Users\A249614\geico\m2_repo\org\eclipse\jetty\websocket\websocket-jetty-api\11.0.12\websocket-jetty-api-11.0.12.jar;C:\Users\A249614\geico\m2_repo\org\jetbrains\kotlin\kotlin-stdlib-jdk8\1.7.10\kotlin-stdlib-jdk8-1.7.10.jar;C:\Users\A249614\geico\m2_repo\org\jetbrains\kotlin\kotlin-stdlib\1.7.10\kotlin-stdlib-1.7.10.jar;C:\Users\A249614\geico\m2_repo\org\jetbrains\kotlin\kotlin-stdlib-common\1.7.10\kotlin-stdlib-common-1.7.10.jar;C:\Users\A249614\geico\m2_repo\org\jetbrains\annotations\13.0\annotations-13.0.jar;C:\Users\A249614\geico\m2_repo\org\jetbrains\kotlin\kotlin-stdlib-jdk7\1.7.10\kotlin-stdlib-jdk7-1.7.10.jar;C:\Users\A249614\geico\m2_repo\org\slf4j\slf4j-simple\1.7.36\slf4j-simple-1.7.36.jar;C:\Users\A249614\geico\m2_repo\com\fasterxml\jackson\core\jackson-databind\2.14.0-rc1\jackson-databind-2.14.0-rc1.jar;C:\Users\A249614\geico\m2_repo\com\fasterxml\jackson\core\jackson-annotations\2.14.0-rc1\jackson-annotations-2.14.0-rc1.jar;C:\Users\A249614\geico\m2_repo\com\fasterxml\jackson\core\jackson-core\2.14.0-rc1\jackson-core-2.14.0-rc1.jar;C:\Users\A249614\geico\m2_repo\com\h2database\h2\2.1.214\h2-2.1.214.jar;C:\Users\A249614\geico\m2_repo\org\mockito\mockito-core\4.9.0\mockito-core-4.9.0.jar;C:\Users\A249614\geico\m2_repo\net\bytebuddy\byte-buddy\1.12.16\byte-buddy-1.12.16.jar;C:\Users\A249614\geico\m2_repo\net\bytebuddy\byte-buddy-agent\1.12.16\byte-buddy-agent-1.12.16.jar;C:\Users\A249614\geico\m2_repo\org\objenesis\objenesis\3.3\objenesis-3.3.jar" com.intellij.rt.junit.JUnitStarter -ideVersion5 -junit4 TestDAO
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStoreType=Windows-ROOT
+
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "BOOK" already exists; SQL statement:
+CREATE TABLE Book (id INT PRIMARY KEY, name VARCHAR(255), price DOUBLE, authorName VARCHAR(255)) [42101-214]
+
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:502)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.command.ddl.CreateTable.update(CreateTable.java:91)
+	at org.h2.command.CommandContainer.update(CommandContainer.java:169)
+	at org.h2.command.Command.executeUpdate(Command.java:252)
+	at org.h2.jdbc.JdbcPreparedStatement.executeUpdateInternal(JdbcPreparedStatement.java:209)
+	at org.h2.jdbc.JdbcPreparedStatement.executeUpdate(JdbcPreparedStatement.java:169)
+	at TestDAO.createTables(TestDAO.java:51)
+	at TestDAO.setUp(TestDAO.java:35)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.RunBefores.invokeMethod(RunBefores.java:33)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:24)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:27)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:69)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater$1.execute(IdeaTestRunner.java:38)
+	at com.intellij.rt.execution.junit.TestsRepeater.repeat(TestsRepeater.java:11)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35)
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:232)
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:55)
+
+
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-214]
+
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:554)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.message.DbException.get(DbException.java:188)
+	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1372)
+	at org.h2.jdbc.JdbcConnection.prepareStatement(JdbcConnection.java:286)
+	at TestDAO.createTables(TestDAO.java:48)
+	at TestDAO.setUp(TestDAO.java:35)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.RunBefores.invokeMethod(RunBefores.java:33)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:24)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:27)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:69)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater$1.execute(IdeaTestRunner.java:38)
+	at com.intellij.rt.execution.junit.TestsRepeater.repeat(TestsRepeater.java:11)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35)
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:232)
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:55)
+
+
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-214]
+
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:554)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.message.DbException.get(DbException.java:188)
+	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1372)
+	at org.h2.jdbc.JdbcConnection.prepareStatement(JdbcConnection.java:286)
+	at TestDAO.dropTables(TestDAO.java:62)
+	at TestDAO.tearDown(TestDAO.java:43)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.RunAfters.invokeMethod(RunAfters.java:46)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:69)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater$1.execute(IdeaTestRunner.java:38)
+	at com.intellij.rt.execution.junit.TestsRepeater.repeat(TestsRepeater.java:11)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35)
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:232)
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:55)
+
+
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-214]
+
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:554)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.message.DbException.get(DbException.java:188)
+	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1372)
+	at org.h2.jdbc.JdbcConnection.prepareStatement(JdbcConnection.java:286)
+	at TestDAO.createTables(TestDAO.java:48)
+	at TestDAO.setUp(TestDAO.java:35)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.RunBefores.invokeMethod(RunBefores.java:33)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:24)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:27)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:69)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater$1.execute(IdeaTestRunner.java:38)
+	at com.intellij.rt.execution.junit.TestsRepeater.repeat(TestsRepeater.java:11)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35)
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:232)
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:55)
+
+
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-214]
+
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:554)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.message.DbException.get(DbException.java:188)
+	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1372)
+	at org.h2.jdbc.JdbcConnection.prepareStatement(JdbcConnection.java:286)
+	at TestDAO.dropTables(TestDAO.java:62)
+	at TestDAO.tearDown(TestDAO.java:43)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.RunAfters.invokeMethod(RunAfters.java:46)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:69)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater$1.execute(IdeaTestRunner.java:38)
+	at com.intellij.rt.execution.junit.TestsRepeater.repeat(TestsRepeater.java:11)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35)
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:232)
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:55)
+
+
+Process finished with exit code -1
+
