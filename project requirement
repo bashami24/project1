@@ -75,3 +75,172 @@ Copy code
 This document includes the essential parts of an HTML document: <!DOCTYPE html>, <html>, <head>, 
 and <body>. The <head> contains the document's metadata,
 while the <body> contains the visible content displayed in the browser.
+
+Commonly used HTML elements include:
+
+1. **`<div>`**: Defines a division or section in an HTML document.
+2. **`<p>`**: Represents a paragraph of text.
+3. **`<a>`**: Defines a hyperlink.
+4. **`<img>`**: Embeds an image in an HTML document.
+5. **`<ul>`**, **`<ol>`**, **`<li>`**: Used for creating unordered and ordered lists.
+6. **`<table>`**, **`<tr>`**, **`<td>`**: Used for creating tables and their rows and cells.
+7. **`<form>`**, **`<input>`**, **`<button>`**: Used for creating forms and form elements like text fields, buttons, etc.
+8. **`<h1>` to `<h6>`**: Defines headings of different levels.
+9. **`<span>`**: Defines a section in a document for styling purposes.
+10. **`<br>`**: Inserts a single line break.
+11. **`<hr>`**: Represents a thematic break between paragraph-level elements.
+12. **`<iframe>`**: Embeds another HTML page into the current page.
+
+These are just a few examples, and there are many more HTML elements available for various purposes.
+In HTML and CSS, elements are classified as either inline or block elements based on how they flow in a document and how they interact with other elements. Here's a brief overview:
+
+1. **Block Elements**:
+   - Start on a new line and take up the full available width by default.
+   - Examples include `<div>`, `<p>`, `<h1>` to `<h6>`, `<form>`, `<ul>`, `<ol>`, `<li>`, `<table>`, `<header>`, `<footer>`, `<section>`, `<article>`, `<nav>`, `<blockquote>`, `<address>`, and `<main>`.
+
+2. **Inline Elements**:
+   - Do not start on a new line and only take up as much width as necessary.
+   - Examples include `<span>`, `<a>`, `<strong>`, `<em>`, `<img>`, `<br>`, `<input>`, `<label>`, `<select>`, `<textarea>`, `<code>`, `<abbr>`, `<cite>`, `<time>`, `<var>`, and `<q>`.
+
+You can change an element's display behavior from block to inline or vice versa using CSS properties like 
+`display: block;` or `display: inline;`. Additionally, there are elements called "inline-block" elements,
+which behave like inline elements but can have block-level properties applied to them.
+`<div>` and `<span>` are both HTML elements used for grouping and styling content, but they are used in different contexts and have different default behaviors:
+
+1. **`<div>` (Division)**:
+   - `<div>` is a block-level element that is used to group content and create divisions or sections on a webpage.
+   - It typically starts on a new line and takes up the full width available.
+   - It is commonly used to structure and layout a webpage, such as grouping elements for styling or positioning with CSS.
+   - Example: `<div class="container">Content goes here</div>`
+
+2. **`<span>` (Inline Span)**:
+   - `<span>` is an inline element used for styling or applying additional properties to a specific portion of text or inline content.
+   - It does not start on a new line and only takes up as much width as necessary.
+   - It is often used to apply CSS styles, such as color or font size, to a specific part of a text.
+   - Example: `<p>This is <span style="color: blue;">blue</span> text.</p>`
+
+In summary, `<div>` is used for grouping and structuring block-level content, while `<span>`
+is used for styling inline content within a block-level element.
+
+Assigning IDs and classes to elements in HTML serves several purposes:
+
+1. **CSS Styling**: IDs and classes are used to apply styles to elements using CSS. They allow you to target specific elements or groups of elements and apply styles such as color, font size, margin, padding, and more.
+
+2. **JavaScript Interaction**: IDs and classes are often used as hooks for JavaScript/jQuery to interact with elements on the page. They can be used to manipulate the content, add or remove classes, or trigger events based on user actions.
+
+3. **Accessibility**: IDs and classes can help improve accessibility by providing hooks for screen readers and other assistive technologies to understand the structure and purpose of content on the page.
+
+4. **Semantic HTML**: Assigning IDs and classes can help make your HTML more semantic and meaningful. For example, using a class name like "navigation" for a navigation menu makes it clear what the purpose of that element is.
+
+5. **Document Structure**: IDs and classes can help organize and structure your document, making it easier to understand and maintain, especially in larger projects.
+
+Overall, assigning IDs and classes to elements is a fundamental part of web development that helps you style, interact with, and structure your web pages effectively.
+
+To create an ordered list (`<ol>`) and an unordered list (`<ul>`) in HTML, you can use the following syntax:
+
+**Ordered List (`<ol>`)**:
+```html
+<ol>
+  <li>Item 1</li>
+  <li>Item 2</li>
+  <li>Item 3</li>
+</ol>
+```
+
+**Unordered List (`<ul>`)**:
+```html
+<ul>
+  <li>Item 1</li>
+  <li>Item 2</li>
+  <li>Item 3</li>
+</ul>
+```
+
+In both cases, the `<li>` element is used to define each item in the list. The `type` attribute can be used with `<ol>` 
+to specify the type of numbering, such as `type="1"` for numbers (default), `type="A"` for uppercase letters, `type="a"` 
+for lowercase letters, `type="I"` 
+for uppercase Roman numerals, and `type="i"` for lowercase Roman numerals.
+
+HTML5 introduced several new features and enhancements over its predecessor, HTML4. Some of the key features introduced in HTML5 include:
+
+1. **Semantic Elements**: HTML5 introduced new semantic elements like `<header>`, `<footer>`, `<nav>`, `<article>`, `<section>`, and `<aside>` to improve the structure and semantics of web documents.
+
+2. **Audio and Video Support**: HTML5 introduced native support for embedding audio and video content using the `<audio>` and `<video>` elements, eliminating the need for third-party plugins like Flash.
+
+3. **Canvas**: The `<canvas>` element allows for dynamic, scriptable rendering of graphics, charts, animations, and other visual images directly in the browser.
+
+4. **SVG**: HTML5 includes support for Scalable Vector Graphics (SVG), allowing for the creation of high-quality, resolution-independent graphics and images.
+
+5. **Form Enhancements**: HTML5 introduced new form input types (`<input type="date">`, `<input type="email">`, `<input type="url">`, etc.), attributes (`placeholder`, `required`, `autocomplete`, etc.), and the `<datalist>` element for improved form handling and validation.
+
+6. **Offline Web Applications**: HTML5 introduced the Application Cache (`appcache`) and Web Storage (`localStorage` and `sessionStorage`) APIs, enabling web applications to work offline and store data locally.
+
+7. **Web Workers**: HTML5 introduced the Web Workers API, allowing for the execution of JavaScript code in the background, separate from the main browser thread, to improve performance and responsiveness.
+
+8. **Geolocation API**: HTML5 includes a Geolocation API that allows web applications to access the user's geographical location information.
+
+9. **Drag and Drop**: HTML5 introduced native support for drag-and-drop operations, making it easier to implement intuitive user interfaces for file uploads and other interactions.
+
+10. **Responsive Images**: HTML5 introduced the `<picture>` and `<source>` elements, as well as the `srcset` attribute, for responsive images that adapt to different screen sizes and resolutions.
+
+These are just a few of the many features and improvements introduced in HTML5 to enhance the capabilities of web development and improve the user experience.
+
+There are several ways to attach JavaScript to an HTML file:
+
+1. **Inline Script**: You can include JavaScript directly within an HTML file using the `<script>` tag. For example:
+
+   ```html
+   <script>
+       // Your JavaScript code here
+       console.log("Hello, World!");
+   </script>
+   ```
+
+2. **External Script File**: You can also link an external JavaScript file to your HTML file using the `<script>` tag with the `src` attribute. For example:
+
+   ```html
+   <script src="script.js"></script>
+   ```
+
+   In this example, `script.js` is the external JavaScript file containing your code.
+
+3. **Event Handlers**: You can use event attributes like `onclick`, `onchange`, `onsubmit`, etc., to attach JavaScript code directly to specific HTML elements. For example:
+
+   ```html
+   <button onclick="alert('Button clicked!')">Click me</button>
+   ```
+
+4. **Document Ready Event**: If you want to ensure that your JavaScript code runs after the HTML document has fully loaded, you can use the `DOMContentLoaded` event. For example:
+
+   ```html
+   <script>
+       document.addEventListener("DOMContentLoaded", function() {
+           // Your JavaScript code here
+           console.log("Document loaded!");
+       });
+   </script>
+   ```
+
+These are some common ways to attach JavaScript to an HTML file. Depending on your requirements and best practices, you can choose the method that suits your needs.
+
+public class SecretCodeConverter {
+
+    public static void main(String[] args) {
+        String input = "AbCygHg";
+        String secretCode = createSecretCode(input);
+        System.out.println(secretCode);
+    }
+
+    public static String createSecretCode(String s) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            char c = Character.toUpperCase(s.charAt(i));
+            if (c >= 'A' && c <= 'Z') {
+                int code = c - 'A' + 1;
+                sb.append(String.format("%02d", code));
+            }
+        }
+        return sb.toString();
+    }
+}
+
