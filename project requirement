@@ -35,130 +35,120 @@ CRUD functionality on Product
             at the start or not. This is convention.
 
 
-The general structure of an HTML document consists of several parts, each serving a specific purpose. Here's a breakdown of the main parts:
+import React from 'react';
+import Seller from '../models/Seller';
 
-<!DOCTYPE html>: This declaration specifies the document type and version of HTML (in this case, HTML5). 
-It is required at the beginning of every HTML document.
+interface SellerListProps {
+  sellers: Seller[];
+}
 
-<html>: The root element of an HTML document. All other elements are nested inside this element.
+const SellerList: React.FC<SellerListProps> = ({ sellers }) => (
+  <div>
+    <h2>Sellers</h2>
+    <ul>
+      {sellers.map(seller => (
+        <li key={seller.id}>{seller.name}</li>
+      ))}
+    </ul>
+  </div>
+);
 
-<head>: Contains meta-information about the document, such as the document title, character set, CSS styles, and scripts.
-It does not display any content on the web page itself.
-
-<meta>: Provides metadata about the HTML document, such as the character set, author, and viewport settings.
-<title>: Sets the title of the document, which appears in the browser tab or title bar.
-<link>: Links to external resources such as CSS stylesheets or icon files.
-<script>: Links to or embeds JavaScript code.
-<body>: Contains the main content of the HTML document, including text, images, links, and other elements 
-that are displayed on the web page.
-
-Text content: Paragraphs <p>, headings <h1> to <h6>, lists <ul>, <ol>, <li>, etc.
-Structural elements: Divisions <div>, sections <section>, articles <article>, headers <header>, footers <footer>, etc.
-Multimedia: Images <img>, videos <video>, audio <audio>, etc.
-Links: Anchor tags <a> for creating hyperlinks.
-Forms: Form elements <form>, input fields <input>, buttons <button>, etc.
-Here's a simple example of an HTML document with the basic structure:
-
-html
-Copy code
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Sample HTML Document</title>
-</head>
-<body>
-    <h1>Hello, World!</h1>
-    <p>This is a sample HTML document.</p>
-</body>
-</html>
-This document includes the essential parts of an HTML document: <!DOCTYPE html>, <html>, <head>, 
-and <body>. The <head> contains the document's metadata,
-while the <body> contains the visible content displayed in the browser.
+export default SellerList;
 
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import SellerList from '../components/SellerList';
+import Seller from '../models/Seller';
 
-const SellersPage = () => {
-  const [sellers, setSellers] = useState([]);
-  const [newSellerName, setNewSellerName] = useState('');
+const SellerPage: React.FC = () => {
+  const [sellers, setSellers] = useState<Seller[]>([]);
 
   useEffect(() => {
+    const fetchSellers = async () => {
+      const response = await fetch('http://localhost:9001/sellers');
+      const data = await response.json();
+      setSellers(data);
+    };
+
     fetchSellers();
   }, []);
 
-  const fetchSellers = async () => {
-    try {
-      const response = await axios.get('http://your-backend-api-url/sellers');
-      setSellers(response.data);
-    } catch (error) {
-      console.error('Failed to fetch sellers:', error);
-    }
-  };
-
-  const addSeller = async () => {
-    try {
-      await axios.post('http://your-backend-api-url/sellers', { name: newSellerName });
-      fetchSellers();
-      setNewSellerName('');
-    } catch (error) {
-      console.error('Failed to add seller:', error);
-    }
-  };
-
   return (
     <div>
-      <h1>All Sellers</h1>
-      <ul>
-        {sellers.map((seller) => (
-          <li key={seller.id}>{seller.name}</li>
-        ))}
-      </ul>
-      <div>
-        <h2>Add New Seller</h2>
-        <input
-          type="text"
-          placeholder="Seller Name"
-          value={newSellerName}
-          onChange={(e) => setNewSellerName(e.target.value)}
-        />
-        <button onClick={addSeller}>Add Seller</button>
-      </div>
+      <SellerList sellers={sellers} />
     </div>
   );
 };
 
-export default SellersPage;
+export default SellerPage;
+
+import React, { useState, useEffect } from 'react';
+import ProductList from '../components/ProductList';
+import Product from '../models/Product';
+
+const ProductPage: React.FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const response = await fetch('http://localhost:9001/products');
+      const data = await response.json();
+      setProducts(data);
+    };
+
+    fetchProducts();
+  }, []);
+
+  return (
+    <div>
+      <ProductList products={products} />
+    </div>
+  );
+};
+
+export default ProductPage;
 
 
-"C:\Program Files\Zulu\zulu-17\bin\java.exe" "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.2\lib\idea_rt.jar=53058:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.2\bin" -Dfile.encoding=UTF-8 -classpath "C:\Users\A249614\Desktop\tom's\out\production\tom's;C:\Users\A249614\geico\m2_repo\org\slf4j\slf4j-api\1.7.36\slf4j-api-1.7.36.jar;C:\Users\A249614\geico\m2_repo\org\mockito\mockito-core\4.9.0\mockito-core-4.9.0.jar;C:\Users\A249614\geico\m2_repo\io\javalin\javalin\5.0.1\javalin-5.0.1.jar;C:\Users\A249614\geico\m2_repo\com\fasterxml\jackson\core\jackson-core\2.14.0-rc1\jackson-core-2.14.0-rc1.jar;C:\Users\A249614\geico\m2_repo\com\fasterxml\jackson\core\jackson-databind\2.14.0-rc1\jackson-databind-2.14.0-rc1.jar;C:\Users\A249614\geico\m2_repo\com\h2database\h2\2.1.214\h2-2.1.214.jar;C:\Users\A249614\geico\m2_repo\junit\junit\4.13.2\junit-4.13.2.jar" org.example.Main
-Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStoreType=Windows-ROOT
-SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
-SLF4J: Defaulting to no-operation (NOP) logger implementation
-SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
-java.io.FileNotFoundException: src\main\resources\Tables.sql (The system cannot find the path specified)
-	at java.base/java.io.FileInputStream.open0(Native Method)
-	at java.base/java.io.FileInputStream.open(FileInputStream.java:216)
-	at java.base/java.io.FileInputStream.<init>(FileInputStream.java:157)
-	at java.base/java.io.FileInputStream.<init>(FileInputStream.java:111)
-	at java.base/java.io.FileReader.<init>(FileReader.java:60)
-	at org.example.Util.ConnectionSingleton.resetTestDatabase(ConnectionSingleton.java:63)
-	at org.example.Util.ConnectionSingleton.getConnection(ConnectionSingleton.java:44)
-	at org.example.Main.main(Main.java:24)
-Exception in thread "main" java.lang.NoClassDefFoundError: kotlin/NoWhenBranchMatchedException
-	at io.javalin.config.PrivateConfig.<init>(PrivateConfig.kt:24)
-	at io.javalin.config.JavalinConfig.<init>(JavalinConfig.kt:24)
-	at io.javalin.Javalin.<init>(Javalin.java:55)
-	at io.javalin.Javalin.create(Javalin.java:92)
-	at io.javalin.Javalin.create(Javalin.java:79)
-	at org.example.Controller.ProductController.getAPI(ProductController.java:44)
-	at org.example.Main.main(Main.java:30)
-Caused by: java.lang.ClassNotFoundException: kotlin.NoWhenBranchMatchedException
-	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
-	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
-	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525)
-	... 7 more
+//seller list
 
-Process finished with exit code 1
+import React from 'react';
+import Seller from '../models/Seller';
+
+interface SellerListProps {
+  sellers: Seller[];
+}
+
+const SellerList: React.FC<SellerListProps> = ({ sellers }) => (
+  <div>
+    <h2>Sellers</h2>
+    <ul>
+      {sellers.map(seller => (
+        <li key={seller.id}>{seller.name}</li>
+      ))}
+    </ul>
+  </div>
+);
+
+export default SellerList;
+
+import React from 'react';
+import Product from '../models/Product';
+
+interface ProductListProps {
+  products: Product[];
+}
+
+const ProductList: React.FC<ProductListProps> = ({ products }) => (
+  <div>
+    <h2>Products</h2>
+    <ul>
+      {products.map(product => (
+        <li key={product.id}>{product.name} - ${product.price}</li>
+      ))}
+    </ul>
+  </div>
+);
+
+export default ProductList;
+
 
 
