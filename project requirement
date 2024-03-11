@@ -37,131 +37,143 @@ CRUD functionality on Product
 
 
 
-//seller list
-
-import React from 'react';
-import Seller from '../models/Seller';
-
-interface SellerListProps {
-  sellers: Seller[];
+// models/Seller.ts
+export interface Seller {
+  id: number;
+  name: string;
 }
 
-const SellerList: React.FC<SellerListProps> = ({ sellers }) => (
-  <div>
-    <h2>Sellers</h2>
-    <ul>
-      {sellers.map(seller => (
-        <li key={seller.id}>{seller.name}</li>
-      ))}
-    </ul>
-  </div>
-);
+// models/Product.ts
+export interface Product {
+  id: number;
+  name: string;
+  price: number;
+  sellerId: number;
+}
 
-export default SellerList;
+// context/DataContext.tsx
+import React, { createContext, useContext, useState } from 'react';
+import { Seller } from '../models/Seller';
+import { Product } from '../models/Product';
 
- COMPONENTS SELLER LIST
-import React from 'react';
-import Product from '../models/Product';
-
-interface ProductListProps {
+interface DataContextType {
+  sellers: Seller[];
+  setSellers: React.Dispatch<React.SetStateAction<Seller[]>>;
   products: Product[];
+  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
 }
 
-const ProductList: React.FC<ProductListProps> = ({ products }) => (
-  <div>
-    <h2>Products</h2>
-    <ul>
-      {products.map(product => (
-        <li key={product.id}>{product.name} - ${product.price}</li>
-      ))}
-    </ul>
-  </div>
-);
+const DataContext = createContext<DataContextType | undefined>(undefined);
 
-export default ProductList;
+export const useData = () => {
+  const context = useContext(DataContext);
+  if (!context) {
+    throw new Error('useData must be used within a DataProvider');
+  }
+  return context;
+};
 
-import React from 'react';
-import Seller from '../models/Seller';
-
-interface SellerListProps {
-  sellers: Seller[];
-}
-
-const SellerList: React.FC<SellerListProps> = ({ sellers }) => (
-  <div>
-    <h2>Sellers</h2>
-    <ul>
-      {sellers.map(seller => (
-        <li key={seller.id}>{seller.name}</li>
-      ))}
-    </ul>
-  </div>
-);
-
-export default SellerList;
-
-
-
-components 
-
-import React from 'react';
-import Seller from '../models/Seller';
-
-interface SellerListProps {
-  sellers: Seller[];
-}
-
-const SellerList: React.FC<SellerListProps> = ({ sellers }) => (
-  <div>
-    <h2>Sellers</h2>
-    <ul>
-      {sellers.map(seller => (
-        <li key={seller.id}>{seller.name}</li>
-      ))}
-    </ul>
-  </div>
-);
-
-export default SellerList;
-
-
-
-
-import React, { useState } from 'react';
-
-interface AddSellerFormProps {
-  onAdd: (name: string, email: string) => void;
-}
-
-const AddSellerForm: React.FC<AddSellerFormProps> = ({ onAdd }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    onAdd(name, email);
-    setName('');
-    setEmail('');
-  };
+export const DataProvider: React.FC = ({ children }) => {
+  const [sellers, setSellers] = useState<Seller[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Name"
-        value={name}
-        onChange={e => setName(e.target.value)}
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-      />
-      <button type="submit">Add Seller</button>
-    </form>
+    <DataContext.Provider value={{ sellers, setSellers, products, setProducts }}>
+      {children}
+    </DataContext.Provider>
   );
 };
 
-export default AddSellerForm;
+// services/SellerService.ts
+import { Seller } from '../models/Seller';
 
+export const getSellers = async (): Promise<Seller[]> => {
+  // Your API call to fetch sellers
+  return [];
+};
+
+// services/ProductService.ts
+import { Product } from '../models/Product';
+
+export const getProducts = async (): Promise<Product[]> => {
+  // Your API call to fetch products
+  return [];
+};
+
+// pages/SellerPage.tsx
+import React, { useEffect } from 'react';
+import { useData } from '../context/DataContext';
+import { getSellers } from '../services/SellerService';
+
+export const SellerPage = () => {
+  const { sellers, setSellers } = useData();
+
+  useEffect(() => {
+    getSellers().then((data) => setSellers(data));
+  }, [setSellers]);
+
+  return (
+    <div>
+      <h1>Sellers</h1>
+      <ul>
+        {sellers.map((seller) => (
+          <li key={seller.id}>{seller.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+// pages/ProductPage.tsx
+import React, { useEffect } from 'react';
+import { useData } from '../context/DataContext';
+import { getProducts } from '../services/ProductService';
+
+export const ProductPage = () => {
+  const { products, setProducts } = useData();
+
+  useEffect(() => {
+    getProducts().then((data) => setProducts(data));
+  }, [setProducts]);
+
+  return (
+    <div>
+      <h1>Products</h1>
+      <ul>
+        {products.map((product) => (
+          <li key={product.id}>
+            {product.name} - ${product.price}
+            <button>Edit</button>
+            <button>Delete</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+// App.tsx
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { DataProvider } from './context/DataContext';
+import { SellerPage } from './pages/SellerPage';
+import { ProductPage } from './pages/ProductPage';
+
+function App() {
+  return (
+    <DataProvider>
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <SellerPage />
+          </Route>
+          <Route path="/products">
+            <ProductPage />
+          </Route>
+        </Switch>
+      </Router>
+    </DataProvider>
+  );
+}
+
+export default App;
