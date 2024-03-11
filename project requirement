@@ -59,6 +59,7 @@ const SellerList: React.FC<SellerListProps> = ({ sellers }) => (
 
 export default SellerList;
 
+ COMPONENTS SELLER LIST
 import React from 'react';
 import Product from '../models/Product';
 
@@ -79,5 +80,46 @@ const ProductList: React.FC<ProductListProps> = ({ products }) => (
 
 export default ProductList;
 
+import React from 'react';
+import Seller from '../models/Seller';
+
+interface SellerListProps {
+  sellers: Seller[];
+}
+
+const SellerList: React.FC<SellerListProps> = ({ sellers }) => (
+  <div>
+    <h2>Sellers</h2>
+    <ul>
+      {sellers.map(seller => (
+        <li key={seller.id}>{seller.name}</li>
+      ))}
+    </ul>
+  </div>
+);
+
+export default SellerList;
 
 
+
+components 
+
+import React from 'react';
+import Seller from '../models/Seller';
+
+interface SellerListProps {
+  sellers: Seller[];
+}
+
+const SellerList: React.FC<SellerListProps> = ({ sellers }) => (
+  <div>
+    <h2>Sellers</h2>
+    <ul>
+      {sellers.map(seller => (
+        <li key={seller.id}>{seller.name}</li>
+      ))}
+    </ul>
+  </div>
+);
+
+export default SellerList;
