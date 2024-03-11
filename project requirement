@@ -130,3 +130,35 @@ const SellersPage = () => {
 
 export default SellersPage;
 
+
+"C:\Program Files\Zulu\zulu-17\bin\java.exe" "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.2\lib\idea_rt.jar=53058:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.2\bin" -Dfile.encoding=UTF-8 -classpath "C:\Users\A249614\Desktop\tom's\out\production\tom's;C:\Users\A249614\geico\m2_repo\org\slf4j\slf4j-api\1.7.36\slf4j-api-1.7.36.jar;C:\Users\A249614\geico\m2_repo\org\mockito\mockito-core\4.9.0\mockito-core-4.9.0.jar;C:\Users\A249614\geico\m2_repo\io\javalin\javalin\5.0.1\javalin-5.0.1.jar;C:\Users\A249614\geico\m2_repo\com\fasterxml\jackson\core\jackson-core\2.14.0-rc1\jackson-core-2.14.0-rc1.jar;C:\Users\A249614\geico\m2_repo\com\fasterxml\jackson\core\jackson-databind\2.14.0-rc1\jackson-databind-2.14.0-rc1.jar;C:\Users\A249614\geico\m2_repo\com\h2database\h2\2.1.214\h2-2.1.214.jar;C:\Users\A249614\geico\m2_repo\junit\junit\4.13.2\junit-4.13.2.jar" org.example.Main
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStoreType=Windows-ROOT
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+java.io.FileNotFoundException: src\main\resources\Tables.sql (The system cannot find the path specified)
+	at java.base/java.io.FileInputStream.open0(Native Method)
+	at java.base/java.io.FileInputStream.open(FileInputStream.java:216)
+	at java.base/java.io.FileInputStream.<init>(FileInputStream.java:157)
+	at java.base/java.io.FileInputStream.<init>(FileInputStream.java:111)
+	at java.base/java.io.FileReader.<init>(FileReader.java:60)
+	at org.example.Util.ConnectionSingleton.resetTestDatabase(ConnectionSingleton.java:63)
+	at org.example.Util.ConnectionSingleton.getConnection(ConnectionSingleton.java:44)
+	at org.example.Main.main(Main.java:24)
+Exception in thread "main" java.lang.NoClassDefFoundError: kotlin/NoWhenBranchMatchedException
+	at io.javalin.config.PrivateConfig.<init>(PrivateConfig.kt:24)
+	at io.javalin.config.JavalinConfig.<init>(JavalinConfig.kt:24)
+	at io.javalin.Javalin.<init>(Javalin.java:55)
+	at io.javalin.Javalin.create(Javalin.java:92)
+	at io.javalin.Javalin.create(Javalin.java:79)
+	at org.example.Controller.ProductController.getAPI(ProductController.java:44)
+	at org.example.Main.main(Main.java:30)
+Caused by: java.lang.ClassNotFoundException: kotlin.NoWhenBranchMatchedException
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525)
+	... 7 more
+
+Process finished with exit code 1
+
+
