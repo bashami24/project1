@@ -37,53 +37,29 @@ CRUD functionality on Product
 
 
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Seller } from '../models/Seller';
-import { getAllSellers, addSeller } from '../services/SellerService';
-import SellerList from '../components/SellerList'; // Correct import
+import { getAllSellers } from '../services/SellerService';
 
-const SellerPage: React.FC = () => {
+interface SellerListProps {
+    seller: Seller;
+}
+ const SellerList: React.FC = () => {
     const [sellers, setSellers] = useState<Seller[]>([]);
-    const [newSellerId, setNewSellerId] = useState<number>(0);
-    const [newSellerName, setNewSellerName] = useState<string>('');
 
     useEffect(() => {
         getAllSellers().then(setSellers);
     }, []);
 
-    const handleAddSeller = async () => {
-        if (!newSellerName || newSellerId <= 0) return;
-        await addSeller({ id: newSellerId, name: newSellerName }); // Pass seller object
-        setNewSellerId(0);
-        setNewSellerName('');
-        getAllSellers().then(setSellers);
-    };
-
     return (
         <div>
-            <h1>Sellers</h1>
+            <h2>All Sellers</h2>
             <ul>
                 {sellers.map((seller) => (
-                    <li key={seller.id}>
-                        <SellerList seller={seller} /> {/* Pass seller object */}
-                    </li>
+                    <li key={seller.id}>{seller.name}</li>
                 ))}
             </ul>
-            <input
-                type="number"
-                placeholder="Enter seller ID"
-                value={newSellerId}
-                onChange={(e) => setNewSellerId(parseInt(e.target.value))}
-            />
-            <input
-                type="text"
-                placeholder="Enter seller name"
-                value={newSellerName}
-                onChange={(e) => setNewSellerName(e.target.value)}
-            />
-            <button onClick={handleAddSeller}>Add Seller</button>
         </div>
     );
 };
-
-export default SellerPage;
+export default SellerList;
