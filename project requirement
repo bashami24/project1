@@ -488,4 +488,35 @@ const SellerPage: React.FC = () => {
 export default SellerPage;
 
 
+// pages/ProductPage.tsx
+import React, { useEffect, useState } from 'react';
+import ProductList from '../components/ProductList';
+import { getAllProductsAPI, addProductAPI } from '../services/ProductService';
+import { Product } from '../models/Product';
+
+const ProductPage: React.FC = () => {
+    const [products, setProducts] = useState<Product[]>([]);
+
+    useEffect(() => {
+        getAllProductsAPI().then(response => response.json())
+            .then(data => setProducts(data));
+    }, []);
+
+    const handleAddProduct = () => {
+        addProductAPI("New Product", 0, 0).then(() => {
+            getAllProductsAPI().then(response => response.json())
+                .then(data => setProducts(data));
+        });
+    };
+
+    return (
+        <div>
+            <h1>Products</h1>
+            <ProductList products={products} />
+            <button onClick={handleAddProduct}>Add Product</button>
+        </div>
+    );
+};
+
+export default ProductPage;
 
