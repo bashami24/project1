@@ -37,10 +37,11 @@ CRUD functionality on Product
 
 
 
-mport React, { useState, useEffect } from 'react';
+m// pages/SellerPage.tsx
+import React, { useState, useEffect } from 'react';
 import { Seller } from '../models/Seller';
 import { getAllSellers, addSeller } from '../services/SellerService';
-import {SellerList} from '../components/SellerList';
+import SellerList from '../components/SellerList'; // Correct import
 
 const SellerPage: React.FC = () => {
     const [sellers, setSellers] = useState<Seller[]>([]);
@@ -53,7 +54,7 @@ const SellerPage: React.FC = () => {
 
     const handleAddSeller = async () => {
         if (!newSellerName || newSellerId <= 0) return;
-        await addSeller( newSellerName,newSellerId);
+        await addSeller({ id: newSellerId, name: newSellerName }); // Pass seller object
         setNewSellerId(0);
         setNewSellerName('');
         getAllSellers().then(setSellers);
@@ -65,7 +66,7 @@ const SellerPage: React.FC = () => {
             <ul>
                 {sellers.map((seller) => (
                     <li key={seller.id}>
-                        <SellerList seller={seller} />
+                        <SellerList seller={seller} /> {/* Pass seller object */}
                     </li>
                 ))}
             </ul>
