@@ -392,3 +392,27 @@ const SellerList: React.FC<SellerListProps> = ({ sellers }) => {
 export default SellerList;
 
 
+
+// components/ProductList.tsx
+import React from 'react';
+import { Product } from '../models/Product';
+
+interface ProductListProps {
+    products: Product[];
+}
+
+const ProductList: React.FC<ProductListProps> = ({ products }) => {
+    return (
+        <div>
+            <h2>All Products</h2>
+            <ul>
+                {products.map((product) => (
+                    <li key={product.id}>{product.name}</li>
+                ))}
+            </ul>
+        </div>
+    );
+};
+
+export default ProductList;
+
