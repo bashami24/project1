@@ -1,13 +1,14 @@
-// pages/ProductPage.tsx
+// components/ProductList.tsx
 
 import React, { useEffect, useState } from 'react';
 import { Product } from '../models/Product';
-import { getAllProductsAPI, addProductAPI, deleteProductAPI, updateProductAPI } from '../services/ProductService';
+import { getAllProductsAPI, deleteProductAPI } from '../services/ProductService';
 
-const ProductPage: React.FC = () => {
+const ProductList: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [showMenuId, setShowMenuId] = useState<number | null>(null);
-    const [newProduct, setNewProduct] = useState<{ name: string; price: number; sellerId: number }>({
+    const [newProduct, setNewProduct] = useState<{ productId: number; name: string; price: number; sellerId: number }>({
+        productId: 0,
         name: '',
         price: 0,
         sellerId: 0
@@ -21,34 +22,19 @@ const ProductPage: React.FC = () => {
         setShowMenuId((prevId) => (prevId === productId ? null : productId));
     };
 
-    const handleDeleteProduct = (productId: number) => {
-        deleteProductAPI(productId).then(() => {
-            getAllProductsAPI().then(data => setProducts(data));
-            setShowMenuId(null);
-        });
-    };
-
-    const handleUpdateProduct = (productId: number, newName: string, newPrice: number, newSellerId: number) => {
-        updateProductAPI(productId, newName, newPrice, newSellerId).then(() => {
-            getAllProductsAPI().then(data => setProducts(data));
-            setShowMenuId(null);
-        });
-    };
-
-    const handleAddProduct = async () => {
-        await addProductAPI(newProduct.name, newProduct.price, newProduct.sellerId);
-        setNewProduct({ name: '', price: 0, sellerId: 0 });
+    const handleDeleteProduct = async (productId: number) => {
+        await deleteProductAPI(productId);
         getAllProductsAPI().then(data => setProducts(data));
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setNewProduct(prevState => ({ ...prevState, [name]: name === 'price' || name === 'sellerId' ? parseInt(value) : value }));
+        setNewProduct(prevState => ({ ...prevState, [name]: name === 'price' || name === 'sellerId' || name === 'productId' ? parseInt(value) : value }));
     };
 
     return (
         <div>
-            <h1>Products</h1>
+            <h2>All Products</h2>
             <ul>
                 {products.map((product) => (
                     <li key={product.id}>
@@ -56,7 +42,7 @@ const ProductPage: React.FC = () => {
                         <button onClick={() => toggleMenu(product.id)}>Toggle Menu</button>
                         {showMenuId === product.id && (
                             <div>
-                                <button onClick={() => handleUpdateProduct(product.id, 'New Name', 0, 0)}>Update</button>
+                                <button onClick={() => console.log(`Update product ${product.id}`)}>Update</button>
                                 <button onClick={() => handleDeleteProduct(product.id)}>Delete</button>
                             </div>
                         )}
@@ -65,6 +51,10 @@ const ProductPage: React.FC = () => {
             </ul>
             <h2>Add Product</h2>
             <form onSubmit={(e) => { e.preventDefault(); handleAddProduct(); }}>
+                <label>
+                    Product ID:
+                    <input type="number" name="productId" value={newProduct.productId} onChange={handleChange} />
+                </label>
                 <label>
                     Name:
                     <input type="text" name="name" value={newProduct.name} onChange={handleChange} />
@@ -83,4 +73,4 @@ const ProductPage: React.FC = () => {
     );
 };
 
-export default ProductPage;
+export default ProductList;
