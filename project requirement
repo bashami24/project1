@@ -394,3 +394,31 @@ export default ProductList;
 
 
 
+import React from 'react';
+import { Product } from '../models/Product';
+import { getAllProducts } from '../services/ProductService';
+
+const ProductPage: React.FC = () => {
+    const [products, setProducts] = React.useState<Product[]>([]);
+
+    React.useEffect(() => {
+        const fetchProducts = async () => {
+            const fetchedProducts = await getAllProducts();
+            setProducts(fetchedProducts);
+        };
+        fetchProducts();
+    }, []);
+
+    return (
+        <div>
+            <h1>Products</h1>
+            <ul>
+                {products.map((product) => (
+                    <li key={product.id}>{product.name}</li>
+                ))}
+            </ul>
+        </div>
+    );
+};
+
+export default ProductPage;
