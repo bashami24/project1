@@ -188,3 +188,50 @@ const ProductList: React.FC<ProductListProps> = ({ products, onToggleMenu, showM
 
 export default ProductList;
 
+
+
+
+// pages/ProductPage.tsx
+
+const ProductPage: React.FC = () => {
+    const [products, setProducts] = useState<Product[]>([]);
+    const [showMenuId, setShowMenuId] = useState<number | null>(null);
+
+    useEffect(() => {
+        getAllProductsAPI().then(data => setProducts(data));
+    }, []);
+
+    const toggleMenu = (productId: number) => {
+        setShowMenuId((prevId) => (prevId === productId ? null : productId));
+    };
+
+    const handleDeleteProduct = (productId: number) => {
+        deleteProductAPI(productId).then(() => {
+            getAllProductsAPI().then(data => setProducts(data));
+            setShowMenuId(null);
+        });
+    };
+
+    const handleUpdateProduct = (productId: number, newName: string, newPrice: number, newSellerId: number) => {
+        updateProductAPI(productId, newName, newPrice, newSellerId).then(() => {
+            getAllProductsAPI().then(data => setProducts(data));
+            setShowMenuId(null);
+        });
+    };
+
+    return (
+        <div>
+            <h1>Products</h1>
+            <ProductList
+                products={products}
+                onToggleMenu={toggleMenu}
+                showMenuId={showMenuId}
+                handleDeleteProduct={handleDeleteProduct}
+                handleUpdateProduct={handleUpdateProduct}
+            />
+        </div>
+    );
+};
+
+export default ProductPage;
+
