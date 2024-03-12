@@ -253,3 +253,59 @@ export const updateProductAPI = async (productId: number, newName: string, newPr
     }
 };
 
+// pages/ProductPage.tsx
+
+const ProductPage: React.FC = () => {
+    const [products, setProducts] = useState<Product[]>([]);
+    const [newProduct, setNewProduct] = useState<{ name: string; price: number; sellerId: number }>({
+        name: '',
+        price: 0,
+        sellerId: 0
+    });
+
+    useEffect(() => {
+        getAllProductsAPI().then(data => setProducts(data));
+    }, []);
+
+    const handleAddProduct = async () => {
+        await addProductAPI(newProduct.name, newProduct.price, newProduct.sellerId);
+        setNewProduct({ name: '', price: 0, sellerId: 0 });
+        getAllProductsAPI().then(data => setProducts(data));
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setNewProduct(prevState => ({ ...prevState, [name]: name === 'price' || name === 'sellerId' ? parseInt(value) : value }));
+    };
+
+    return (
+        <div>
+            <h1>Products</h1>
+            <ul>
+                {products.map((product) => (
+                    <li key={product.id}>
+                        {product.name} - {product.price} - {product.sellerId}
+                    </li>
+                ))}
+            </ul>
+            <h2>Add Product</h2>
+            <form onSubmit={(e) => { e.preventDefault(); handleAddProduct(); }}>
+                <label>
+                    Name:
+                    <input type="text" name="name" value={newProduct.name} onChange={handleChange} />
+                </label>
+                <label>
+                    Price:
+                    <input type="number" name="price" value={newProduct.price} onChange={handleChange} />
+                </label>
+                <label>
+                    Seller ID:
+                    <input type="number" name="sellerId" value={newProduct.sellerId} onChange={handleChange} />
+                </label>
+                <button type="submit">Add Product</button>
+            </form>
+        </div>
+    );
+};
+
+export default ProductPage;
