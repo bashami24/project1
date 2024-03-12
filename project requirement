@@ -36,6 +36,158 @@ CRUD functionality on Product
 
 
 
+//Navigation bar
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+/*import HomePage from '../pages/Home';<Route path="/" element={<HomePage />} /> */
+import SellerPage from '../pages/SellerPage';
+import ProductPage from '../pages/ProductPage';
+import NotFoundPage from '../pages/PageNotFoundPage';
+
+const NavApp: React.FC = () => {
+    return (
+        <Router>
+            <Routes>
+                <Route path="/sellers" element={<SellerPage />} />
+                <Route path="/products" element={<ProductPage />} />
+                <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+        </Router>
+    );
+};
+
+export default NavApp;
+
+//product component
+import React, { useEffect, useState } from 'react';
+import { Product } from '../models/Product';
+import { getAllProducts, addProduct } from '../services/ProductService';
+
+const ProductList: React.FC = () => {
+    const [products, setProducts] = useState<Product[]>([]);
+    const [showMenuId, setShowMenuId] = useState<number | null>(null);
+    const [newProductName, setNewProductName] = useState('');
+
+    useEffect(() => {
+        getAllProducts().then(setProducts);
+    }, []);
+
+    const toggleMenu = (productId: number) => {
+        setShowMenuId((prevId) => (prevId === productId ? null : productId));
+    };
+
+    const handleAddProduct = async () => {
+        if (!newProductName) return;
+        await addProduct({ id: 0, name: newProductName, price: 0, sellerId: 0 });
+        setNewProductName('');
+        getAllProducts().then(setProducts);
+    };
+
+    return (
+        <div>
+            <h2>All Products</h2>
+            <ul>
+                {products.map((product) => (
+                    <li key={product.id}>
+                        {product.name}{' '}
+                        <button onClick={() => toggleMenu(product.id)}>
+                            {showMenuId === product.id ? 'Hide' : 'Show'} Menu
+                        </button>
+                        {showMenuId === product.id && (
+                            <div>
+                                <button onClick={() => console.log(`Update product ${product.id}`)}>Update</button>
+                                <button onClick={() => console.log(`Delete product ${product.id}`)}>Delete</button>
+                            </div>
+                        )}
+                    </li>
+                ))}
+            </ul>
+            <input
+                type="text"
+                placeholder="Enter product name"
+                value={newProductName}
+                onChange={(e) => setNewProductName(e.target.value)}
+            />
+            <button onClick={handleAddProduct}>Add Product</button>
+        </div>
+    );
+};
+
+export default ProductList;
+
+//seller component
+
+import React, { useEffect, useState } from 'react';
+import { Seller } from '../models/Seller';
+import { getAllSellers } from '../services/SellerService';
+
+interface SellerListProps {
+    seller: Seller;
+}
+ const SellerList: React.FC<SellerListProps> = ({seller}) => {
+    const [sellers, setSellers] = useState<Seller[]>([]);
+
+    useEffect(() => {
+        getAllSellers().then(setSellers);
+    }, []);
+
+    return (
+        <div>
+            <h2>All Sellers</h2>
+            <ul>
+                {sellers.map((seller) => (
+                    <li key={seller.id}>{seller.name}</li>
+                ))}
+            </ul>
+        </div>
+    );
+};
+export default SellerList;
+//pagenotfound page
+import React from 'react';
+
+const NotFoundPage: React.FC = () => {
+    return (
+        <div>
+            <h1>404 - Page Not Found</h1>
+            <p>The page you are looking for does not exist.</p>
+        </div>
+    );
+};
+
+export default NotFoundPage;
+
+//product page 
+import React from 'react';
+import { Product } from '../models/Product';
+import { getAllProducts } from '../services/ProductService';
+
+const ProductPage: React.FC = () => {
+    const [products, setProducts] = React.useState<Product[]>([]);
+
+    React.useEffect(() => {
+        const fetchProducts = async () => {
+            const fetchedProducts = await getAllProducts();
+            setProducts(fetchedProducts);
+        };
+        fetchProducts();
+    }, []);
+
+    return (
+        <div>
+            <h1>Products</h1>
+            <ul>
+                {products.map((product) => (
+                    <li key={product.id}>{product.name}</li>
+                ))}
+            </ul>
+        </div>
+    );
+};
+
+export default ProductPage;
+
+//seller page
 
 import React, { useState, useEffect } from 'react';
 import { Seller } from '../models/Seller';
@@ -88,21 +240,70 @@ const SellerPage: React.FC = () => {
 
 export default SellerPage;
 
+product service 
+import axios from 'axios';
+import { Product } from '../models/Product';
+const API_URL = 'http://localhost:9017';
 
+export const getAllProducts = async (): Promise<Product[]> => {
+    try {
+        const response = await axios.get<Product[]>(`${API_URL}/products`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        throw error; // Rethrow the error to handle it elsewhere if needed
+    }
+};
 
+export const addProduct = async (product: Product): Promise<void> => {
+    try {
+        await axios.post(`${API_URL}/products`, product);
+    } catch (error) {
+        console.error('Error adding product:', error);
+        throw error; // Rethrow the error to handle it elsewhere if needed
+    }
+};
+
+//seller service 
+
+import axios from 'axios';
+import { Seller } from '../models/Seller';
+
+const API_URL = 'http://localhost:9017';
+
+export const getAllSellers = async (): Promise<Seller[]> => {
+  try{  const response = await axios.get<Seller[]>(`${API_URL}/sellers`);
+    return response.data;
+
+} catch (error) { console.error('Error fetching Sellers', error);
+return[];}
+};
+
+export const addSeller = async ({name, id}:{name: string,id: number}): Promise<void> => {
+    try {
+        await axios.post(`${API_URL}/sellers`, {name,id});
+    } catch (error) {
+        console.error('Error adding seller:', error);
+        throw error; // Rethrow the error to handle it elsewhere if needed
+    }
+};
+ //app.tsx
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SellerPage from './pages/SellerPage';
+import ProductPage from './pages/ProductPage';
+import NotFoundPage from './pages/PageNotFoundPage';
 
 const App: React.FC = () => {
     return (
         <Router>
-            <Switch>
-                <Route exact path="/" component={SellerPage} />
-            </Switch>
+            <Routes>
+            <Route path="/seller" element={<SellerPage />} />
+            <Route path="/product" element={<ProductPage />} />
+            <Route path="*" element={<NotFoundPage/>}/>
+            </Routes>
         </Router>
     );
 };
 
 export default App;
-
