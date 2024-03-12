@@ -442,3 +442,61 @@ export default SellerComponent;
 
 
 export default ProductPage;
+
+
+
+
+
+
+// pages/SellerPage.tsx
+import React, { useState, useEffect } from 'react';
+import { Seller } from '../models/Seller';
+import { getAllSellers, addSeller } from '../services/SellerService';
+import SellerComponent from '../components/SellerComponent';
+
+const SellerPage: React.FC = () => {
+    const [sellers, setSellers] = useState<Seller[]>([]);
+    const [newSellerId, setNewSellerId] = useState<number>(0);
+    const [newSellerName, setNewSellerName] = useState<string>('');
+
+    useEffect(() => {
+        getAllSellers().then(setSellers);
+    }, []);
+
+    const handleAddSeller = async () => {
+        if (!newSellerName || newSellerId <= 0) return;
+        await addSeller(newSellerId, newSellerName);
+        setNewSellerId(0);
+        setNewSellerName('');
+        getAllSellers().then(setSellers);
+    };
+
+    return (
+        <div>
+            <h1>Sellers</h1>
+            <ul>
+                {sellers.map((seller) => (
+                    <li key={seller.id}>
+                        <SellerComponent seller={seller} />
+                    </li>
+                ))}
+            </ul>
+            <input
+                type="number"
+                placeholder="Enter seller ID"
+                value={newSellerId}
+                onChange={(e) => setNewSellerId(parseInt(e.target.value))}
+            />
+            <input
+                type="text"
+                placeholder="Enter seller name"
+                value={newSellerName}
+                onChange={(e) => setNewSellerName(e.target.value)}
+            />
+            <button onClick={handleAddSeller}>Add Seller</button>
+        </div>
+    );
+};
+
+export default SellerPage;
+
