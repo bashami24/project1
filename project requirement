@@ -39,3 +39,17 @@ export const updateProductAPI = async (productId: number, newName: string, newPr
         throw error;
     }
 };
+
+
+Warning: Received NaN for the `value` attribute. If this is expected, cast the value to a string.
+    at input
+    at label
+    at form
+    at div
+    at ProductPage (http://localhost:3000/static/js/bundle.js:604:82)
+    at RenderedRoute (http://localhost:3000/static/js/bundle.js:39764:5)
+    at Routes (http://localhost:3000/static/js/bundle.js:40455:5)
+    at div
+    at Router (http://localhost:3000/static/js/bundle.js:40389:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:38342:5)
+    at App
