@@ -500,3 +500,33 @@ const SellerPage: React.FC = () => {
 
 export default SellerPage;
 
+
+
+
+
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import ProductPage from './pages/ProductPage';
+import SellerPage from './pages/SellerPage';
+import NotFoundPage from './pages/NotFoundPage';
+import AddProductPage from './pages/AddProductPage';
+import AddSellerPage from './pages/AddSellerPage';
+
+const App: React.FC = () => {
+    return (
+        <Router>
+            <Switch>
+                <Route path="/" exact component={ProductPage} />
+                <Route path="/products" component={ProductPage} />
+                <Route path="/sellers" component={SellerPage} />
+                <Route path="/add-product" component={AddProductPage} />
+                <Route path="/add-seller" component={AddSellerPage} />
+                <Route path="*" component={NotFoundPage} />
+            </Switch>
+        </Router>
+    );
+};
+
+export default App;
+
+
