@@ -296,6 +296,39 @@ const NotFoundPage: React.FC = () => {
     );
 };
 
+
+
+// pages/SellerPage.tsx
+import React from 'react';
+import { Seller } from '../models/Seller';
+import { getAllSellers } from '../services/SellerService';
+
+const SellerPage: React.FC = () => {
+    const [sellers, setSellers] = React.useState<Seller[]>([]);
+
+    React.useEffect(() => {
+        const fetchSellers = async () => {
+            const fetchedSellers = await getAllSellers();
+            setSellers(fetchedSellers);
+        };
+        fetchSellers();
+    }, []);
+
+    return (
+        <div>
+            <h1>Sellers</h1>
+            <ul>
+                {sellers.map((seller) => (
+                    <li key={seller.id}>{seller.name}</li>
+                ))}
+            </ul>
+        </div>
+    );
+};
+
+export default SellerPage;
+
+
 export default NotFoundPage;
 
 
