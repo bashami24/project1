@@ -252,3 +252,35 @@ export const addSeller = async (seller: Seller): Promise<void> => {
     }
 };
 
+
+
+
+
+
+
+
+import axios from 'axios';
+import { Product } from '../models/Product';
+
+const API_URL = 'http://localhost:9001';
+
+export const getAllProducts = async (): Promise<Product[]> => {
+    try {
+        const response = await axios.get<Product[]>(`${API_URL}/products`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        throw error; // Rethrow the error to handle it elsewhere if needed
+    }
+};
+
+export const addProduct = async (product: Product): Promise<void> => {
+    try {
+        await axios.post(`${API_URL}/products`, product);
+    } catch (error) {
+        console.error('Error adding product:', error);
+        throw error; // Rethrow the error to handle it elsewhere if needed
+    }
+};
+
+
