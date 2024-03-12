@@ -238,4 +238,17 @@ const MainApp: React.FC = () => {
 
 export default MainApp;
 
+import axios from 'axios';
+import { Seller } from '../models/Seller';
+
+const API_URL = 'http://localhost:9001';
+
+export const addSeller = async (seller: Seller): Promise<void> => {
+    try {
+        await axios.post(`${API_URL}/sellers`, seller);
+    } catch (error) {
+        console.error('Error adding seller:', error);
+        throw error; // Rethrow the error to handle it elsewhere if needed
+    }
+};
 
