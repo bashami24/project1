@@ -88,3 +88,24 @@ const SellerPage: React.FC = () => {
 };
 
 export default SellerPage;
+
+
+import React from 'react';
+import { Seller } from '../models/Seller';
+
+interface SellerListProps {
+    seller: Seller;
+}
+
+const SellerList: React.FC<SellerListProps> = ({ seller }) => {
+    return (
+        <div>
+            <p>{seller.id}</p>
+            <p>{seller.name}</p>
+            {/* Additional details */}
+        </div>
+    );
+};
+
+export default SellerList;
+
