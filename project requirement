@@ -657,3 +657,49 @@ const ProductPage: React.FC = () => {
 
 export default ProductPage;
 
+
+
+// components/ProductList.tsx
+
+import React from 'react';
+import { Product } from '../models/Product';
+
+interface ProductListProps {
+    products: Product[];
+    toggleProductMenu: (productId: number) => void;
+    showProductMenu: number | null;
+    handleDeleteProduct: (productId: number) => void;
+}
+
+const ProductList: React.FC<ProductListProps> = ({
+    products,
+    toggleProductMenu,
+    showProductMenu,
+    handleDeleteProduct,
+}) => {
+    return (
+        <div>
+            <h2>All Products</h2>
+            <ul>
+                {products.map((product) => (
+                    <li key={product.id}>
+                        {product.name}{' '}
+                        <button onClick={() => toggleProductMenu(product.id)}>
+                            {showProductMenu === product.id ? 'Hide' : 'Show'} Menu
+                        </button>
+                        {showProductMenu === product.id && (
+                            <div>
+                                <button onClick={() => console.log(`Update product ${product.id}`)}>Update</button>
+                                <button onClick={() => handleDeleteProduct(product.id)}>Delete</button>
+                            </div>
+                        )}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+};
+
+export default ProductList;
+
+
