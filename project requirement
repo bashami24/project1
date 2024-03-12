@@ -862,3 +862,52 @@ const ProductList: React.FC<ProductListProps> = ({ products, toggleProductMenu, 
 
 export default ProductList;
 
+
+
+
+
+
+// pages/ProductPage.tsx
+
+const ProductPage: React.FC = () => {
+    const [products, setProducts] = useState<Product[]>([]);
+    const [showProductMenu, setShowProductMenu] = useState<number | null>(null);
+
+    useEffect(() => {
+        getAllProductsAPI().then(response => response.json()).then(data => setProducts(data));
+    }, []);
+
+    const handleDeleteProduct = (productId: number) => {
+        deleteProductAPI(productId).then(() => {
+            getAllProductsAPI().then(response => response.json()).then(data => {
+                setProducts(data);
+                setShowProductMenu(null);
+            });
+        });
+    };
+
+    const handleUpdateProduct = (productId: number, newName: string, newPrice: number, newSellerId: number) => {
+        // Implement the update functionality here
+        console.log(`Update product ${productId} with name ${newName}, price ${newPrice}, and sellerId ${newSellerId}`);
+        // You should replace the console.log with your actual update logic
+    };
+
+    return (
+        <div>
+            <h1>Products</h1>
+            <ProductList
+                products={products}
+                toggleProductMenu={(productId) =>
+                    setShowProductMenu((prevId) => (prevId === productId ? null : productId))
+                }
+                showProductMenu={showProductMenu}
+                handleDeleteProduct={handleDeleteProduct}
+                handleUpdateProduct={handleUpdateProduct}
+            />
+        </div>
+    );
+};
+
+export default ProductPage;
+
+
