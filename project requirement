@@ -617,3 +617,43 @@ const SellerPage: React.FC = () => {
 
 export default SellerPage;
 
+
+// pages/ProductPage.tsx
+
+import React, { useEffect, useState } from 'react';
+import ProductList from '../components/ProductList';
+import { getAllProductsAPI, deleteProductAPI } from '../services/ProductService';
+import { Product } from '../models/Product';
+
+const ProductPage: React.FC = () => {
+    const [products, setProducts] = useState<Product[]>([]);
+    const [showProductMenu, setShowProductMenu] = useState<number | null>(null);
+
+    useEffect(() => {
+        getAllProductsAPI().then(data => setProducts(data));
+    }, []);
+
+    const handleDeleteProduct = (productId: number) => {
+        deleteProductAPI(productId).then(() => {
+            getAllProductsAPI().then(data => setProducts(data));
+            setShowProductMenu(null);
+        });
+    };
+
+    return (
+        <div>
+            <h1>Products</h1>
+            <ProductList
+                products={products}
+                toggleProductMenu={(productId) =>
+                    setShowProductMenu((prevId) => (prevId === productId ? null : productId))
+                }
+                showProductMenu={showProductMenu}
+                handleDeleteProduct={handleDeleteProduct}
+            />
+        </div>
+    );
+};
+
+export default ProductPage;
+
