@@ -235,3 +235,21 @@ const ProductPage: React.FC = () => {
 
 export default ProductPage;
 
+
+// services/ProductService.ts
+
+export const updateProductAPI = async (productId: number, newName: string, newPrice: number, newSellerId: number): Promise<void> => {
+    try {
+        await fetch(`${API_URL}/products/${productId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: newName, price: newPrice, sellerId: newSellerId })
+        });
+    } catch (error) {
+        console.error('Error updating product:', error);
+        throw error;
+    }
+};
+
