@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Product } from '../models/Product';
-import { getAllProductsAPI, deleteProductAPI } from '../services/ProductService';
+import { getAllProductsAPI, deleteProductAPI, addProductAPI } from '../services/ProductService';
 
 const ProductList: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
@@ -30,6 +30,12 @@ const ProductList: React.FC = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setNewProduct(prevState => ({ ...prevState, [name]: name === 'price' || name === 'sellerId' || name === 'productId' ? parseInt(value) : value }));
+    };
+
+    const handleAddProduct = async () => {
+        await addProductAPI(newProduct.productId, newProduct.name, newProduct.price, newProduct.sellerId);
+        setNewProduct({ productId: 0, name: '', price: 0, sellerId: 0 });
+        getAllProductsAPI().then(data => setProducts(data));
     };
 
     return (
