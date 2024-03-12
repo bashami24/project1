@@ -421,4 +421,24 @@ const ProductPage: React.FC = () => {
     );
 };
 
+
+import React from 'react';
+import { Seller } from '../models/Seller';
+
+interface SellerProps {
+    seller: Seller;
+}
+
+const SellerComponent: React.FC<SellerProps> = ({ seller }) => {
+    return (
+        <div>
+            <h3>{seller.name}</h3>
+            <p>ID: {seller.id}</p>
+        </div>
+    );
+};
+
+export default SellerComponent;
+
+
 export default ProductPage;
