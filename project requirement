@@ -37,7 +37,6 @@ CRUD functionality on Product
 
 
 
-m// pages/SellerPage.tsx
 import React, { useState, useEffect } from 'react';
 import { Seller } from '../models/Seller';
 import { getAllSellers, addSeller } from '../services/SellerService';
@@ -88,48 +87,3 @@ const SellerPage: React.FC = () => {
 };
 
 export default SellerPage;
-
-
-import React from 'react';
-import { Seller } from '../models/Seller';
-
-interface SellerListProps {
-    seller: Seller;
-}
-
-const SellerList: React.FC<SellerListProps> = ({ seller }) => {
-    return (
-        <div>
-            <p>{seller.id}</p>
-            <p>{seller.name}</p>
-            {/* Additional details */}
-        </div>
-    );
-};
-
-export default SellerList;
-
-
-import axios from 'axios';
-import { Seller } from '../models/Seller';
-
-const API_URL = 'http://localhost:9017';
-
-export const getAllSellers = async (): Promise<Seller[]> => {
-  try{  const response = await axios.get<Seller[]>(`${API_URL}/sellers`);
-    return response.data;
-
-} catch (error) { console.error('Error fetching Sellers', error);
-return[];}
-};
-
-export const addSeller = async (name: string,id: number): Promise<void> => {
-    try {
-        await axios.post(`${API_URL}/sellers`, {name,id});
-    } catch (error) {
-        console.error('Error adding seller:', error);
-        throw error; // Rethrow the error to handle it elsewhere if needed
-    }
-};
-
-
