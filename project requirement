@@ -1,5 +1,7 @@
 
 
+
+
 HTTP project
 Two models:
     Product
@@ -564,4 +566,54 @@ const App: React.FC = () => {
 export default App;
 
 
-Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true, but the message channel closed befo
+re a response was received
+
+
+// pages/SellerPage.tsx
+
+import React, { useEffect, useState } from 'react';
+import SellerList from '../components/SellerList';
+import { getAllSellersAPI, addSellerAPI } from '../services/SellerService';
+import { Seller } from '../models/Seller';
+
+const SellerPage: React.FC = () => {
+    const [sellers, setSellers] = useState<Seller[]>([]);
+    const [showAddSellerForm, setShowAddSellerForm] = useState(false);
+    const [newSellerName, setNewSellerName] = useState('');
+
+    useEffect(() => {
+        getAllSellersAPI().then(data => setSellers(data));
+    }, []);
+
+    const handleAddSeller = () => {
+        addSellerAPI(newSellerName).then(() => {
+            getAllSellersAPI().then(data => setSellers(data));
+            setShowAddSellerForm(false);
+            setNewSellerName('');
+        });
+    };
+
+    return (
+        <div>
+            <h1>Sellers</h1>
+            <SellerList sellers={sellers} />
+            {showAddSellerForm ? (
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Enter seller name"
+                        value={newSellerName}
+                        onChange={(e) => setNewSellerName(e.target.value)}
+                    />
+                    <button onClick={handleAddSeller}>Add Seller</button>
+                </div>
+            ) : (
+                <button onClick={() => setShowAddSellerForm(true)}>Add New Seller</button>
+            )}
+        </div>
+    );
+};
+
+export default SellerPage;
+
