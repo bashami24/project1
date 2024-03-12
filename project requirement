@@ -1,82 +1,41 @@
-// components/ProductList.tsx
+// services/ProductService.ts
 
-import React, { useEffect, useState } from 'react';
-import { Product } from '../models/Product';
-import { getAllProductsAPI, deleteProductAPI, addProductAPI } from '../services/ProductService';
+const apiBaseURL = "http://localhost:9017/";
 
-const ProductList: React.FC = () => {
-    const [products, setProducts] = useState<Product[]>([]);
-    const [showMenuId, setShowMenuId] = useState<number | null>(null);
-    const [newProduct, setNewProduct] = useState<{ productId: number; name: string; price: number; sellerId: number }>({
-        productId: 0,
-        name: '',
-        price: 0,
-        sellerId: 0
+export function getAllProductsAPI() {
+    return fetch(apiBaseURL + "product", {
+        method: "GET",
+        mode: "cors"
     });
+}
 
-    useEffect(() => {
-        getAllProductsAPI().then(data => setProducts(data));
-    }, []);
+export function addProductAPI(productId: number, productName: string, price: number, sellerId: number) {
+    return fetch(apiBaseURL + "product", {
+        method: "POST",
+        mode: "cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: productId, name: productName, price, sellerId })
+    });
+}
 
-    const toggleMenu = (productId: number) => {
-        setShowMenuId((prevId) => (prevId === productId ? null : productId));
-    };
+export function deleteProductAPI(productId: number){
+    return fetch (apiBaseURL + `product/${productId}`,{
+        method:"DELETE",
+        mode: "cors"
+    });
+}
 
-    const handleDeleteProduct = async (productId: number) => {
-        await deleteProductAPI(productId);
-        getAllProductsAPI().then(data => setProducts(data));
-    };
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setNewProduct(prevState => ({ ...prevState, [name]: name === 'price' || name === 'sellerId' || name === 'productId' ? parseInt(value) : value }));
-    };
-
-    const handleAddProduct = async () => {
-        await addProductAPI(newProduct.productId, newProduct.name, newProduct.price, newProduct.sellerId);
-        setNewProduct({ productId: 0, name: '', price: 0, sellerId: 0 });
-        getAllProductsAPI().then(data => setProducts(data));
-    };
-
-    return (
-        <div>
-            <h2>All Products</h2>
-            <ul>
-                {products.map((product) => (
-                    <li key={product.id}>
-                        {product.name} - {product.price} - {product.sellerId}
-                        <button onClick={() => toggleMenu(product.id)}>Toggle Menu</button>
-                        {showMenuId === product.id && (
-                            <div>
-                                <button onClick={() => console.log(`Update product ${product.id}`)}>Update</button>
-                                <button onClick={() => handleDeleteProduct(product.id)}>Delete</button>
-                            </div>
-                        )}
-                    </li>
-                ))}
-            </ul>
-            <h2>Add Product</h2>
-            <form onSubmit={(e) => { e.preventDefault(); handleAddProduct(); }}>
-                <label>
-                    Product ID:
-                    <input type="number" name="productId" value={newProduct.productId} onChange={handleChange} />
-                </label>
-                <label>
-                    Name:
-                    <input type="text" name="name" value={newProduct.name} onChange={handleChange} />
-                </label>
-                <label>
-                    Price:
-                    <input type="number" name="price" value={newProduct.price} onChange={handleChange} />
-                </label>
-                <label>
-                    Seller ID:
-                    <input type="number" name="sellerId" value={newProduct.sellerId} onChange={handleChange} />
-                </label>
-                <button type="submit">Add Product</button>
-            </form>
-        </div>
-    );
+export const updateProductAPI = async (productId: number, newName: string, newPrice: number, newSellerId: number): Promise<void> => {
+    try {
+        await fetch(`${apiBaseURL}/products/${productId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: newName, price: newPrice, sellerId: newSellerId })
+        });
+    } catch (error) {
+        console.error('Error updating product:', error);
+        throw error;
+    }
 };
-
-export default ProductList;
