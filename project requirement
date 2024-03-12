@@ -805,4 +805,60 @@ export default SellerPage;
 
 
 
+// components/ProductList.tsx
+
+import React, { useState } from 'react';
+import { Product } from '../models/Product';
+
+interface ProductListProps {
+    products: Product[];
+    toggleProductMenu: (productId: number) => void;
+    showProductMenu: number | null;
+    handleDeleteProduct: (productId: number) => void;
+    handleUpdateProduct: (productId: number, newName: string, newPrice: number, newSellerId: number) => void;
+}
+
+const ProductList: React.FC<ProductListProps> = ({ products, toggleProductMenu, showProductMenu, handleDeleteProduct, handleUpdateProduct }) => {
+    const [newName, setNewName] = useState('');
+    const [newPrice, setNewPrice] = useState<number | ''>('');
+    const [newSellerId, setNewSellerId] = useState<number | ''>('');
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        if (name === 'name') setNewName(value);
+        if (name === 'price') setNewPrice(value);
+        if (name === 'sellerId') setNewSellerId(value);
+    };
+
+    const handleUpdate = (productId: number) => {
+        handleUpdateProduct(productId, newName, newPrice as number, newSellerId as number);
+        setNewName('');
+        setNewPrice('');
+        setNewSellerId('');
+    };
+
+    return (
+        <ul>
+            {products.map((product) => (
+                <li key={product.id}>
+                    {product.name}{' '}
+                    <button onClick={() => toggleProductMenu(product.id)}>
+                        {showProductMenu === product.id ? 'Hide' : 'Show'} Menu
+                    </button>
+                    {showProductMenu === product.id && (
+                        <div>
+                            <input type="text" name="name" placeholder="Enter product name" value={newName} onChange={handleChange} />
+                            <input type="number" name="price" placeholder="Enter product price" value={newPrice} onChange={handleChange} />
+                            <input type="number" name="sellerId" placeholder="Enter seller ID" value={newSellerId} onChange={handleChange} />
+                            <button onClick={() => handleUpdate(product.id)}>Update</button>
+                            <button onClick={() => handleDeleteProduct(product.id)}>Delete</button>
+                        </div>
+                    )}
+                </li>
+            ))}
+        </ul>
+    );
+};
+
+export default ProductList;
 
