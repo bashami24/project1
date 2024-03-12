@@ -333,3 +333,64 @@ export default NotFoundPage;
 
 
 
+
+
+import React, { useEffect, useState } from 'react';
+import { Product } from '../models/Product';
+import { getAllProducts, addProduct } from '../services/ProductService';
+
+const ProductList: React.FC = () => {
+    const [products, setProducts] = useState<Product[]>([]);
+    const [showMenuId, setShowMenuId] = useState<number | null>(null);
+    const [newProductName, setNewProductName] = useState('');
+
+    useEffect(() => {
+        getAllProducts().then(setProducts);
+    }, []);
+
+    const toggleMenu = (productId: number) => {
+        setShowMenuId((prevId) => (prevId === productId ? null : productId));
+    };
+
+    const handleAddProduct = async () => {
+        if (!newProductName) return;
+        await addProduct({ id: 0, name: newProductName, price: 0, sellerId: 0 });
+        setNewProductName('');
+        getAllProducts().then(setProducts);
+    };
+
+    return (
+        <div>
+            <h2>All Products</h2>
+            <ul>
+                {products.map((product) => (
+                    <li key={product.id}>
+                        {product.name}{' '}
+                        <button onClick={() => toggleMenu(product.id)}>
+                            {showMenuId === product.id ? 'Hide' : 'Show'} Menu
+                        </button>
+                        {showMenuId === product.id && (
+                            <div>
+                                <button onClick={() => console.log(`Update product ${product.id}`)}>Update</button>
+                                <button onClick={() => console.log(`Delete product ${product.id}`)}>Delete</button>
+                            </div>
+                        )}
+                    </li>
+                ))}
+            </ul>
+            <input
+                type="text"
+                placeholder="Enter product name"
+                value={newProductName}
+                onChange={(e) => setNewProductName(e.target.value)}
+            />
+            <button onClick={handleAddProduct}>Add Product</button>
+        </div>
+    );
+};
+
+export default ProductList;
+
+
+
+
