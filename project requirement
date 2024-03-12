@@ -344,3 +344,25 @@ export function addSellerAPI(name: string, id: number) {
         body: JSON.stringify({ name, id })
     });
 }
+
+
+
+// services/ProductService.ts
+const apiBaseURL = "http://localhost:9017/";
+
+export function getAllProductsAPI() {
+    return fetch(apiBaseURL + "products", {
+        method: "GET",
+        mode: "cors"
+    });
+}
+
+export function addProductAPI(name: string, price: number, sellerId: number) {
+    return fetch(apiBaseURL + "products", {
+        method: "POST",
+        mode: "cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, price, sellerId })
+    });
+}
+
