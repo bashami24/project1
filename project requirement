@@ -1,57 +1,105 @@
-export function addSellerAPI(name: string, id: number) {
-    return fetch(apiBaseURL + "seller", {
-        method: "POST",
-        mode: "cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, id })
-    });
-}
+import React, { useEffect, useState } from 'react';
+import { Product } from '../models/Product';
+import { getAllProductsAPI, addProductAPI, deleteProductAPI, updateProductAPI } from '../services/ProductService';
 
-const SellerPage: React.FC = () => {
-    const [sellers, setSellers] = useState<Seller[]>([]);
-    const [showAddSellerForm, setShowAddSellerForm] = useState(false);
-    const [newSellerName, setNewSellerName] = useState('');
-    const [newSellerId, setNewSellerId] = useState(0);
+const ProductPage: React.FC = () => {
+    const [products, setProducts] = useState<Product[]>([]);
+    const [showMenuId, setShowMenuId] = useState<number | null>(null);
+    const [newProduct, setNewProduct] = useState<{ name: string; price: number; seller: number }>({
+        name: '',
+        price: 0,
+        seller: 0
+    });
 
     useEffect(() => {
-        getAllSellersAPI().then(response => response.json()).then(data => setSellers(data));
+        getAllProductsAPI().then(response => response.json()).then(data => setProducts(data));
     }, []);
 
-    const handleAddSeller = () => {
-        addSellerAPI(newSellerName,newSellerId).then(() => {
-            getAllSellersAPI().then(response => response.json()).then(data => {
-                setSellers(data);
-                setShowAddSellerForm(false);
-                setNewSellerName('');
-                setNewSellerId(0);
-            });
+    const toggleMenu = (productId: number) => {
+        setShowMenuId((prevId) => (prevId === productId ? null : productId));
+    };
+
+    const handleDeleteProduct = (productId: number) => {
+        deleteProductAPI(productId).then(() => {
+            setProducts(products.filter(product => product.id !== productId));
+            setShowMenuId(null);
         });
+    };
+
+    const handleUpdateProduct = (productId: number, newName: string, newPrice: number, newSeller: number) => {
+        updateProductAPI(productId, newName, newPrice, newSeller).then(() => {
+            const updatedProducts = products.map(product => {
+                if (product.id === productId) {
+                    return { ...product, name: newName, price: newPrice, seller: newSeller };
+                }
+                return product;
+            });
+            setProducts(updatedProducts);
+            setShowMenuId(null);
+        });
+    };
+
+    const handleAddProduct = () => {
+        addProductAPI(newProduct.name, newProduct.price, newProduct.seller).then(() => {
+            setNewProduct({ name: '', price: 0, seller: 0 });
+            getAllProductsAPI().then(response => response.json()).then(data => setProducts(data));
+        });
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setNewProduct(prevState => ({ ...prevState, [name]: name === 'price' || name === 'seller' ? parseInt(value) : value }));
     };
 
     return (
         <div>
-            <h1>Sellers</h1>
-            <SellerList sellers={sellers} />
-            {showAddSellerForm ? (
-                <div>
-                    <input
-                        type="text"
-                        placeholder="Enter seller name"
-                        value={newSellerName}
-                        onChange={(e) => setNewSellerName(e.target.value)}
-                    />
-                    <input
-                    type="number"
-                    placeholder='Enter Seller Id'
-                    value={newSellerId}
-                    onChange={(e) => setNewSellerId(parseInt(e.target.value))}/>
-                    <button onClick={handleAddSeller}>Add Seller</button>
-                </div>
-            ) : (
-                <button onClick={() => setShowAddSellerForm(true)}>Add New Seller</button>
-            )}
+            <h1>Products</h1>
+            <ul>
+                {products.map((product) => (
+                    <li key={product.id}>
+                        {product.name} - {product.price} - {product.seller}
+                        <button onClick={() => toggleMenu(product.id)}>Toggle Menu</button>
+                        {showMenuId === product.id && (
+                            <div>
+                                <input
+                                    type="text"
+                                    value={product.name}
+                                    onChange={(e) => handleUpdateProduct(product.id, e.target.value, product.price, product.seller)}
+                                />
+                                <input
+                                    type="number"
+                                    value={product.price}
+                                    onChange={(e) => handleUpdateProduct(product.id, product.name, parseInt(e.target.value), product.seller)}
+                                />
+                                <input
+                                    type="number"
+                                    value={product.seller}
+                                    onChange={(e) => handleUpdateProduct(product.id, product.name, product.price, parseInt(e.target.value))}
+                                />
+                                <button onClick={() => handleDeleteProduct(product.id)}>Delete</button>
+                            </div>
+                        )}
+                    </li>
+                ))}
+            </ul>
+            <h2>Add Product</h2>
+            <form onSubmit={(e) => { e.preventDefault(); handleAddProduct(); }}>
+                <label>
+                    Name:
+                    <input type="text" name="name" value={newProduct.name} onChange={handleChange} />
+                </label>
+                <label>
+                    Price:
+                    <input type="number" name="price" value={newProduct.price} onChange={handleChange} />
+                </label>
+                <label>
+                    Seller ID:
+                    <input type="number" name="seller" value={newProduct.seller} onChange={handleChange} />
+                </label>
+                <button type="submit">Add Product</button>
+            </form>
         </div>
     );
 };
 
-export default SellerPage;
+export default ProductPage;
