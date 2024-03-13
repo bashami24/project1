@@ -103,3 +103,17 @@ const ProductPage: React.FC = () => {
 };
 
 export default ProductPage;
+
+
+react-dom.development.js:86 Warning: Received NaN for the `value` attribute. If this is expected, cast the value to a string.
+    at input
+    at label
+    at form
+    at div
+    at ProductPage (http://localhost:3000/static/js/bundle.js:604:82)
+    at RenderedRoute (http://localhost:3000/static/js/bundle.js:39775:5)
+    at Routes (http://localhost:3000/static/js/bundle.js:40466:5)
+    at div
+    at Router (http://localhost:3000/static/js/bundle.js:40400:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:38353:5)
+    at App
