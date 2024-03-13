@@ -1,61 +1,56 @@
-// services/ProductService.ts
+import React, { useState, useEffect } from 'react';
+import { getAllProductsAPI, addProductAPI, updateProductAPI, deleteProductAPI } from './ProductService';
 
-const apiBaseURL = "http://localhost:9017/";
+const ProductPage = () => {
+    const [products, setProducts] = useState([]);
+    const [newProductName, setNewProductName] = useState('');
+    const [newProductPrice, setNewProductPrice] = useState(0);
+    const [newProductSellerId, setNewProductSellerId] = useState(0);
 
-export function getAllProductsAPI() {
-    return fetch(apiBaseURL + "product", {
-        method: "GET",
-        mode: "cors"
-    });
-}
+    useEffect(() => {
+        getAllProductsAPI().then(data => setProducts(data));
+    }, []);
 
-export function addProductAPI(productId: number, productName: string, price: number, sellerId: number) {
-    return fetch(apiBaseURL + "product", {
-        method: "POST",
-        mode: "cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: productId, name: productName, price, sellerId })
-    });
-}
-
-export function deleteProductAPI(productId: number){
-    return fetch (apiBaseURL + `product/${productId}`,{
-        method:"DELETE",
-        mode: "cors"
-    });
-}
-
-export const updateProductAPI = async (productId: number, newName: string, newPrice: number, newSellerId: number): Promise<void> => {
-    try {
-        await fetch(`${apiBaseURL}/products/${productId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ name: newName, price: newPrice, sellerId: newSellerId })
+    const handleAddProduct = () => {
+        addProductAPI(newProductName, newProductPrice, newProductSellerId).then(() => {
+            getAllProductsAPI().then(data => setProducts(data));
+            setNewProductName('');
+            setNewProductPrice(0);
+            setNewProductSellerId(0);
         });
-    } catch (error) {
-        console.error('Error updating product:', error);
-        throw error;
-    }
+    };
+
+    const handleUpdateProduct = (productId, newName, newPrice, newSellerId) => {
+        updateProductAPI(productId, newName, newPrice, newSellerId).then(() => {
+            getAllProductsAPI().then(data => setProducts(data));
+        });
+    };
+
+    const handleDeleteProduct = (productId) => {
+        deleteProductAPI(productId).then(() => {
+            getAllProductsAPI().then(data => setProducts(data));
+        });
+    };
+
+    return (
+        <div>
+            <h1>Products</h1>
+            <ul>
+                {products.map(product => (
+                    <li key={product.productId}>
+                        {product.name} - {product.price} - {product.sellerId}
+                        <button onClick={() => handleUpdateProduct(product.productId, product.name, product.price, product.sellerId)}>Update</button>
+                        <button onClick={() => handleDeleteProduct(product.productId)}>Delete</button>
+                    </li>
+                ))}
+            </ul>
+            <h2>Add New Product</h2>
+            <input type="text" placeholder="Name" value={newProductName} onChange={(e) => setNewProductName(e.target.value)} />
+            <input type="number" placeholder="Price" value={newProductPrice} onChange={(e) => setNewProductPrice(parseFloat(e.target.value))} />
+            <input type="number" placeholder="Seller ID" value={newProductSellerId} onChange={(e) => setNewProductSellerId(parseInt(e.target.value))} />
+            <button onClick={handleAddProduct}>Add Product</button>
+        </div>
+    );
 };
 
-
-react-dom.development.js:86 Warning: Received NaN for the `value` attribute. If this is expected, cast the value to a string.
-    at input
-    at label
-    at form
-    at div
-    at ProductPage (http://localhost:3000/static/js/bundle.js:604:82)
-    at RenderedRoute (http://localhost:3000/static/js/bundle.js:39764:5)
-    at Routes (http://localhost:3000/static/js/bundle.js:40455:5)
-    at div
-    at Router (http://localhost:3000/static/js/bundle.js:40389:15)
-    at BrowserRouter (http://localhost:3000/static/js/bundle.js:38342:5)
-    at App
-react-dom.development.js:1661 The specified value "NaN" cannot be parsed, or is out of range.
-react-dom.development.js:1661 The specified value "NaN" cannot be parsed, or is out of range.
-react-dom.development.js:1661 The specified value "NaN" cannot be parsed, or is out of range.
-react-dom.development.js:1661 The specified value "NaN" cannot be parsed, or is out of range.
-ProductService.tsx:11 
- POST http://localhost:9017/product net::ERR_ABORTED 400 (Bad Request)
+export default ProductPage;
