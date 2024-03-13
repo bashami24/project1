@@ -1,42 +1,9 @@
-const handleDeleteProduct = (productId: number) => {
-    deleteProductAPI(productId).then(() => {
-        setProducts(products.filter(product => product.id !== productId));
-        setShowMenuId(null);
-    });
-};
-
-const handleUpdateProduct = (id: number, newName: string, newPrice: number, newSeller: number) => {
-    updateProductAPI(id, newName, newPrice, newSeller).then(() => {
-        setProducts(products.map(product => (product.id === id ? { ...product, name: newName, price: newPrice, seller: newSeller } : product)));
-        setShowMenuId(null);
-    });
-};
-
-
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import NavigationBar from './components/NavigationBar';
-import HomePage from './pages/Homepage';
-import SellerPage from './pages/SellerPage';
-import ProductPage from './pages/ProductPage';
-import PageNotFoundPage from './pages/PageNotFoundPage';
-
-const App: React.FC = () => {
-    return (
-        <Router>
-            <div>
-                <NavigationBar />
-                <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/sellers" element={<SellerPage />} />
-                    <Route path="/products" element={<ProductPage />} />
-                    <Route path="*" element={<PageNotFoundPage />} />
-                </Routes>
-            </div>
-        </Router>
-    );
-};
-
-export default App;
+{showMenuId === product.id && (
+    <div>
+        <input type="text" placeholder="New Name" onChange={(e) => setNewName(e.target.value)} />
+        <input type="number" placeholder="New Price" onChange={(e) => setNewPrice(parseInt(e.target.value) || 0)} />
+        <input type="number" placeholder="New Seller ID" onChange={(e) => setNewSeller(parseInt(e.target.value) || 0)} />
+        <button onClick={() => handleUpdateProduct(product.id, newName, newPrice, newSeller)}>Confirm Update</button>
+        <button onClick={() => setShowMenuId(null)}>Cancel</button>
+    </div>
+)}
