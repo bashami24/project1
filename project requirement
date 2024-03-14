@@ -110,3 +110,21 @@ const ProductPage: React.FC = () => {
 };
 
 export default ProductPage;
+
+
+
+const handleDeleteProduct = () => {
+    const productIdStr = prompt("Enter the product ID to delete:");
+    if (productIdStr) {
+        const productId = parseInt(productIdStr);
+        if (!isNaN(productId)) {
+            deleteProductAPI(productId).then(() => {
+                getAllProductsAPI().then(response => response.json()).then(data => setProducts(data));
+                setShowMenuId(null);
+            });
+        } else {
+            alert("Please enter a valid product ID.");
+        }
+    }
+};
+
