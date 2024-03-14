@@ -4,3 +4,4 @@ const myFunction = () => {
   };
   return <button onClick={thisFunction}>Something!</button>;
 };
+`There are ${product.quantity} units of ${product.name} at $${product.price}`
