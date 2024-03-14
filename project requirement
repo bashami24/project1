@@ -1,14 +1,8 @@
-Requirements 
-
-
 import React, { useEffect, useState } from 'react';
 import { Product } from '../models/Product';
 import { getAllProductsAPI, addProductAPI, deleteProductAPI, updateProductAPI } from '../services/ProductService';
 
 const ProductPage: React.FC = () => {
-    const[newName, setNewName] = useState<string>('');
-    const[newPrice, setNewPrice] = useState<number>();
-    const[newSeller, setNewSeller] = useState<number>();
     const [products, setProducts] = useState<Product[]>([]);
     const [showMenuId, setShowMenuId] = useState<number | null>(null);
     const [newProduct, setNewProduct] = useState<{ name: string; price: number; seller: number }>({
@@ -16,6 +10,8 @@ const ProductPage: React.FC = () => {
         price: 0,
         seller: 0
     });
+    const [deleteProductId, setDeleteProductId] = useState<number | null>(null);
+    const [updateProductId, setUpdateProductId] = useState<number | null>(null);
 
     useEffect(() => {
         getAllProductsAPI().then(response => response.json()).then(data => setProducts(data));
@@ -25,35 +21,25 @@ const ProductPage: React.FC = () => {
         setShowMenuId((prevId) => (prevId === productId ? null : productId));
     };
 
-    const handleDeleteProduct = (productId: number) => {
-        deleteProductAPI(productId).then(() => {
-            getAllProductsAPI().then(response => response.json()).then(data => setProducts(data));
-            setShowMenuId(null);
-        });
-    };
-    /*const handleUpdateProduct = (id: number, newName: string, newPrice: number, newSeller: number) => {
-        updateProductAPI(id, newName, newPrice, newSeller).then(() => {
-            setProducts(products.map(product => (product.id === id ? { ...product, name: newName, price: newPrice, seller: newSeller } : product)));
-            setShowMenuId(null);
-        });
-    };*/
-    const handleUpdateProduct = (id: number, newName: string, newPrice: number, newSeller: number) => {
-        if(!newName || newPrice === 0 || newSeller === 0){ 
-           
-            return;
-        }
-        updateProductAPI(id, newName, newPrice, newSeller).then(() => {
-            const updatedProducts = products.map(product => {
-                if (product.id === id) {
-                    return { ...product, name: newName, price: newPrice, seller: newSeller };
-                }
-                return product;
+    const handleDeleteProduct = () => {
+        if (deleteProductId) {
+            deleteProductAPI(deleteProductId).then(() => {
+                getAllProductsAPI().then(response => response.json()).then(data => setProducts(data));
+                setShowMenuId(null);
+                setDeleteProductId(null);
             });
-            setProducts(updatedProducts);
-            setShowMenuId(null);
-        });
+        }
     };
 
+    const handleUpdateProduct = () => {
+        if (updateProductId) {
+            updateProductAPI(updateProductId, newProduct.name, newProduct.price, newProduct.seller).then(() => {
+                getAllProductsAPI().then(response => response.json()).then(data => setProducts(data));
+                setShowMenuId(null);
+                setUpdateProductId(null);
+            });
+        }
+    };
 
     const handleAddProduct = async () => {
         await addProductAPI(newProduct.name, newProduct.price, newProduct.seller);
@@ -73,22 +59,31 @@ const ProductPage: React.FC = () => {
                 {products.map((product) => (
                     <li key={product.id}>
                         {product.name} - {product.price} - {product.seller}
-                        <button onClick={() => toggleMenu(product.id)}>Please Click here to choose</button>
+                        <button onClick={() => toggleMenu(product.id)}>Toggle Menu</button>
                         {showMenuId === product.id && (
                             <div>
-                            <input type="text" placeholder="New Name" onChange={(e) => setNewName(e.target.value)} />
-                            <input type="number" placeholder="New Price" onChange={(e) => setNewPrice(parseInt(e.target.value) || 0)} />
-                            <input type="number" placeholder="New Seller ID" onChange={(e) => setNewSeller(parseInt(e.target.value) || 0)} />
-                            <input type="number" name="id" value={product.id}onChange={handleChange} />
-                                <button onClick={() => handleUpdateProduct(product.id,newName,newPrice||0,newSeller||0)}>Update</button>
-                                {(!newName || newPrice === 0 || newSeller === 0)&& 
-                                <p style={{color: 'red'}}>Cannot Update the product. Please enter valid value for Name, Price and Seller</p>}
-                                <button onClick={() => handleDeleteProduct(product.id)}>Delete</button>
+                                <button onClick={() => setUpdateProductId(product.id)}>Update</button>
+                                <button onClick={() => setDeleteProductId(product.id)}>Delete</button>
                             </div>
                         )}
                     </li>
                 ))}
             </ul>
+            {deleteProductId && (
+                <div>
+                    <p>Are you sure you want to delete this product?</p>
+                    <button onClick={handleDeleteProduct}>Yes</button>
+                    <button onClick={() => setDeleteProductId(null)}>No</button>
+                </div>
+            )}
+            {updateProductId && (
+                <div>
+                    <input type="text" placeholder="New Name" value={newProduct.name} onChange={(e) => setNewProduct(prevState => ({ ...prevState, name: e.target.value }))} />
+                    <input type="number" placeholder="New Price" value={newProduct.price} onChange={(e) => setNewProduct(prevState => ({ ...prevState, price: parseInt(e.target.value) || 0 }))} />
+                    <input type="number" placeholder="New Seller ID" value={newProduct.seller} onChange={(e) => setNewProduct(prevState => ({ ...prevState, seller: parseInt(e.target.value) || 0 }))} />
+                    <button onClick={handleUpdateProduct}>Update</button>
+                </div>
+            )}
             <h2>Add Product</h2>
             <form onSubmit={(e) => { e.preventDefault(); handleAddProduct(); }}>
                 <label>
@@ -110,21 +105,3 @@ const ProductPage: React.FC = () => {
 };
 
 export default ProductPage;
-
-
-
-const handleDeleteProduct = () => {
-    const productIdStr = prompt("Enter the product ID to delete:");
-    if (productIdStr) {
-        const productId = parseInt(productIdStr);
-        if (!isNaN(productId)) {
-            deleteProductAPI(productId).then(() => {
-                getAllProductsAPI().then(response => response.json()).then(data => setProducts(data));
-                setShowMenuId(null);
-            });
-        } else {
-            alert("Please enter a valid product ID.");
-        }
-    }
-};
-
