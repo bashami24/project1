@@ -5,3 +5,8 @@ const myFunction = () => {
   return <button onClick={thisFunction}>Something!</button>;
 };
 `There are ${product.quantity} units of ${product.name} at $${product.price}`
+
+const theseThings= [1,2,3,4,5]
+const allOfThem = theseThings.map((thisThing) =>
+  <li>{allOfThem}</li>
+);
