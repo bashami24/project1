@@ -10,3 +10,11 @@ const theseThings= [1,2,3,4,5]
 const allOfThem = theseThings.map((thisThing) =>
   <li>{allOfThem}</li>
 );
+
+return (
+  <>
+    {error && (
+      <h1>Error</h1>
+    )}
+  </>
+)
