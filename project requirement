@@ -1,20 +1,25 @@
-const myFunction = () => {
-  const thisFunction = () => {
-    // something
-  };
-  return <button onClick={thisFunction}>Something!</button>;
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import NavigationBar from './components/NavigationBar';
+import HomePage from './pages/Homepage';
+import SellerPage from './pages/SellerPage';
+import ProductPage from './pages/ProductPage';
+import PageNotFoundPage from './pages/PageNotFoundPage';
+
+const App: React.FC = () => {
+    return (
+        <Router>
+            <div>
+                <NavigationBar />
+                <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/sellers" element={<SellerPage />} />
+                    <Route path="/products" element={<ProductPage />} />
+                    <Route path="*" element={<PageNotFoundPage />} />
+                </Routes>
+            </div>
+        </Router>
+    );
 };
-`There are ${product.quantity} units of ${product.name} at $${product.price}`
 
-const theseThings= [1,2,3,4,5]
-const allOfThem = theseThings.map((thisThing) =>
-  <li>{allOfThem}</li>
-);
-
-return (
-  <>
-    {error && (
-      <h1>Error</h1>
-    )}
-  </>
-)
+export default App;
