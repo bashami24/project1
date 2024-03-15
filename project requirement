@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import SellerList from '../components/SellerList';
+import { getAllSellersAPI } from '../services/SellerService';
 import { Product } from '../models/Product';
+import {Seller} from '../models/Seller';
 import { getAllProductsAPI, addProductAPI, deleteProductAPI, updateProductAPI } from '../services/ProductService';
+
 const ProductPage: React.FC = () => {
     const[newName, setNewName] = useState<string>('');
     const[newPrice, setNewPrice] = useState<number>();
     const[newSeller, setNewSeller] = useState<number>();
     const [products, setProducts] = useState<Product[]>([]);
+    const [sellers, setSellers] = useState<Seller[]>([]);
     const [showMenuId, setShowMenuId] = useState<number | null>(null);
     const [newProduct, setNewProduct] = useState<{ name: string; price: number; seller: number }>({
         name: '',
@@ -15,6 +20,9 @@ const ProductPage: React.FC = () => {
     
     useEffect(() => {
         getAllProductsAPI().then(response => response.json()).then(data => setProducts(data));
+    }, []);
+    useEffect (() => {
+    getAllSellersAPI().then(response => response.json()).then(data => setSellers(data));
     }, []);
     const toggleMenu = (productId: number) => {
         setShowMenuId((prevId) => (prevId === productId ? null : productId));
@@ -35,6 +43,9 @@ const ProductPage: React.FC = () => {
     const handleUpdateProduct = (id: number, newName: string, newPrice: number, newSeller: number) => {
         if(!newName || newPrice === 0 || newSeller === 0){ 
            
+            return;
+        }
+        if(!Sellers.some(Seller.id === newSeller)){
             return;
         }
         updateProductAPI(id, newName, newPrice, newSeller).then(() => {
