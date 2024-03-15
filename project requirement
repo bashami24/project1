@@ -112,3 +112,19 @@ const ProductPage: React.FC = () => {
     );
 };
 export default ProductPage;
+
+
+<input type="text" placeholder="New Name" onChange={(e) => setNewName(e.target.value)} />
+                                <input type="number" placeholder="New Price" onChange={(e) => setNewPrice(parseInt(e.target.value) || 0)} />
+                                <select value={newSeller} onChange={(e) => setNewSeller(parseInt(e.target.value))}>
+                                    <option value={0}>Select Seller</option>
+                                    {sellers.map((seller) => (
+                                        <option key={seller.id} value={seller.id}>{seller.name}</option>
+                                    ))}
+                                </select>
+                                <input type="number" name="id" value={product.id} onChange={handleChange} />
+                                <button onClick={() => handleUpdateProduct(product.id, newName, newPrice || 0, newSeller || 0)}>Update</button>
+                                {!newName || newPrice === 0 || newSeller === 0 ?
+                                    <p style={{ color: 'red' }}>Cannot Update the product. Please enter valid value for Name, Price, and Seller</p>
+                                    : null}
+                                <button onClick={() => handleDeleteProduct(product.id)}>Delete</button>
