@@ -1,5 +1,11 @@
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>2.0.9</version>
-        </dependency>
+ jar:file:/C:/Users/A249614/geico/m2_repo/org/apache/logging/log4j/log4j-slf4j2-impl/2.21.1/log4j-slf4j2-impl-2.21.1.jar!/org/apache/logging/slf4j/SLF4JServiceProvider.class
+
+The called method's class, org.apache.logging.slf4j.Log4jLoggerFactory, is available from the following locations:
+
+    jar:file:/C:/Users/A249614/geico/m2_repo/org/apache/logging/log4j/log4j-slf4j-impl/2.17.0/log4j-slf4j-impl-2.17.0.jar!/org/apache/logging/slf4j/Log4jLoggerFactory.class
+    jar:file:/C:/Users/A249614/geico/m2_repo/org/apache/logging/log4j/log4j-slf4j2-impl/2.21.1/log4j-slf4j2-impl-2.21.1.jar!/org/apache/logging/slf4j/Log4jLoggerFactory.class
+
+The called method's class hierarchy was loaded from the following locations:
+
+    org.apache.logging.slf4j.Log4jLoggerFactory: file:/C:/Users/A249614/geico/m2_repo/org/apache/logging/log4j/log4j-slf4j-impl/2.17.0/log4j-slf4j-impl-2.17.0.jar
+    org.apache.logging.log4j.spi.AbstractLoggerAdapter: file:/C:/Users/A249614/geico/m2_repo/org/apache/logging/log4j/log4j-api/2.21.1/log4j-api-2.21.1.jar
