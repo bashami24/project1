@@ -1,17 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN">
-    <Appenders>
-        <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-        </Console>
-        <File name="File" fileName="logs/mylog.log">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-        </File>
-    </Appenders>
-    <Loggers>
-        <Root level="info">
-            <AppenderRef ref="Console"/>
-            <AppenderRef ref="File"/>
-        </Root>
-    </Loggers>
-</Configuration>
+Leaves
+    - Apply for a leave
+    - Both manager / employee should be able to see data
+    regarding applied leaves
+    - From the manager's side, all their employees should be listed
+together with their leaves, which may be approved
+    Stretch
+        - Employee should see the manager's name when applying
+for leave
+        - See a dropdown menu of available types of leaves (pto, 
+sick, family, etc)
+        - See data regarding holidays
+        - Email notification sent when leave approved or rejected
