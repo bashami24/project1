@@ -1,13 +1,25 @@
-Leaves
-    - Apply for a leave
-    - Both manager / employee should be able to see data
-    regarding applied leaves
-    - From the manager's side, all their employees should be listed
-together with their leaves, which may be approved
-    Stretch
-        - Employee should see the manager's name when applying
-for leave
-        - See a dropdown menu of available types of leaves (pto, 
-sick, family, etc)
-        - See data regarding holidays
-        - Email notification sent when leave approved or rejected
+@Service
+public class LeaveRequestService {
+    private final LeaveRequestRepository leaveRequestRepository;
+
+    public LeaveRequestService(LeaveRequestRepository leaveRequestRepository) {
+        this.leaveRequestRepository = leaveRequestRepository;
+    }
+
+    public LeaveRequest addLeaveRequest(Long employeeId, LocalDate startDate, LocalDate endDate) {
+        // You may want to validate the input parameters and handle any errors here
+        
+        Employee employee = // Retrieve employee from employeeId (you can use your EmployeeService for this)
+        if (employee == null) {
+            throw new RuntimeException("Employee not found");
+        }
+
+        LeaveRequest leaveRequest = new LeaveRequest();
+        leaveRequest.setEmployee(employee);
+        leaveRequest.setStartDate(startDate);
+        leaveRequest.setEndDate(endDate);
+        leaveRequest.setStatus("Pending");
+
+        return leaveRequestRepository.save(leaveRequest);
+    }
+}
