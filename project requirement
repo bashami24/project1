@@ -1,1 +1,13 @@
-create table leave (accepted_flag boolean not null, active_flag boolean not null, employeeid integer, leave_id integer not null, managerid integer, end_date timestamp(6), start_date timestamp(6), leave_name varchar(255), primary key (leave_id))
+{
+    "leaveName": "Vacation",
+    "startDate": "2024-04-01T00:00:00",
+    "endDate": "2024-04-05T00:00:00",
+    "activeFlag": true,
+    "acceptedFlag": false,
+    "employee": {
+        "id": 1
+    },
+    "manager": {
+        "id": 1
+    }
+}
