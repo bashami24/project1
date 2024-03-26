@@ -1,11 +1,31 @@
+import jakarta.persistence.*;
+import lombok.*;
+import org.apache.catalina.Manager;
+
+import java.sql.Timestamp;
 
 
-Leaves
-Apply for a leave
-Both manager / employee should be able to see data regarding applied leaves From the manager's side, all their employees should be listed together with their leaves, which may be approved
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@EqualsAndHashCode
+@ToString
+public class Leave {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int leaveId;
+    private String leaveName;
+    private Timestamp startDate;
+    private Timestamp endDate;
+    //private LeaveStatus leaveStatus;
+    private boolean acceptedFlag;
+    private boolean activeFlag;
+    @ManyToOne
+    @JoinColumn(name = "employeeID")
+    private Employee employee;
 
-Stretch
-- Employee should see the manager's name when applying for leave
-- See a dropdown menu of available types of leaves (pto, sick, family, etc)
-- See data regarding holidays
-- Email notification sent when leave approved or rejected
+    @JoinColumn(name = "managerID")
+    private Manager manager;
+
+}
