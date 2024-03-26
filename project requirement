@@ -1,31 +1,32 @@
-import jakarta.persistence.*;
-import lombok.*;
-import org.apache.catalina.Manager;
+@Service
+public class LeaveService {
 
-import java.sql.Timestamp;
+    @Autowired
+    private LeaveRepository leaveRepository;
 
+    public Leave addLeave(Leave leave) {
+        // Validate leave details
+        if (leave.getLeaveName() == null || leave.getLeaveName().isEmpty()) {
+            throw new IllegalArgumentException("Leave name is required");
+        }
+        if (leave.getStartDate() == null || leave.getEndDate() == null) {
+            throw new IllegalArgumentException("Start date and end date are required");
+        }
+        if (leave.getEmployee() == null) {
+            throw new IllegalArgumentException("Employee is required");
+        }
+        if (leave.getManager() == null) {
+            throw new IllegalArgumentException("Manager is required");
+        }
 
-@Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-@EqualsAndHashCode
-@ToString
-public class Leave {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int leaveId;
-    private String leaveName;
-    private Timestamp startDate;
-    private Timestamp endDate;
-    //private LeaveStatus leaveStatus;
-    private boolean acceptedFlag;
-    private boolean activeFlag;
-    @ManyToOne
-    @JoinColumn(name = "employeeID")
-    private Employee employee;
+        // Set additional properties
+        leave.setActiveFlag(true);
+        leave.setAcceptedFlag(false);
+        // Add more properties as needed
 
-    @JoinColumn(name = "managerID")
-    private Manager manager;
+        // Save the leave record
+        return leaveRepository.save(leave);
+    }
 
+    // Other methods for leave management
 }
