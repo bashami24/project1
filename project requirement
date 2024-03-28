@@ -1,13 +1,20 @@
-{
-    "leaveName": "Vacation",
-    "startDate": "2024-04-01T00:00:00",
-    "endDate": "2024-04-05T00:00:00",
-    "activeFlag": true,
-    "acceptedFlag": false,
-    "employee": {
-        "id": 1
-    },
-    "manager": {
-        "id": 1
-    }
-}
+   public Leave addLeave(Leave leave) throws LeaveException {
+       Main.logger.info("Attempting to add a new leave: " + leave);
+
+       // Validate leave details
+       if (leave.getLeaveName() == null || leave.getLeaveName().isEmpty()) {
+           throw new LeaveException("Leave name is required");
+       }
+       if (leave.getStartDate() == null || leave.getEndDate() == null) {
+           throw new LeaveException("Start date and end date are required");
+       }
+       /**if (leave.getEmployee() == null) {
+           throw new LeaveException("Employee is required");
+       }
+       if (leave.getManager() == null) {
+           throw new LeaveException("Manager is required");
+       }*/ else {
+       //if (leave.isActiveFlag() && !leave.isAcceptedFlag()) {
+
+           leave.setAcceptedFlag(false);            // new leave is set to Not Approved
+           leave.setActiveFlag(true);      
