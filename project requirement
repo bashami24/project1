@@ -1,81 +1,51 @@
-import React, { useEffect, useState } from 'react';
+// src/components/AddLeaveForm.tsx
+import React, { useState } from 'react';
+import { addLeaveRequestAPI } from '../services/LeaveService';
 import { LeaveRequest } from '../models/LeaveRequest';
-import { getAllSellersAPI, addLeaveRequestAPI } from '../services/LeaveService';
 
-const AddLeavePage: React.FC = () => {
-  const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
-  const [showAddLeaveForm, setShowAddLeaveForm] = useState(false);
-  const [newLeaveName, setNewLeaveName] = useState('');
-  const [newStartDate, setNewStartDate] = useState('');
-  const [newEndDate, setNewEndDate] = useState('');
+const AddLeaveForm: React.FC = () => {
+  const [leaveName, setLeaveName] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
-  useEffect(() => {
-    // Fetch leave requests when the component mounts
-    getAllLeaveRequests();
-  }, []);
-
-  const getAllLeaveRequests = () => {
-    getAllLeaveRequestsAPI().then((response) => response.json()).then((data) => setLeaveRequests(data));
-  };
-
-  const handleAddLeaveRequest = () => {
-    const newLeaveRequest: LeaveRequest = {
-      leaveName: newLeaveName,
-      startDate: newStartDate,
-      endDate: newEndDate,
-    };
-
-    addLeaveRequestAPI(newLeaveRequest).then(() => {
-      // After adding the leave request, fetch all leave requests again to update the list
-      getAllLeaveRequests();
-      // Reset the form inputs
-      setNewLeaveName('');
-      setNewStartDate('');
-      setNewEndDate('');
-      setShowAddLeaveForm(false);
-    });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const newLeaveRequest: LeaveRequest = { leaveName, startDate, endDate };
+    try {
+      await addLeaveRequestAPI(newLeaveRequest);
+      // Reset form inputs
+      setLeaveName('');
+      setStartDate('');
+      setEndDate('');
+      console.log('Leave request submitted successfully');
+    } catch (error) {
+      console.error('Error submitting leave request:', error);
+    }
   };
 
   return (
     <div>
       <h1>Add Leave Request</h1>
-      {showAddLeaveForm ? (
-        <div>
-          <input
-            type="text"
-            placeholder="Leave Name"
-            value={newLeaveName}
-            onChange={(e) => setNewLeaveName(e.target.value)}
-          />
-          <br />
-          <input
-            type="date"
-            placeholder="Start Date"
-            value={newStartDate}
-            onChange={(e) => setNewStartDate(e.target.value)}
-          />
-          <br />
-          <input
-            type="date"
-            placeholder="End Date"
-            value={newEndDate}
-            onChange={(e) => setNewEndDate(e.target.value)}
-          />
-          <br />
-          <button onClick={handleAddLeaveRequest}>Add Leave Request</button>
-          <button onClick={() => setShowAddLeaveForm(false)}>Cancel</button>
-        </div>
-      ) : (
-        <button onClick={() => setShowAddLeaveForm(true)}>Show Add Leave Form</button>
-      )}
-      <h2>Leave Requests</h2>
-      <ul>
-        {leaveRequests.map((leaveRequest, index) => (
-          <li key={index}>{leaveRequest.leaveName} - {leaveRequest.startDate} to {leaveRequest.endDate}</li>
-        ))}
-      </ul>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Leave Name:
+          <input type="text" value={leaveName} onChange={(e) => setLeaveName(e.target.value)} />
+        </label>
+        <br />
+        <label>
+          Start Date:
+          <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+        </label>
+        <br />
+        <label>
+          End Date:
+          <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+        </label>
+        <br />
+        <button type="submit">Submit</button>
+      </form>
     </div>
   );
 };
 
-export default AddLeavePage;
+export default AddLeaveForm;
