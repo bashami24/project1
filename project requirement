@@ -1,27 +1,15 @@
-// src/models/LeaveRequest.ts
-export interface LeaveRequest {
-  leaveId?: number;
-  leaveName: string;
-  startDate: string;
-  endDate: string;
-  acceptedFlag?: boolean;
-  activeFlag?: boolean;
-  employeeId?: number; // Assuming you have an employeeId associated with the leave request
-  managerId?: number; // Assuming you have a managerId associated with the leave request
+export function getAllSellersAPI() {
+    return fetch(apiBaseURL + "seller", {
+        method: "GET",
+        mode: "cors"
+    });
 }
 
-// src/services/LeaveService.ts
-import axios from 'axios';
-import { LeaveRequest } from '../models/LeaveRequest';
-
-const BASE_URL = 'http://localhost:8080'; // Update with your backend URL
-
-export const addLeaveRequest = async (leaveRequest: LeaveRequest) => {
-  try {
-    const response = await axios.post(`${BASE_URL}/api/leave/add`, leaveRequest);
-    return response.data;
-  } catch (error) {
-    console.error('Error adding leave request:', error);
-    throw error;
-  }
-};
+export function addSellerAPI( id: number , seller: string,) {
+    return fetch(apiBaseURL + "seller", {
+        method: "POST",
+        mode: "cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, seller })
+    });
+}
