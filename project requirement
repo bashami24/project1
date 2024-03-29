@@ -1,12 +1,61 @@
-            <div className={theme}>
-                <NavigationBar toggleTheme={toggleTheme} />
-                <div className="sidebar">
-                    <ul>
-                    <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/sellers" element={<SellerPage />} />
-                    <Route path="/products" element={<ProductPage />} />
-                    <Route path="*" element={<PageNotFoundPage />} />
-                </Routes>
-                    </ul>
-                </div>
+import React from 'react';
+
+interface NavigationBarProps {
+  toggleTheme: () => void;
+}
+
+const NavigationBar: React.FC<NavigationBarProps> = ({ toggleTheme }) => {
+  return (
+    <nav>
+      <ul>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to="/add-leave">Add Leave</Link>
+        </li>
+      </ul>
+      <button onClick={toggleTheme}>Toggle Theme</button>
+    </nav>
+  );
+};
+
+export default NavigationBar;
+
+
+
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import AddLeavePage from './pages/AddLeavePage';
+import NavigationBar from './components/NavigationBar';
+import { ThemeProvider } from './context/ThemeContext';
+
+const App: React.FC = () => {
+  const [theme, setTheme] = useState('light');
+
+  const toggleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+
+  return (
+    <ThemeProvider value={theme}>
+      <Router>
+        <div className={theme}>
+          <NavigationBar toggleTheme={toggleTheme} />
+          <div className="sidebar">
+            <ul>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/add-leave" element={<AddLeavePage />} />
+                <Route path="*" element={<PageNotFoundPage />} />
+              </Routes>
+            </ul>
+          </div>
+        </div>
+      </Router>
+    </ThemeProvider>
+  );
+};
+
+export default App;
