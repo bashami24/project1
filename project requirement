@@ -1,14 +1,14 @@
-// src/pages/AddLeavePage.tsx
+// src/App.tsx
 import React from 'react';
-import AddLeaveForm from '../components/AddLeaveForm';
+import AddLeavePage from './pages/AddLeavePage';
 
-const AddLeavePage: React.FC = () => {
+const App: React.FC = () => {
   return (
     <div>
-      <h1>Add Leave Page</h1>
-      <AddLeaveForm />
+      <h1>Leave Management System</h1>
+      <AddLeavePage />
     </div>
   );
 };
 
-export default AddLeavePage;
+export default App;
