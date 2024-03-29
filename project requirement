@@ -1,51 +1,37 @@
-// src/components/AddLeaveForm.tsx
 import React, { useState } from 'react';
-import { addLeaveRequestAPI } from '../services/LeaveService';
-import { LeaveRequest } from '../models/LeaveRequest';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import NavigationBar from './components/NavigationBar';
+import HomePage from './pages/Homepage';
+import SellerPage from './pages/SellerPage';
+import ProductPage from './pages/ProductPage';
+import PageNotFoundPage from './pages/PageNotFoundPage';
+import './App.css';
 
-const AddLeaveForm: React.FC = () => {
-  const [leaveName, setLeaveName] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+const App: React.FC = () => {
+    const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const newLeaveRequest: LeaveRequest = { leaveName, startDate, endDate };
-    try {
-      await addLeaveRequestAPI(newLeaveRequest);
-      // Reset form inputs
-      setLeaveName('');
-      setStartDate('');
-      setEndDate('');
-      console.log('Leave request submitted successfully');
-    } catch (error) {
-      console.error('Error submitting leave request:', error);
-    }
-  };
+    const toggleTheme = () => {
+        setTheme(theme === 'dark' ? 'light' : 'dark');
+    };
 
-  return (
-    <div>
-      <h1>Add Leave Request</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Leave Name:
-          <input type="text" value={leaveName} onChange={(e) => setLeaveName(e.target.value)} />
-        </label>
-        <br />
-        <label>
-          Start Date:
-          <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-        </label>
-        <br />
-        <label>
-          End Date:
-          <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-        </label>
-        <br />
-        <button type="submit">Submit</button>
-      </form>
-    </div>
-  );
+    return (
+        <Router>
+            <div className={theme}>
+                <NavigationBar toggleTheme={toggleTheme} />
+                <div className="sidebar">
+                    <ul>
+                    <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/sellers" element={<SellerPage />} />
+                    <Route path="/products" element={<ProductPage />} />
+                    <Route path="*" element={<PageNotFoundPage />} />
+                </Routes>
+                    </ul>
+                </div>
+
+            </div>
+        </Router>
+    );
 };
 
-export default AddLeaveForm;
+export default App;
