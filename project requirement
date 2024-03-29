@@ -1,58 +1,81 @@
 import React, { useEffect, useState } from 'react';
-import SellerList from '../components/SellerList';
-import { getAllSellersAPI, addSellerAPI } from '../services/SellerService';
-import { Seller } from '../models/Seller';
+import { LeaveRequest } from '../models/LeaveRequest';
+import { getAllSellersAPI, addLeaveRequestAPI } from '../services/LeaveService';
 
-const SellerPage: React.FC = () => {
-    const [sellers, setSellers] = useState<Seller[]>([]);
-    const [showAddSellerForm, setShowAddSellerForm] = useState(false);
-    const [newSellerId, setNewSellerId] = useState(0);
-    const [newSellerName, setNewSellerName] = useState('');
-   
+const AddLeavePage: React.FC = () => {
+  const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
+  const [showAddLeaveForm, setShowAddLeaveForm] = useState(false);
+  const [newLeaveName, setNewLeaveName] = useState('');
+  const [newStartDate, setNewStartDate] = useState('');
+  const [newEndDate, setNewEndDate] = useState('');
 
-    useEffect(() => {
-        getAllSellersAPI().then(response => response.json()).then(data => setSellers(data));
-    }, []);
+  useEffect(() => {
+    // Fetch leave requests when the component mounts
+    getAllLeaveRequests();
+  }, []);
 
-    const handleAddSeller = () => {
-        addSellerAPI(newSellerId,newSellerName).then(() => {
-            getAllSellersAPI().then(response => response.json()).then(data => {
-                setSellers(data);
-                setShowAddSellerForm(false);
-                setNewSellerId(0);
-                setNewSellerName('');
-                
-            });
-        });
+  const getAllLeaveRequests = () => {
+    getAllLeaveRequestsAPI().then((response) => response.json()).then((data) => setLeaveRequests(data));
+  };
+
+  const handleAddLeaveRequest = () => {
+    const newLeaveRequest: LeaveRequest = {
+      leaveName: newLeaveName,
+      startDate: newStartDate,
+      endDate: newEndDate,
     };
 
-    return (
+    addLeaveRequestAPI(newLeaveRequest).then(() => {
+      // After adding the leave request, fetch all leave requests again to update the list
+      getAllLeaveRequests();
+      // Reset the form inputs
+      setNewLeaveName('');
+      setNewStartDate('');
+      setNewEndDate('');
+      setShowAddLeaveForm(false);
+    });
+  };
+
+  return (
+    <div>
+      <h1>Add Leave Request</h1>
+      {showAddLeaveForm ? (
         <div>
-            <h1>Sellers</h1>
-            <img src= "https://cdn.pixabay.com/photo/2017/08/07/19/46/shop-2607121_1280.jpg" style={{width: '350px', height: 'auto', margin: '10px'}}/>
-            <SellerList sellers={sellers} />
-            {showAddSellerForm ? (
-                <div>
-                    <input
-                    type="number"
-                    placeholder='Enter Seller Id'
-                    value={newSellerId}
-                    onChange={(e) => setNewSellerId(parseInt(e.target.value))}/>
-                    
-                    <input
-                        type="text"
-                        placeholder="Enter seller name"
-                        value={newSellerName}
-                        onChange={(e) => setNewSellerName(e.target.value)}/>
-                        <button onClick={handleAddSeller}>Add Seller</button>
-                    
-                </div>
-            ) : (
-                <button onClick={() => setShowAddSellerForm(true)}>Add New Seller</button>
-            )}
-            
+          <input
+            type="text"
+            placeholder="Leave Name"
+            value={newLeaveName}
+            onChange={(e) => setNewLeaveName(e.target.value)}
+          />
+          <br />
+          <input
+            type="date"
+            placeholder="Start Date"
+            value={newStartDate}
+            onChange={(e) => setNewStartDate(e.target.value)}
+          />
+          <br />
+          <input
+            type="date"
+            placeholder="End Date"
+            value={newEndDate}
+            onChange={(e) => setNewEndDate(e.target.value)}
+          />
+          <br />
+          <button onClick={handleAddLeaveRequest}>Add Leave Request</button>
+          <button onClick={() => setShowAddLeaveForm(false)}>Cancel</button>
         </div>
-    );
+      ) : (
+        <button onClick={() => setShowAddLeaveForm(true)}>Show Add Leave Form</button>
+      )}
+      <h2>Leave Requests</h2>
+      <ul>
+        {leaveRequests.map((leaveRequest, index) => (
+          <li key={index}>{leaveRequest.leaveName} - {leaveRequest.startDate} to {leaveRequest.endDate}</li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
-export default SellerPage;
+export default AddLeavePage;
