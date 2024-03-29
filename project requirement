@@ -1,15 +1,21 @@
-export function getAllSellersAPI() {
-    return fetch(apiBaseURL + "seller", {
-        method: "GET",
-        mode: "cors"
-    });
-}
+import { LeaveRequest } from '../models/LeaveRequest';
 
-export function addSellerAPI( id: number , seller: string,) {
-    return fetch(apiBaseURL + "seller", {
-        method: "POST",
-        mode: "cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, seller })
+const apiBaseURL = 'http://localhost:8080'; // Update with your backend URL
+
+export const addLeaveRequestAPI = async (leaveRequest: LeaveRequest) => {
+  try {
+    const response = await fetch(`${apiBaseURL}/api/leave/add`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(leaveRequest),
     });
-}
+    if (!response.ok) {
+      throw new Error('Failed to add leave request');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Error adding leave request:', error);
+    throw error;
+  }
+};
