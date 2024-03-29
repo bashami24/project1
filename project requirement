@@ -9,3 +9,19 @@ export interface LeaveRequest {
   employeeId?: number; // Assuming you have an employeeId associated with the leave request
   managerId?: number; // Assuming you have a managerId associated with the leave request
 }
+
+// src/services/LeaveService.ts
+import axios from 'axios';
+import { LeaveRequest } from '../models/LeaveRequest';
+
+const BASE_URL = 'http://localhost:8080'; // Update with your backend URL
+
+export const addLeaveRequest = async (leaveRequest: LeaveRequest) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/api/leave/add`, leaveRequest);
+    return response.data;
+  } catch (error) {
+    console.error('Error adding leave request:', error);
+    throw error;
+  }
+};
