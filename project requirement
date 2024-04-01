@@ -1,6 +1,23 @@
-   // Endpoint for getting all leaves by employee
-  /*  @GetMapping(value = "/employee/{employeeID}/leave")
-    public ResponseEntity<List<Leave>> getLeaveByEmployeeID(@PathVariable int employeeID) throws LeaveException {
-        List<Leave> leaves = leaveService.getAllLeaveByEmployeeId(employeeID);
-        return ResponseEntity.ok(leaves);
+   List<Leave> findByEmployeeEmployeeID(int employeeID); my repository 
+
+my service 
+   public List<Leave> getAllLeaveByEmployeeId(int employeeID) throws LeaveException {
+        Main.logger.info("Getting leaves by employee");
+        List <Leave> l = leaveRepository.findByEmployeeEmployeeID(employeeID);
+        if (l.isEmpty()) {
+            throw new LeaveException("No leaves for a given employeeId is found: " + employeeID);
+        }
+        return l;
+    }
+
+my controller 
+ @GetMapping (value = "/employee/{employeeId}/leave")
+    public ResponseEntity<List<Leave>> getLeaveByEmployeeID(@PathVariable int employeeID)  throws LeaveException {
+        try {
+            List<Leave> l = leaveService.getAllLeaveByEmployeeId(employeeID);
+            return new ResponseEntity<>(l, HttpStatus.OK);
+
+        } catch (LeaveException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
