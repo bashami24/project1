@@ -1,2 +1,31 @@
 
-    at workLoo
+    org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'leaveController' 
+defined in file [C:\Users\A249614\Desktop\backend\capstone-backend\target\classes\org\capstone\controller\LeaveController.class]:
+Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'leaveService' defined in file 
+[C:\Users\A249614\Desktop\backend\capstone-backend\target\classes\org\capstone\service\LeaveService.class]: Unsatisfied dependency expressed through 
+constructor parameter 0: Error creating bean with name 'LeaveRepository' defined in org.capstone.repository.LeaveRepository defined in 
+@EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Could not create query for public abstract java.util.List
+org.capstone.repository.LeaveRepository.getAllLeaveByEmployeeId(int); Reason: Failed to create query for method public abstract java.util.List 
+org.capstone.repository.LeaveRepository.getAllLeaveByEmployeeId(int); No property 'id' found for type 'Employee'; 
+Traversed path: Leave.employee
+
+  @GetMapping (value = "/employee/{employeeId}/leave")
+    public ResponseEntity<Object> getAllLeaveByEmployeeId(@PathVariable int employeeID) throws LeaveException {
+        try {
+            List<Leave> l = leaveService.getAllLeaveByEmployeeId(employeeID);
+            return new ResponseEntity<>(l, HttpStatus.OK);
+
+        } catch (LeaveException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+public List<Leave> getAllLeaveByEmployeeId(int employeeID) throws LeaveException {
+        Main.logger.info("Getting leaves by employee");
+        List <Leave> l = leaveRepository.findByEmployeeEmployeeID(employeeID);
+        if (l.isEmpty()) {
+            throw new LeaveException("No leaves for a given employeeId is found: " + employeeID);
+        }
+        return l;
+    }
