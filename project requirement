@@ -1,41 +1,14 @@
-I have updated my updateleaveapi as follows
-export const updateLeaveAPI = async (leave: Leaves, employeeID: number) => {
-  console.log("update api: ", `${apiBaseURL}employee/${employeeID}/leave/${leave.Id}`);
-  const response = await fetch(`${apiBaseURL}employee/${employeeID}/leave/${leave.Id}`, {
-    method: "PUT",
-    mode: "cors",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(leave),
-  });
+ public Leave updateLeave(int Id, Leave updatedLeave) throws LeaveNotFoundException {
+        Main.logger.info("Updating Leave with ID: "+Id);
+        Optional<Leave> optionalLeave = leaveRepository.findById(Id);
+        if (optionalLeave.isEmpty()) {
+            throw new LeaveNotFoundException("Leave Not Found");
 
-  if (!response.ok) {
-    console.log("put error: ", response); // Log the entire response for debugging
-
-    try {
-      const responseData = await response.json();
-      console.log("put error resp: ", responseData);
-      throw new Error("Failed to update leave: " + responseData.Error); // Use error message from response
-    } catch (error) {
-      console.error("Error parsing response:", error);
-      throw new Error("!" + error); // Rethrow the error to the calling code
-    }
-  }
-
- and here is my leaveform specificlly for update 
- const handleSubmit = async (values: Leaves, { setSubmitting, resetForm }:FormikHelpers<Leaves>) => {
-    if 
-   /* (otherLeaveType === "") {
-      values.leaveName = values.leaveName;} else {
-      values.leaveName = otherLeaveType; }*/
-      (values.Id) {
-        const response = await updateLeaveAPI(values);
-        if (response){
-          const UpdatedLeaves = allLeaves.map((leave) => (leave.Id === values.Id? values : leave));
-          setAllLeaves(UpdatedLeaves);
-          toast.success("Leave updated Successfully");
-        } else { toast.error("Error Updating Leave");
-      }
         }
-      else {
-    
-can you provide a solution to this?
+        Leave existingLeave = optionalLeave.get();
+
+        existingLeave.setStartDate(updatedLeave.getStartDate());
+        existingLeave.setEndDate(updatedLeave.getEndDate());
+
+        return leaveRepository.save(existingLeave);
+    }
