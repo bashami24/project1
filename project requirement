@@ -1,180 +1,196 @@
-import { json } from "react-router-dom";
+import React from "react";
+import {
+  Grid,
+  makeStyles,
+  Card,
+  CardContent,
+  MenuItem,
+  InputLabel,
+  Select,
+  CardActions,
+  Button,
+  CardHeader,
+  FormControl,
+} from "@material-ui/core";
+
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+import { TextField } from "formik-material-ui";
 import { Leaves } from "../Models/Leaves";
+import { postLeaveAPI } from "../Services/LeavesAPI";
+import { toast } from "react-toastify";
+import { Employee } from "../Models/Employee";
 
-const apiBaseURL = "http://localhost:9004/"; // Base URL for the API
+const useStyle = makeStyles((theme) => ({
+  padding: {
+    padding: theme.spacing(3),
+  },
+  button: {
+    margin: theme.spacing(1),
+  },
+}));
 
-// Fetch all products from the API
-export function getAllLeaveAPI() {
-  return fetch(apiBaseURL + "leave", {
-    method: "GET",
-    mode: "cors", // Enable cross-origin requests
-  });
+//Data
+const initialValues: Leaves = {
+  leaveName: "",
+  startDate: null,
+  endDate: null,
+  acceptedFlag: false,
+  activeFlag: true,
+  employeeID: undefined,
+  managerID: undefined,
+};
+
+const options = [
+  { label: "Sick Leave", value: "Sick Leave" },
+  { label: "Vacation", value: "Vacation" },
+  { label: "Other", value: "Other" },
+];
+
+const today = new Date(Date.now());
+today.setHours(0, 0, 0, 0);
+
+const validationSchema = Yup.object({
+  leaveName: Yup.string().required("Leave type is required"),
+  startDate: Yup.date()
+    .nullable()
+    .required("Start date is required")
+    .min(today, "Start date can't be before today"),
+  endDate: Yup.date()
+    .nullable()
+    .required("End date is required")
+    .min(Yup.ref("startDate"), "End date can't be before start date"),
+});
+
+interface LeaveFormProps {
+  employee: Employee;
+  setAllLeaves: any;
+  allLeaves: Leaves[];
+  setShowForm: any;
 }
 
-// Add a new leave via API
-// http://localhost:8080/employee/2/leave
-export async function postLeaveAPI(leave: Leaves, employeeID: number) {
-  console.log("post API: ", apiBaseURL + "leave");
-  //const response = await fetch(apiBaseURL + `employee/${employeeID}/leave`, {
-    const response = await fetch(apiBaseURL + "leave", {
-    method: "POST",
-    mode: "cors",
-    headers: { "Content-Type": "application/json" }, // Set request header for JSON data
-    body: JSON.stringify(leave), // Convert leave object to JSON string
-  });
+const LeaveForm: React.FC<LeaveFormProps> = ({
+  employee,
+  setAllLeaves,
+  allLeaves,
+  setShowForm,
+}) => {
+  const [otherLeaveType, setOtherLeaveType] = React.useState("");
+  const options = [
+    { label: "Sick Leave", value: "Sick Leave" },
+    { label: "Vacation", value: "Vacation" },
+    { label: "Other", value: "Other" },
+  ];
 
-  if (!response.ok) {
-    console.log("post error: ", response); // Log server error details (for debugging)
+  const handleSubmit = async (values: any) => {
+    console.log("*************************");
+    console.log(values);
+    console.log(employee.employeeID);
+    console.log("*************************");
 
-    try {
-      const responseData = await response.json();
-      console.log("post error resp: ", responseData);
-      throw new Error("Failed to add a leave: " + responseData.Error); // Use error message from response
-    } catch (error) {
-      console.error("Error parsing response:", error);
-      throw new Error("!" + error); // Rethrow the error to the calling code
+    if (otherLeaveType == "") values.leaveName = values.leaveName;
+    else values.leaveName = otherLeaveType;
+
+    const response = await postLeaveAPI(values, employee.employeeID);
+    if (response) {
+      setAllLeaves([...allLeaves, values]);
+      setShowForm(false);
+      toast.success("Leave Requested Successfully");
+    } else {
+      toast.error("Error Requesting Leave");
     }
-  }
-  const responseData = await response.json();
-  console.log("post resp: ", responseData);
-  return responseData;
-}
+  };
 
-// Delete a leave via API
-export const deleteLeaveAPI = async (leaveId: any) => {
-  return await fetch(`${apiBaseURL}leave/${leaveId}`, {
-    method: "DELETE",
-    mode: "cors",
-    headers: { "Content-Type": "application/json" },
-  });
+  return (
+    <Grid container justify="center" spacing={2}>
+      <Grid item xs={12} md={6}>
+        <Card>
+          <CardHeader title="Leave Request Form" />
+          <CardContent>
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={(values, { setSubmitting }) => {
+                // Handle form submission
+                handleSubmit(values);
+                setSubmitting(false);
+              }}
+            >
+              {({ values, setFieldValue }) => (
+                <Form>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      <FormControl fullWidth variant="outlined">
+                        <InputLabel>Leave Type</InputLabel>
+                        <Select
+                          name="leaveName"
+                          label="Leave Type"
+                          onChange={(e: any) => {
+                            setFieldValue("leaveName", e.target.value);
+                            setOtherLeaveType("");
+                          }}
+                        >
+                          {options.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                              {option.label}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+
+                    {values.leaveName === "Other" && (
+                      <Grid item xs={12}>
+                        <Field
+                          component={TextField}
+                          name="otherLeaveType" // Make sure to handle this field appropriately in your form submission logic
+                          label="Specify Leave Type"
+                          fullWidth
+                          variant="outlined"
+                          onChange={(e: any) => {
+                            setOtherLeaveType(e.target.value);
+                          }}
+                        />
+                      </Grid>
+                    )}
+
+                    <Grid item xs={12}>
+                      <Field
+                        component={TextField}
+                        type="date"
+                        name="startDate"
+                        label="Start Date"
+                        InputLabelProps={{ shrink: true }}
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <Field
+                        component={TextField}
+                        type="date"
+                        name="endDate"
+                        label="End Date"
+                        InputLabelProps={{ shrink: true }}
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </Grid>
+                  </Grid>
+                  <CardActions>
+                    <Button type="submit" variant="contained" color="primary">
+                      Submit
+                    </Button>
+                  </CardActions>
+                </Form>
+              )}
+            </Formik>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+  );
 };
 
-// Update an existing leave via API
-export const updateLeaveAPI = async (leave: Leaves) => {
-  console.log("update api: ", `${apiBaseURL}leave/${leave.Id}`);
-  const response = await fetch(`${apiBaseURL}leave/${leave.Id}`, {
-    method: "PUT",
-    mode: "cors",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(leave),
-  });
-
-  if (!response.ok) {
-    console.log("put error: ", response); // Log the entire response for debugging
-
-    try {
-      const responseData = await response.json();
-      console.log("put error resp: ", responseData);
-      throw new Error("Failed to update leave: " + responseData.Error); // Use error message from response
-    } catch (error) {
-      console.error("Error parsing response:", error);
-      throw new Error("!" + error); // Rethrow the error to the calling code
-    }
-  }
-  const responseData = await response.json();
-  console.log("put resp: ", responseData);
-  return responseData;
-};
-
-export const getAllLeavesByEmployeeId = async (employeeId: number) => {
-  try {
-    const response = await fetch(`${apiBaseURL}employee/${employeeId}/leave`, {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-
-    const leaves: Leaves[] = await response.json();
-
-    // Assuming each leave record has startDate and endDate properties
-    return leaves.map((leave) => {
-      return {
-        ...leave,
-        // Parse the ISO date strings to Date objects or formatted strings
-        startDate: leave.startDate ? new Date(leave.startDate) : null,
-        endDate: leave.endDate ? new Date(leave.endDate) : null,
-      };
-    });
-  } catch (error) {
-    console.error("There was a problem with the fetch operation:", error);
-    throw new Error(`Unable to retrieve leaves: ${error}`);
-  }
-};
-
-export const acceptLeave = async (leaveId: number) => {
-  try {
-    const response = await fetch(`${apiBaseURL}leave/${leaveId}/accept`, {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-        // Include other headers as needed, like authorization tokens
-      },
-    });
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error accepting leave:", error);
-    throw error;
-  }
-};
-
-// Function to reject a leave
-export const rejectLeave = async (leaveId: number) => {
-  try {
-    const response = await fetch(`${apiBaseURL}leave/${leaveId}/reject`, {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error rejecting leave:", error);
-    throw error;
-  }
-};
-
-export const getAllLeavesByManagerId = async (employeeId: number) => {
-  try {
-    const response = await fetch(`${apiBaseURL}manager/${employeeId}/leaves`, {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-
-    const leaves: Leaves[] = await response.json();
-
-    // Assuming each leave record has startDate and endDate properties
-    return leaves.map((leave) => {
-      return {
-        ...leave,
-        startDate: leave.startDate ? new Date(leave.startDate) : null,
-        endDate: leave.endDate ? new Date(leave.endDate) : null,
-      };
-    });
-  } catch (error) {
-    console.error("There was a problem with the fetch operation:", error);
-    throw new Error(`Unable to retrieve leaves: ${error}`);
-  }
-};
+export default LeaveForm;
