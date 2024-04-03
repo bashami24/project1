@@ -1,1 +1,39 @@
-2024-04-03T18:03:27.542-04:00  WARN 58396 --- [nio-9004-exec-5] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'int'; For input string: "undefined"]
+export const updateLeaveAPI = async (leave: Leaves, employeeID: number) => {
+  console.log("update api: ", `${apiBaseURL}employee/${employeeID}/leave/${leave.Id}`);
+  const response = await fetch(`${apiBaseURL}employee/${employeeID}/leave/${leave.Id}`, {
+    method: "PUT",
+    mode: "cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(leave),
+  });
+
+  if (!response.ok) {
+    console.log("put error: ", response); // Log the entire response for debugging
+
+    try {
+      const responseData = await response.json();
+      console.log("put error resp: ", responseData);
+      throw new Error("Failed to update leave: " + responseData.Error); // Use error message from response
+    } catch (error) {
+      console.error("Error parsing response:", error);
+      throw new Error("!" + error); // Rethrow the error to the calling code
+    }
+  }
+
+
+ const handleSubmit = async (values: Leaves, { setSubmitting, resetForm }:FormikHelpers<Leaves>) => {
+    if 
+   /* (otherLeaveType === "") {
+      values.leaveName = values.leaveName;} else {
+      values.leaveName = otherLeaveType; }*/
+      (values.Id) {
+        const response = await updateLeaveAPI(values);
+        if (response){
+          const UpdatedLeaves = allLeaves.map((leave) => (leave.Id === values.Id? values : leave));
+          setAllLeaves(UpdatedLeaves);
+          toast.success("Leave updated Successfully");
+        } else { toast.error("Error Updating Leave");
+      }
+        }
+      else {
+    
