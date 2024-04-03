@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   Grid,
   makeStyles,
@@ -17,7 +17,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { TextField } from "formik-material-ui";
 import { Leaves } from "../Models/Leaves";
-import { postLeaveAPI, deleteLeaveAPI, updateLeaveAPI } from "../Services/LeavesAPI";
+import { postLeaveAPI } from "../Services/LeavesAPI";
 import { toast } from "react-toastify";
 import { Employee } from "../Models/Employee";
 
@@ -30,6 +30,44 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
+const initialValues: Leaves = {
+  leaveName: "",
+  startDate: null,
+  endDate: null,
+  acceptedFlag: false,
+  activeFlag: true,
+  employeeID: undefined,
+  managerID: undefined,
+};
+
+const options = [
+  { label: "Sick Leave", value: "Sick Leave" },
+  { label: "Vacation", value: "Vacation" },
+  { label: "Other", value: "Other" },
+];
+
+const today = new Date(Date.now());
+today.setHours(0, 0, 0, 0);
+
+const validationSchema = Yup.object({
+  leaveName: Yup.string().required("Leave type is required"),
+  startDate: Yup.date()
+    .nullable()
+    .required("Start date is required")
+    .min(today, "Start date can't be before today"),
+  endDate: Yup.date()
+    .nullable()
+    .required("End date is required")
+    .min(Yup.ref("startDate"), "End date can't be before start date"),
+});
+
+interface LeaveFormProps {
+  employee: Employee;
+  setAllLeaves: any;
+  allLeaves: Leaves[];
+  setShowForm: any;
+}
+
 const LeaveForm: React.FC<LeaveFormProps> = ({
   employee,
   setAllLeaves,
@@ -37,63 +75,25 @@ const LeaveForm: React.FC<LeaveFormProps> = ({
   setShowForm,
 }) => {
   const [otherLeaveType, setOtherLeaveType] = React.useState("");
-  const [leaveToUpdate, setLeaveToUpdate] = React.useState<Leaves | null>(null);
 
-  useEffect(() => {
-    if (leaveToUpdate) {
-      setInitialValues(leaveToUpdate);
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    if (otherLeaveType === "") {
+      values.leaveName = values.leaveName;
+    } else {
+      values.leaveName = otherLeaveType;
     }
-  }, [leaveToUpdate]);
-
-  const setInitialValues = (leave: Leaves) => {
-    formik.setValues({
-      leaveName: leave.leaveName,
-      startDate: leave.startDate,
-      endDate: leave.endDate,
-      acceptedFlag: leave.acceptedFlag,
-      activeFlag: leave.activeFlag,
-      employeeID: leave.employeeID,
-      managerID: leave.managerID,
-    });
-  };
-
-  const handleSubmit = async (values: any) => {
-    if (leaveToUpdate) {
-      const updatedLeaves = allLeaves.map((leave) =>
-        leave === leaveToUpdate ? { ...leave, ...values } : leave
-      );
-      setAllLeaves(updatedLeaves);
-      setLeaveToUpdate(null);
-      toast.success("Leave Updated Successfully");
-      return;
-    }
-
-    if (otherLeaveType === "") values.leaveName = values.leaveName;
-    else values.leaveName = otherLeaveType;
 
     const response = await postLeaveAPI(values, employee.employeeID);
     if (response) {
       setAllLeaves([...allLeaves, values]);
       setShowForm(false);
       toast.success("Leave Requested Successfully");
+      resetForm(); // Reset the form fields to their initial values
     } else {
       toast.error("Error Requesting Leave");
     }
-  };
 
-  const handleDelete = async (leaveId: number) => {
-    const response = await deleteLeaveAPI(leaveId);
-    if (response) {
-      const updatedLeaves = allLeaves.filter((leave) => leave.leaveId !== leaveId);
-      setAllLeaves(updatedLeaves);
-      toast.success("Leave Deleted Successfully");
-    } else {
-      toast.error("Error Deleting Leave");
-    }
-  };
-
-  const handleUpdate = (leave: Leaves) => {
-    setLeaveToUpdate(leave);
+    setSubmitting(false);
   };
 
   return (
@@ -105,48 +105,83 @@ const LeaveForm: React.FC<LeaveFormProps> = ({
             <Formik
               initialValues={initialValues}
               validationSchema={validationSchema}
-              onSubmit={(values, { setSubmitting }) => {
-                handleSubmit(values);
-                setSubmitting(false);
-              }}
+              onSubmit={handleSubmit}
             >
-              {(formik) => (
+              {({ values, setFieldValue, setSubmitting, resetForm }) => (
                 <Form>
                   <Grid container spacing={2}>
-                    ...
+                    <Grid item xs={12}>
+                      <FormControl fullWidth variant="outlined">
+                        <InputLabel>Leave Type</InputLabel>
+                        <Select
+                          name="leaveName"
+                          label="Leave Type"
+                          onChange={(e: any) => {
+                            setFieldValue("leaveName", e.target.value);
+                            setOtherLeaveType("");
+                          }}
+                        >
+                          {options.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                              {option.label}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+
+                    {values.leaveName === "Other" && (
+                      <Grid item xs={12}>
+                        <Field
+                          component={TextField}
+                          name="otherLeaveType"
+                          label="Specify Leave Type"
+                          fullWidth
+                          variant="outlined"
+                          onChange={(e: any) => {
+                            setOtherLeaveType(e.target.value);
+                          }}
+                        />
+                      </Grid>
+                    )}
+
+                    <Grid item xs={12}>
+                      <Field
+                        component={TextField}
+                        type="date"
+                        name="startDate"
+                        label="Start Date"
+                        InputLabelProps={{ shrink: true }}
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <Field
+                        component={TextField}
+                        type="date"
+                        name="endDate"
+                        label="End Date"
+                        InputLabelProps={{ shrink: true }}
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </Grid>
                   </Grid>
+                  <CardActions>
+                    <Button type="submit" variant="contained" color="primary">
+                      Submit
+                    </Button>
+                  </CardActions>
                 </Form>
               )}
             </Formik>
           </CardContent>
         </Card>
       </Grid>
-      {allLeaves.map((leave) => (
-        <Grid item xs={12} md={6} key={leave.leaveId}>
-          <Card>
-            <CardContent>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <FormControl fullWidth variant="outlined">
-                    <InputLabel>Leave Type</InputLabel>
-                    <Select
-                      name="leaveName"
-                      label="Leave Type"
-                      value={leave.leaveName}
-                      disabled
-                    />
-                  </FormControl>
-                </Grid>
-                ...
-              </Grid>
-            </CardContent>
-            <CardActions>
-              <Button
-                color="primary"
-                onClick={() => handleUpdate(leave)}
-              >
-                Update
-              </Button>
-              <Button
-                color="secondary"
-                onClick={() =>
+    </Grid>
+  );
+};
+
+export default LeaveForm;
