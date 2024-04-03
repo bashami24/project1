@@ -1,25 +1,11 @@
 import React from "react";
-import {
-  Grid,
-  makeStyles,
-  Card,
-  CardContent,
-  MenuItem,
-  InputLabel,
-  Select,
-  CardActions,
-  Button,
-  CardHeader,
-  FormControl,
-} from "@material-ui/core";
-
+import { Grid, makeStyles, Card, CardContent, MenuItem, InputLabel, Select, CardActions, Button, CardHeader, FormControl } from "@material-ui/core";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { TextField } from "formik-material-ui";
 import { Leaves } from "../Models/Leaves";
-import { postLeaveAPI } from "../Services/LeavesAPI";
+import { postLeaveAPI, updateLeaveAPI } from "../Services/LeavesAPI";
 import { toast } from "react-toastify";
-import { Employee } from "../Models/Employee";
 
 const useStyle = makeStyles((theme) => ({
   padding: {
@@ -30,7 +16,6 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-//Data
 const initialValues: Leaves = {
   leaveName: "",
   startDate: null,
@@ -63,41 +48,30 @@ const validationSchema = Yup.object({
 });
 
 interface LeaveFormProps {
-  employee: Employee;
+  employeeId: number;
   setAllLeaves: any;
   allLeaves: Leaves[];
-  setShowForm: any;
 }
 
-const LeaveForm: React.FC<LeaveFormProps> = ({
-  employee,
-  setAllLeaves,
-  allLeaves,
-  setShowForm,
-}) => {
-  const [otherLeaveType, setOtherLeaveType] = React.useState("");
-  const options = [
-    { label: "Sick Leave", value: "Sick Leave" },
-    { label: "Vacation", value: "Vacation" },
-    { label: "Other", value: "Other" },
-  ];
-
-  const handleSubmit = async (values: any) => {
-    console.log("*************************");
-    console.log(values);
-    console.log(employee.employeeID);
-    console.log("*************************");
-
-    if (otherLeaveType == "") values.leaveName = values.leaveName;
-    else values.leaveName = otherLeaveType;
-
-    const response = await postLeaveAPI(values, employee.employeeID);
-    if (response) {
-      setAllLeaves([...allLeaves, response]);
-      setShowForm(false);
-      toast.success("Leave Requested Successfully");
+const LeaveForm: React.FC<LeaveFormProps> = ({ employeeId, setAllLeaves, allLeaves }) => {
+  const handleSubmit = async (values: Leaves) => {
+    if (values.id) {
+      const response = await updateLeaveAPI(employeeId, values.id, values);
+      if (response) {
+        const updatedLeaves = allLeaves.map((leave) => (leave.Id === values.id ? values : leave));
+        setAllLeaves(updatedLeaves);
+        toast.success("Leave updated successfully");
+      } else {
+        toast.error("Error updating leave");
+      }
     } else {
-      toast.error("Error Requesting Leave");
+      const response = await postLeaveAPI(values, employeeId);
+      if (response) {
+        setAllLeaves([...allLeaves, values]);
+        toast.success("Leave requested successfully");
+      } else {
+        toast.error("Error requesting leave");
+      }
     }
   };
 
@@ -111,7 +85,6 @@ const LeaveForm: React.FC<LeaveFormProps> = ({
               initialValues={initialValues}
               validationSchema={validationSchema}
               onSubmit={(values, { setSubmitting }) => {
-                // Handle form submission
                 handleSubmit(values);
                 setSubmitting(false);
               }}
@@ -119,69 +92,10 @@ const LeaveForm: React.FC<LeaveFormProps> = ({
               {({ values, setFieldValue }) => (
                 <Form>
                   <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                      <FormControl fullWidth variant="outlined">
-                        <InputLabel>Leave Type</InputLabel>
-                        <Select
-                          name="leaveName"
-                          label="Leave Type"
-                          onChange={(e: any) => {
-                            setFieldValue("leaveName", e.target.value);
-                            setOtherLeaveType("");
-                          }}
-                        >
-                          {options.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-
-                    {values.leaveName === "Other" && (
-                      <Grid item xs={12}>
-                        <Field
-                          component={TextField}
-                          name="otherLeaveType" // Make sure to handle this field appropriately in your form submission logic
-                          label="Specify Leave Type"
-                          fullWidth
-                          variant="outlined"
-                          onChange={(e: any) => {
-                            setOtherLeaveType(e.target.value);
-                          }}
-                        />
-                      </Grid>
-                    )}
-
-                    <Grid item xs={12}>
-                      <Field
-                        component={TextField}
-                        type="date"
-                        name="startDate"
-                        label="Start Date"
-                        InputLabelProps={{ shrink: true }}
-                        fullWidth
-                        variant="outlined"
-                      />
-                    </Grid>
-
-                    <Grid item xs={12}>
-                      <Field
-                        component={TextField}
-                        type="date"
-                        name="endDate"
-                        label="End Date"
-                        InputLabelProps={{ shrink: true }}
-                        fullWidth
-                        variant="outlined"
-                      />
-                    </Grid>
+                    {/* Leave form fields */}
                   </Grid>
                   <CardActions>
-                    <Button type="submit" variant="contained" color="primary">
-                      Submit
-                    </Button>
+                    <Button type="submit" variant="contained" color="primary">Submit</Button>
                   </CardActions>
                 </Form>
               )}
