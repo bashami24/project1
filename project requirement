@@ -9,3 +9,6 @@
   OVER(PARTITION BY  CLAIM_NUMBER,EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE,YEAR(REOPEN_TIMESTAMP), MONTH(REOPEN_TIMESTAMP)) = 1 THEN 1 ELSE 0 END AS NEW_REOPENED_REPORTED_COUNT_1
  --CASE WHEN  REOPEN_TIMESTAMP between '2022-10-01'and '2022-10-31 23:59:59'THEN MAX(NEW_REOPENED_REPORTED_COUNT) OVER (PARTITION BY  CLAIM_NUMBER,EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE,YEAR(REOPEN_TIMESTAMP), MONTH(REOPEN_TIMESTAMP),REOPEN_TIMESTAMP) ELSE 0 END AS NEW_REOPENED_REPORTED_COUNT_1
 ,CASE WHEN  CLOSE_TIMESTAMP between '2022-10-01'and '2022-10-31 23:59:59'and STATUS_NAME != 'Reopened' THEN MAX(NEW_CLOSED_COUNT) OVER (PARTITION BY  CLAIM_NUMBER,EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE, YEAR(CLOSE_TIMESTAMP), MONTH(CLOSE_TIMESTAMP)) ELSE 0 END AS NEW_CLOSED_COUNT_1
+ If either of those happen, then we miss the count completely. This is because our snapshot only populates the latest reopen date if there were multiple reopens during the month.
+ So, if there is a scenario where a "Closed" record on the snapshot contains at least 2 reopens (which happen in the above scenarios),
+ then when the code sorts records to find the row from the timeline to populate, it grabs the more recent record, which does not have the count. 
