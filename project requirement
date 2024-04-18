@@ -1,3 +1,15 @@
-In the first CASE statement, the MAX(NEW_REPORTED_COUNT) is calculated for each unique combination of CLAIM_NUMBER, EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE, YEAR(CREATE_TIMESTAMP), and MONTH(CREATE_TIMESTAMP). This means that the MAX function is applied to the NEW_REPORTED_COUNT values for each group defined by these columns, grouped by the year and month of the CREATE_TIMESTAMP.
-
-In the second CASE statement, the MAX(NEW_REOPENED_REPORTED_COUNT) is calculated for each unique combination of CLAIM_NUMBER, EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE, YEAR(REOPEN_TIMESTAMP), MONTH(REOPEN_TIMESTAMP), and REOPEN_TIMESTAMP. This means that the MAX function is applied to the NEW_REOPENED_REPORTED_COUNT values for each group defined by these columns, grouped by the year, month, and REOPEN_TIMESTAMP of the REOPEN_TIMESTAMP.
+CASE
+    WHEN REOPEN_TIMESTAMP BETWEEN {{snapshot_begin_date}} AND {{snapshot_end_date}}
+         AND (
+               STATUS_NAME = 'Closed' AND
+               LAG(STATUS_NAME) OVER (PARTITION BY CLAIM_NUMBER, EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE ORDER BY REOPEN_TIMESTAMP) = 'Reopened'
+             )
+         OR
+         (
+               STATUS_NAME = 'Reopen' AND
+               COUNT(STATUS_NAME) OVER (PARTITION BY CLAIM_NUMBER, EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE ORDER BY REOPEN_TIMESTAMP) >= 3 AND
+               LAST_VALUE(STATUS_NAME) OVER (PARTITION BY CLAIM_NUMBER, EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE ORDER BY REOPEN_TIMESTAMP) = 'Reopen'
+             )
+    THEN 1
+    ELSE 0
+END AS NEW_REOPENED_REPORTED_COUNT_1
