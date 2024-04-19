@@ -7,21 +7,7 @@ END AS NEW_REOPENED_REPORTED_COUNT_1
 
 
 
-SELECT
-  *,
-  CASE
-    WHEN REOPEN_TIMESTAMP BETWEEN '2022-10-01' AND '2022-10-31 23:59:59'
-      THEN MAX(NEW_REOPENED_REPORTED_COUNT) OVER (
-        PARTITION BY
-          CLAIM_NUMBER,
-          EXPOSURE_PUBLICID_NK,
-          CLAIM_SYMBOL_CODE,
-          YEAR(REOPEN_TIMESTAMP),
-          MONTH(REOPEN_TIMESTAMP)
-      )
-    ELSE 0
-  END AS NEW_REOPENED_REPORTED_COUNT_1,
-  CASE
+,CASE
     WHEN REOPEN_TIMESTAMP BETWEEN '2022-10-01' AND '2022-10-31 23:59:59'
       AND MAX(NEW_REOPENED_REPORTED_COUNT) OVER (
         PARTITION BY
@@ -32,19 +18,18 @@ SELECT
           MONTH(REOPEN_TIMESTAMP)
       ) = 1
       AND (
-        SELECT
-          NEW_REOPENED_REPORTED_COUNT
+        SELECT 
+         COALESCE(max(a.NEW_REOPENED_REPORTED_COUNT),0)
         FROM
-          monthly_dest
-        WHERE
-          -- Assuming PREVIOUS_MONTH function returns the start and end dates for the previous month
-          SNAP_DATE BETWEEN PREVIOUS_MONTH('2022-10-01') AND PREVIOUS_MONTH('2022-10-31 23:59:59')
-          AND CLAIM_NUMBER = feature_snapshot.CLAIM_NUMBER
-          AND EXPOSURE_PUBLICID_NK = feature_snapshot.EXPOSURE_PUBLICID_NK
-          AND CLAIM_SYMBOL_CODE = feature_snapshot.CLAIM_SYMBOL_CODE
-      ) = 0
+          PD_PRESENTATION.PRODUCT_V2.atlas_CLAIM_FEATURE_MONTHLY a 
+          INNER JOIN joining_feature_timeline  ON 
+           a.CLAIM_NUMBER = joining_feature_timeline.CLAIM_NUMBER
+          and a.EXPOSURE_PUBLICID_NK = joining_feature_timeline.EXPOSURE_PUBLICID_NK
+          AND a.CLAIM_SYMBOL_CODE = joining_feature_timeline.CLAIM_SYMBOL_CODE
+          AND a.SNAP_DATE <= '2022-09-30' 
+         GROUP BY a.CLAIM_NUMBER, a.EXPOSURE_PUBLICID_NK, a.CLAIM_SYMBOL_CODE, a.SNAP_DATE
+        order by snap_date limit 1--date_trunc('month',current_date()) - interval '2 month' - interval '1 day'
+      )  = 0
       THEN 1
-    ELSE 0
-  END AS NEW_REOPENED_REPORTED_COUNT_CHECK
-FROM
-  your_table;
+  ELSE 0
+  END AS NEW_REOPENED_REPORTED_COUNT_1
