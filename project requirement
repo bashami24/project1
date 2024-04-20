@@ -4,3 +4,9 @@
     THEN 1 
     ELSE 0 
 END AS NEW_REOPENED_REPORTED_COUNT_1*/
+
+
+ select CASE WHEN  REOPEN_TIMESTAMP < '2022-10-01' AND MAX(NEW_REOPENED_REPORTED_COUNT) 
+      OVER (PARTITION BY  CLAIM_NUMBER, EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE, YEAR(REOPEN_TIMESTAMP), MONTH(REOPEN_TIMESTAMP))
+  from   pd_presentation.product_v2.atlas_claim_feature_timeline
+   where claim_number = '0803908060000001' and exposure_publicid_NK = 'cc:908470261' and claim_symbol_code = 'DPR';
