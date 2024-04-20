@@ -33,3 +33,28 @@ WHERE
   AND exposure_publicid_NK = 'cc:908470261' 
   AND claim_symbol_code = 'DPR';
 
+
+
+
+
+SELECT 
+ CASE 
+    WHEN REOPEN_TIMESTAMP < '2022-10-01' 
+      AND COALESCE(
+        COUNT(NEW_REOPENED_REPORTED_COUNT) OVER (
+          PARTITION BY CLAIM_NUMBER, EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE
+        ), 0
+      ) = 0 
+    THEN 1 
+    ELSE 0 
+  END  AS NEW_REOPENED_REPORTED_COUNT_1
+FROM 
+
+
+  pd_presentation.product_v2.claim_feature_timeline
+WHERE 
+  claim_number = '0803908060000001' 
+  AND exposure_publicid_NK = 'cc:908470261' 
+  AND claim_symbol_code = 'DPR'
+  and REOPEN_TIMESTAMP < '2022-10-01';
+
