@@ -499,4 +499,22 @@ CONVERT_TIMEZONE('UTC', 'America/New_York', SYSDATE()) as LOAD_TIMESTAMP,
 from feature_snapshot b --inner join final_reopen a
  --on a.claim_number = b.claim_number and a.EXPOSURE_PUBLICID_NK = b.EXPOSURE_PUBLICID_NK and a.claim_symbol_code = b.claim_symbol_code
 ;
- if there is a scenario where a "Closed" record on the snapshot contains at least 2 reopens (which happen in the above scenarios), then when the code sorts records to find the row from the timeline to populate, it grabs the more recent record, which does not have the count
+ if there is a scenario where a "Closed" record on the snapshot contains at least 2 reopens , then when the code sorts records to find
+the row from the timeline to populate, it grabs the more recent record, which does not have the count
+,CASE
+    WHEN REOPEN_TIMESTAMP BETWEEN '2022-10-01' AND '2022-10-31 23:59:59' AND
+         (CLAIM_NUMBER, EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE) IN
+         (SELECT CLAIM_NUMBER, EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE
+          FROM (
+              SELECT CLAIM_NUMBER, EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE,
+                     ROW_NUMBER() OVER (PARTITION BY CLAIM_NUMBER, EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE ORDER BY REOPEN_TIMESTAMP) AS rn
+              FROM joining_feature_timeline
+              WHERE STATUS_NAME = 'Reopened'
+                AND REOPEN_TIMESTAMP BETWEEN '2022-10-01' AND '2022-10-31 23:59:59'
+          ) AS tmp
+          WHERE rn = 1
+         )
+    THEN 1
+    ELSE 0
+END AS NEW_REOPENED_REPORTED_COUNT_1
+QUALIFY ROW_NUMBER() OVER (PARTITION BY CLAIM_NUMBER, EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE ORDER BY REOPEN_TIMESTAMP DESC) = 1
