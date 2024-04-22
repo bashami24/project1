@@ -499,3 +499,4 @@ CONVERT_TIMEZONE('UTC', 'America/New_York', SYSDATE()) as LOAD_TIMESTAMP,
 from feature_snapshot b --inner join final_reopen a
  --on a.claim_number = b.claim_number and a.EXPOSURE_PUBLICID_NK = b.EXPOSURE_PUBLICID_NK and a.claim_symbol_code = b.claim_symbol_code
 ;
+ if there is a scenario where a "Closed" record on the snapshot contains at least 2 reopens (which happen in the above scenarios), then when the code sorts records to find the row from the timeline to populate, it grabs the more recent record, which does not have the count
