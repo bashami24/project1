@@ -1,84 +1,14 @@
-with feature_cumulative_payments as (
-select distinct
-from pd_presentation.product_v2.claim_financial_transaction as A
-WHERE A.ACCOUNTING_TIMESTAMP <= '2021-02-28 23:59:59'
-),
-joining_feature_timeline as
-(select
- b.other_fields
- ,CASE WHEN B.STATUS_NAME = 'Closed' THEN B.PRIOR_REOPEN_TIMESTAMP ELSE B.REOPEN_TIMESTAMP END AS REOPEN_TIMESTAMP
-from (Select *
-      ,some other logic
-      ,RANK() OVER(PARTITION BY CLAIM_NUMBER,EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE ORDER BY RECORD_BEGIN_TIMESTAMP DESC) AS RANK_ORDER
-       from pd_presentation.product_v2.claim_feature_timeline
-       where  RECORD_BEGIN_TIMESTAMP <=  '2021-02-28 23:59:59'
-
- ) B
-left join feature_cumulative_payments C
-ON B.EXPOSURE_PUBLICID_NK = C.EXPOSURE_PUBLICID_NK AND B.CLAIM_SYMBOL_CODE = C.CLAIM_SYMBOL_CODE AND B.CLAIM_NUMBER = C.CLAIM_NUMBER
-AND date_trunc('SECOND', C.ACCOUNTING_TIMESTAMP) >= date_trunc('SECOND', B.RECORD_BEGIN_TIMESTAMP) and
-  date_trunc('SECOND', C.ACCOUNTING_TIMESTAMP) < date_trunc('SECOND', B.RECORD_END_TIMESTAMP)
-  ),
-  
- --select * from joining_feature_timeline;
- reopen_snapshot as
-  (  select 
-  other_fields
-  ,CASE WHEN B.STATUS_NAME = 'Closed' THEN B.PRIOR_REOPEN_TIMESTAMP ELSE B.REOPEN_TIMESTAMP END AS REOPEN_TIMESTAMP
- 
-FROM( other_logic
-    from  pd_presentation.product_v2.claim_feature_timeline
-   where record_begin_timestamp  <=  '2021-02-28 23:59:59') B
-        left join feature_cumulative_payments C
-on conditions 
-     ),
-
-    final_reopen as 
-(select * from reopen_snapshot where REOPEN_TIMESTAMP between '2021-02-01'and '2021-02-28 23:59:59' 
-    QUALIFY ROW_NUMBER () OVER (PARTITION BY  CLAIM_NUMBER,EXPOSURE_PUBLICID_NK, 
-    CLAIM_SYMBOL_CODE order by NEW_REOPENED_REPORTED_COUNT_1 desc) =1 ),
-
-feature_snapshot_stg1 as
-(
+corrected_reopen_snapshot AS (
+    SELECT
+        fs.*,
+        fr.NEW_REOPENED_REPORTED_COUNT_1 AS Corrected_REOPEN_VALUE,
+        ROW_NUMBER() OVER (PARTITION BY fs.CLAIM_NUMBER, fs.EXPOSURE_PUBLICID_NK, fs.CLAIM_SYMBOL_CODE ORDER BY fr.NEW_REOPENED_REPORTED_COUNT_1 DESC) AS rn
+    FROM feature_snapshot fs
+    JOIN final_reopen fr ON fs.CLAIM_NUMBER = fr.CLAIM_NUMBER
+                          AND fs.EXPOSURE_PUBLICID_NK = fr.EXPOSURE_PUBLICID_NK
+                          AND fs.CLAIM_SYMBOL_CODE = fr.CLAIM_SYMBOL_CODE
+    WHERE fs.NEW_REOPENED_REPORTED_COUNT_1 = 0
+)
 SELECT *
-,other cases
-  FROM (select  * from joining_feature_timeline) where
- ((record_begin_timestamp  <=  '2021-02-28 23:59:59')
-     OR (ACCOUNTING_TIMESTAMP between '2021-02-01'and '2021-02-28 23:59:59'))
-
-     ),
-feature_snapshot as
-(
-SELECT *
-FROM (
-SELECT
-,NEW_REOPENED_REPORTED_COUNT_1 AS NEW_REOPENED_REPORTED_COUNT 
-FROM
-(
-SELECT * FROM
-(
-SELECT a.*
-FROM
-feature_snapshot_stg1 a
-QUALIFY ROW_NUMBER() OVER( PARTITION BY a.CLAIM_NUMBER,a.EXPOSURE_PUBLICID_NK, a.CLAIM_SYMBOL_CODE
-                          ORDER BY  CASE WHEN a.ACCOUNTING_TIMESTAMP <= '2021-02-28 23:59:59'THEN a.ACCOUNTING_TIMESTAMP
-       ELSE a.RECORD_BEGIN_TIMESTAMP  END DESC  ) = 1
-) WHERE STATUS_NAME in ('Open', 'Reopened')
-
-union 
-SELECT a.*
-  FROM
-feature_snapshot_stg1 A
-where ((A.ACCOUNTING_TIMESTAMP between '2021-02-01'and '2021-02-28 23:59:59')
-                                    OR (A.RECORD_BEGIN_TIMESTAMP between '2021-02-01'and '2021-02-28 23:59:59')) and a. status_name = 'Closed'
-QUALIFY ROW_NUMBER() OVER( PARTITION BY A.CLAIM_NUMBER,A.EXPOSURE_PUBLICID_NK, A.CLAIM_SYMBOL_CODE
-                         ORDER BY  CASE WHEN A.ACCOUNTING_TIMESTAMP <= '2021-02-28 23:59:59'THEN A.ACCOUNTING_TIMESTAMP
-  ELSE A.RECORD_BEGIN_TIMESTAMP  END DESC   ) = 1)
-       ) ,
-    final_reopen as 
-(select * from reopen_snapshot where REOPEN_TIMESTAMP between '2021-02-01'and '2021-02-28 23:59:59' 
-    QUALIFY ROW_NUMBER () OVER (PARTITION BY  CLAIM_NUMBER,EXPOSURE_PUBLICID_NK, 
-    CLAIM_SYMBOL_CODE order by NEW_REOPENED_REPORTED_COUNT_1 desc) =1 )
-select  
-*
-from feature_snapshot;
+FROM corrected_reopen_snapshot
+WHERE rn = 1;
