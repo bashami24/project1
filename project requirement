@@ -1,14 +1,62 @@
-corrected_reopen_snapshot AS (
-    SELECT
-        fs.*,
-        fr.NEW_REOPENED_REPORTED_COUNT_1 AS Corrected_REOPEN_VALUE,
-        ROW_NUMBER() OVER (PARTITION BY fs.CLAIM_NUMBER, fs.EXPOSURE_PUBLICID_NK, fs.CLAIM_SYMBOL_CODE ORDER BY fr.NEW_REOPENED_REPORTED_COUNT_1 DESC) AS rn
-    FROM feature_snapshot fs
-    JOIN final_reopen fr ON fs.CLAIM_NUMBER = fr.CLAIM_NUMBER
-                          AND fs.EXPOSURE_PUBLICID_NK = fr.EXPOSURE_PUBLICID_NK
-                          AND fs.CLAIM_SYMBOL_CODE = fr.CLAIM_SYMBOL_CODE
-    WHERE fs.NEW_REOPENED_REPORTED_COUNT_1 = 0
-)
-SELECT *
-FROM corrected_reopen_snapshot
-WHERE rn = 1;
+CASE 
+    WHEN reopen_timestamp BETWEEN 'today' AND 'tomorrow' 
+        AND (
+            reopen_timestamp <> LAG(reopen_timestamp) OVER (PARTITION BY cl, bc, cd ORDER BY order_timestamp DESC)
+            OR LAG(status) OVER (PARTITION BY cl, bc, cd ORDER BY order_timestamp DESC) <> 'CLOSE'
+        )
+    THEN CASE 
+             WHEN status = 'REOPEN' AND (
+                    LAG(status) OVER (PARTITION BY cl, bc, cd ORDER BY order_timestamp DESC) <> 'REOPEN' 
+                    OR LAG(status) OVER (PARTITION BY cl, bc, cd ORDER BY order_timestamp DESC) IS NULL
+                 )
+             THEN 1 
+             ELSE 
+                 CASE 
+                     WHEN MAX(new_count) OVER (PARTITION BY cl, bc, cd, YEAR(reopen_timestamp), MONTH(reopen_timestamp)) = 0
+                     THEN
+                         CASE 
+                             WHEN MIN(new_count) OVER (PARTITION BY cl, bc, cd, YEAR(reopen_timestamp), MONTH(reopen_timestamp)) = 1
+                             THEN 1
+                             ELSE 
+                                 CASE 
+                                     WHEN status = 'CLOSE' AND ROW_NUMBER() OVER (PARTITION BY cl, bc, cd ORDER BY order_timestamp DESC) = 1
+                                     THEN 1
+                                     ELSE 0
+                                 END
+                         END
+                     ELSE MAX(new_count) OVER (PARTITION BY cl, bc, cd, YEAR(reopen_timestamp), MONTH(reopen_timestamp), reopen_timestamp) 
+                 END
+         END
+    ELSE 
+        CASE
+            WHEN (status = 'REOPEN' AND COUNT(new_count) OVER (PARTITION BY cl, bc, cd, YEAR(reopen_timestamp), MONTH(reopen_timestamp)) = 0)
+            THEN 1
+            ELSE
+                CASE
+                    WHEN status = 'CLOSE' AND
+                         (LAG(status) OVER (PARTITION BY cl, bc, cd ORDER BY order_timestamp DESC) = 'REOPEN'
+                         OR LAG(status) OVER (PARTITION BY cl, bc, cd ORDER BY order_timestamp DESC) IS NULL)
+                    THEN 1
+                    ELSE 
+                        CASE
+                            WHEN status = 'REOPEN' AND 
+                                 (LAG(status) OVER (PARTITION BY cl, bc, cd ORDER BY order_timestamp DESC) = 'REOPEN')
+                                 AND COUNT(new_count) OVER (PARTITION BY cl, bc, cd, YEAR(reopen_timestamp), MONTH(reopen_timestamp)) >= 2
+                            THEN 1
+                            ELSE 
+                                CASE
+                                    WHEN status = 'REOPEN' AND COUNT(new_count) OVER (PARTITION BY cl, bc, cd, YEAR(reopen_timestamp), MONTH(reopen_timestamp)) >= 3
+                                    THEN 1
+                                    ELSE 
+                                        CASE
+                                            WHEN status = 'CLOSE' AND 
+                                                 (LEAD(status) OVER (PARTITION BY cl, bc, cd ORDER BY order_timestamp DESC) = 'REOPEN'
+                                                 OR LEAD(status) OVER (PARTITION BY cl, bc, cd ORDER BY order_timestamp DESC) IS NULL)
+                                            THEN 1
+                                            ELSE 0
+                                        END
+                                END
+                        END
+                END
+        END
+END AS new_count
