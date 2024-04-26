@@ -1,62 +1,254 @@
-CASE 
-    WHEN reopen_timestamp BETWEEN 'today' AND 'tomorrow' 
-        AND (
-            reopen_timestamp <> LAG(reopen_timestamp) OVER (PARTITION BY cl, bc, cd ORDER BY order_timestamp DESC)
-            OR LAG(status) OVER (PARTITION BY cl, bc, cd ORDER BY order_timestamp DESC) <> 'CLOSE'
-        )
-    THEN CASE 
-             WHEN status = 'REOPEN' AND (
-                    LAG(status) OVER (PARTITION BY cl, bc, cd ORDER BY order_timestamp DESC) <> 'REOPEN' 
-                    OR LAG(status) OVER (PARTITION BY cl, bc, cd ORDER BY order_timestamp DESC) IS NULL
-                 )
-             THEN 1 
-             ELSE 
-                 CASE 
-                     WHEN MAX(new_count) OVER (PARTITION BY cl, bc, cd, YEAR(reopen_timestamp), MONTH(reopen_timestamp)) = 0
-                     THEN
-                         CASE 
-                             WHEN MIN(new_count) OVER (PARTITION BY cl, bc, cd, YEAR(reopen_timestamp), MONTH(reopen_timestamp)) = 1
-                             THEN 1
-                             ELSE 
-                                 CASE 
-                                     WHEN status = 'CLOSE' AND ROW_NUMBER() OVER (PARTITION BY cl, bc, cd ORDER BY order_timestamp DESC) = 1
-                                     THEN 1
-                                     ELSE 0
-                                 END
-                         END
-                     ELSE MAX(new_count) OVER (PARTITION BY cl, bc, cd, YEAR(reopen_timestamp), MONTH(reopen_timestamp), reopen_timestamp) 
-                 END
-         END
-    ELSE 
-        CASE
-            WHEN (status = 'REOPEN' AND COUNT(new_count) OVER (PARTITION BY cl, bc, cd, YEAR(reopen_timestamp), MONTH(reopen_timestamp)) = 0)
-            THEN 1
-            ELSE
-                CASE
-                    WHEN status = 'CLOSE' AND
-                         (LAG(status) OVER (PARTITION BY cl, bc, cd ORDER BY order_timestamp DESC) = 'REOPEN'
-                         OR LAG(status) OVER (PARTITION BY cl, bc, cd ORDER BY order_timestamp DESC) IS NULL)
-                    THEN 1
-                    ELSE 
-                        CASE
-                            WHEN status = 'REOPEN' AND 
-                                 (LAG(status) OVER (PARTITION BY cl, bc, cd ORDER BY order_timestamp DESC) = 'REOPEN')
-                                 AND COUNT(new_count) OVER (PARTITION BY cl, bc, cd, YEAR(reopen_timestamp), MONTH(reopen_timestamp)) >= 2
-                            THEN 1
-                            ELSE 
-                                CASE
-                                    WHEN status = 'REOPEN' AND COUNT(new_count) OVER (PARTITION BY cl, bc, cd, YEAR(reopen_timestamp), MONTH(reopen_timestamp)) >= 3
-                                    THEN 1
-                                    ELSE 
-                                        CASE
-                                            WHEN status = 'CLOSE' AND 
-                                                 (LEAD(status) OVER (PARTITION BY cl, bc, cd ORDER BY order_timestamp DESC) = 'REOPEN'
-                                                 OR LEAD(status) OVER (PARTITION BY cl, bc, cd ORDER BY order_timestamp DESC) IS NULL)
-                                            THEN 1
-                                            ELSE 0
-                                        END
-                                END
-                        END
-                END
-        END
-END AS new_count
+
+/*{{ config(
+    materialized='incremental',
+    post_hook = "{{ incr_update_atlas_feature_close_reopen_timestamp() }}"
+    ) }}
+
+set '2022-10-01'= '2022-10-31'
+set '2022-10-31 23:59:59'= '2022-10-31 23:59:59'*/
+use pd_userschemas;
+use SCHEMA _BASHAMI;
+
+
+--CREATE OR REPLACE TABLE NEW_REPORTED_COUNT_TEST AS 
+with feature_cumulative_payments as (
+select distinct
+A.CLAIM_PUBLICID_NK,
+A.EXPOSURE_PUBLICID_NK,
+A.CLAIM_SYMBOL_CODE,
+A.ACCOUNTING_TIMESTAMP,
+A.CLAIM_NUMBER,
+from pd_presentation.product_v2.claim_financial_transaction as A
+WHERE A.ACCOUNTING_TIMESTAMP <= '2022-10-31 23:59:59'
+--AND  claim_number = '0552809350101017' AND exposure_publicid_NK = 'cc:936641124' AND claim_symbol_code = 'AFA'
+and claim_number = '0803908060000001' and exposure_publicid_NK = 'cc:908470261' and claim_symbol_code = 'DPR' 
+--and claim_number = '0656485760000001' and exposure_publicid_NK = 'cc:890900614' and claim_symbol_code = 'APD'
+),
+  
+ --SELECT * FROM feature_cumulative_payments;
+
+
+joining_feature_timeline as
+(select
+
+ B.CLAIM_NUMBER
+ ,B.CLAIM_PUBLICID_NK
+ ,B.EXPOSURE_PUBLICID_NK
+ ,B.CLAIM_SYMBOL_CODE
+ ,B.CREATE_TIMESTAMP
+ ,B.RECORD_BEGIN_TIMESTAMP
+ ,C.ACCOUNTING_TIMESTAMP
+ ,B.RECORD_END_TIMESTAMP
+ ,B.CLOSE_TIMESTAMP
+ ,CASE WHEN B.STATUS_NAME = 'Closed' THEN B.PRIOR_REOPEN_TIMESTAMP ELSE B.REOPEN_TIMESTAMP END AS REOPEN_TIMESTAMP
+ ,B.STATUS_NAME
+ ,B.RESERVE_TYPE_NAME
+ ,B.PRIOR_RESERVE_TYPE_NAME
+ ,B.NEW_REPORTED_COUNT
+ ,B.NEW_REOPENED_REPORTED_COUNT
+,FEATURE_RESERVE_STATUS_CODE
+,PENDING_OR_CLOSED
+,NEW_CLOSED_COUNT
+,CLOSED_COUNT_INCEPTION
+,REOPEN_COUNT_INCEPTION
+,RANK_ORDER
+,B.S160_COVERAGE_CODE
+from (Select *
+      ,SUM(CASE WHEN CLOSE_TIMESTAMP IS NOT NULL THEN 1 ELSE 0 END) over (
+            partition by CLAIM_NUMBER,EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE
+            order by  RECORD_BEGIN_TIMESTAMP) AS CLOSED_COUNT_INCEPTION
+      ,SUM(CASE WHEN REOPEN_TIMESTAMP IS NOT NULL THEN 1 ELSE 0 END) over (
+            partition by CLAIM_NUMBER,EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE
+            order by  RECORD_BEGIN_TIMESTAMP) AS REOPEN_COUNT_INCEPTION
+      ,LAG(REOPEN_TIMESTAMP) OVER(PARTITION BY CLAIM_NUMBER,EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE ORDER BY RECORD_BEGIN_TIMESTAMP) AS PRIOR_REOPEN_TIMESTAMP
+      ,CASE WHEN STATUS_NAME = 'Open' and RESERVE_TYPE_NAME = 'Stat' THEN 'NEWAVG'
+            WHEN STATUS_NAME = 'Open' and RESERVE_TYPE_NAME = 'Case' THEN 'NEWCASE'
+            WHEN STATUS_NAME = 'Closed' and RESERVE_TYPE_NAME = 'Stat' and REOPEN_COUNT_INCEPTION = 0 THEN 'NEWAVG'
+            WHEN STATUS_NAME = 'Closed' and RESERVE_TYPE_NAME = 'Case' and REOPEN_COUNT_INCEPTION = 0 THEN 'NEWCASE'
+            WHEN STATUS_NAME = 'Reopened' and RESERVE_TYPE_NAME = 'Stat'  THEN 'REAVG'
+            WHEN STATUS_NAME = 'Reopened' and RESERVE_TYPE_NAME = 'Case'  THEN 'RECASE'
+            WHEN STATUS_NAME = 'Closed' and RESERVE_TYPE_NAME = 'Stat' and REOPEN_COUNT_INCEPTION > 0 THEN 'REAVG'
+            WHEN STATUS_NAME = 'Closed' and RESERVE_TYPE_NAME = 'Case' and REOPEN_COUNT_INCEPTION > 0 THEN 'RECASE'
+       ELSE NULL END AS FEATURE_RESERVE_STATUS_CODE
+      ,CASE WHEN STATUS_NAME = 'Closed' THEN 'Closed' ELSE 'Pending' END AS PENDING_OR_CLOSED
+      ,CASE WHEN COUNT_IF(STATUS_NAME= 'Closed') over (
+            partition by CLAIM_NUMBER,EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE, STATUS_NAME
+            order by  RECORD_BEGIN_TIMESTAMP )   = 1 THEN 1 ELSE 0 END AS NEW_CLOSED_COUNT
+      ,RANK() OVER(PARTITION BY CLAIM_NUMBER,EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE ORDER BY RECORD_BEGIN_TIMESTAMP DESC) AS RANK_ORDER
+       from pd_presentation.product_v2.claim_feature_timeline
+       where  RECORD_BEGIN_TIMESTAMP <=  '2022-10-31 23:59:59'
+       --AND claim_number = '0552809350101017' AND exposure_publicid_NK = 'cc:936641124' AND claim_symbol_code = 'AFA'
+      and claim_number = '0803908060000001' and exposure_publicid_NK = 'cc:908470261' and claim_symbol_code = 'DPR'
+      --and claim_number = '0656485760000001' and exposure_publicid_NK = 'cc:890900614' and claim_symbol_code = 'APD'
+ ) B
+left join feature_cumulative_payments C
+ON B.EXPOSURE_PUBLICID_NK = C.EXPOSURE_PUBLICID_NK AND B.CLAIM_SYMBOL_CODE = C.CLAIM_SYMBOL_CODE AND B.CLAIM_NUMBER = C.CLAIM_NUMBER
+AND date_trunc('SECOND', C.ACCOUNTING_TIMESTAMP) >= date_trunc('SECOND', B.RECORD_BEGIN_TIMESTAMP) and
+  date_trunc('SECOND', C.ACCOUNTING_TIMESTAMP) < date_trunc('SECOND', B.RECORD_END_TIMESTAMP)
+  ),
+  
+--select * from joining_feature_timeline 
+feature_snapshot_stg1 as
+(
+SELECT *
+
+,CASE WHEN  CREATE_TIMESTAMP between   '2022-10-01'and  '2022-10-31 23:59:59'and STATUS_NAME !=  'Reopened' THEN MAX(NEW_REPORTED_COUNT) OVER (PARTITION BY  CLAIM_NUMBER,EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE, YEAR(CREATE_TIMESTAMP), MONTH(CREATE_TIMESTAMP)) ELSE 0 END AS NEW_REPORTED_COUNT_1
+,CASE WHEN  REOPEN_TIMESTAMP between '2022-10-01' and '2022-10-31 23:59:59'  
+THEN MAX(NEW_REOPENED_REPORTED_COUNT) OVER (PARTITION BY  CLAIM_NUMBER,EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE,YEAR(REOPEN_TIMESTAMP), 
+MONTH(REOPEN_TIMESTAMP), REOPEN_TIMESTAMP) ELSE 0 END AS COUNT_2
+
+,CASE 
+    WHEN reopen_timestamp BETWEEN '2022-10-01' AND '2022-10-31 23:59:59' 
+THEN CASE WHEN MAX(NEW_REOPENED_REPORTED_COUNT) OVER (PARTITION BY  CLAIM_NUMBER,EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE,YEAR(REOPEN_TIMESTAMP),
+                                                      MONTH(REOPEN_TIMESTAMP), REOPEN_TIMESTAMP) = 1 THEN 
+ CASE WHEN MAX(CASE WHEN NEW_REOPENED_REPORTED_COUNT = 1 THEN 1 ELSE 0 END ) OVER  (PARTITION BY  CLAIM_NUMBER,EXPOSURE_PUBLICID_NK,
+  CLAIM_SYMBOL_CODE,YEAR(REOPEN_TIMESTAMP), MONTH(REOPEN_TIMESTAMP)) = 1 THEN 
+  CASE WHEN ROW_NUMBER() OVER (PARTITION BY  CLAIM_NUMBER,EXPOSURE_PUBLICID_NK,
+  CLAIM_SYMBOL_CODE,YEAR(REOPEN_TIMESTAMP), MONTH(REOPEN_TIMESTAMP) ORDER BY RECORD_BEGIN_TIMESTAMP DESC) = 1 THEN 1 ELSE 0 END 
+  ELSE MAX(NEW_REOPENED_REPORTED_COUNT)  OVER (PARTITION BY  CLAIM_NUMBER,EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE,YEAR(REOPEN_TIMESTAMP),
+                                                      MONTH(REOPEN_TIMESTAMP), REOPEN_TIMESTAMP) END
+ ELSE  0 
+ END  
+  ELSE 0
+  END AS  NEW_REOPENED
+  ,CASE WHEN  CLOSE_TIMESTAMP between '2022-10-01'and '2022-10-31 23:59:59'and STATUS_NAME != 'Reopened' THEN MAX(NEW_CLOSED_COUNT) OVER (PARTITION BY  CLAIM_NUMBER,EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE, YEAR(CLOSE_TIMESTAMP), MONTH(CLOSE_TIMESTAMP)) ELSE 0 END AS NEW_CLOSED_COUNT_1
+  FROM (select  * from joining_feature_timeline) where
+ ((record_begin_timestamp  <=  '2022-10-31 23:59:59')
+     OR (ACCOUNTING_TIMESTAMP between '2022-10-01'and '2022-10-31 23:59:59'))
+ 
+     )--,
+     
+SELECT * FROM feature_snapshot_stg1;
+
+feature_snapshot as
+(
+SELECT *
+
+FROM (
+SELECT
+
+CLAIM_NUMBER
+,CLAIM_PUBLICID_NK
+,EXPOSURE_PUBLICID_NK
+,CLAIM_SYMBOL_CODE
+,S160_COVERAGE_CODE
+,CREATE_TIMESTAMP
+,RECORD_BEGIN_TIMESTAMP
+,'2022-10-01'
+,'2022-10-31 23:59:59'
+,ACCOUNTING_TIMESTAMP
+,RECORD_END_TIMESTAMP
+,CLOSE_TIMESTAMP
+,REOPEN_TIMESTAMP
+,STATUS_NAME
+,RESERVE_TYPE_NAME
+,PRIOR_RESERVE_TYPE_NAME
+,FEATURE_RESERVE_STATUS_CODE
+,PENDING_OR_CLOSED
+,NEW_REPORTED_COUNT_1 AS NEW_REPORTED_COUNT 
+--,NEW_REOPENED_REPORTED_COUNT_1
+,NEW_REOPENED_REPORTED_COUNT_1 AS NEW_REOPENED_REPORTED_COUNT 
+,NEW_CLOSED_COUNT_1 AS NEW_CLOSED_COUNT
+
+FROM
+(
+SELECT * FROM
+(
+SELECT *
+FROM
+feature_snapshot_stg1 a
+--LEFT join final_reopen b  on b.claim_number = a.claim_number and a.EXPOSURE_PUBLICID_NK = b.EXPOSURE_PUBLICID_NK and a.CLAIM_SYMBOL_CODE = b.CLAIM_SYMBOL_CODE
+QUALIFY ROW_NUMBER() OVER( PARTITION BY a.CLAIM_NUMBER,a.EXPOSURE_PUBLICID_NK, a.CLAIM_SYMBOL_CODE
+                          ORDER BY  CASE WHEN a.ACCOUNTING_TIMESTAMP <= '2022-10-31 23:59:59'THEN a.ACCOUNTING_TIMESTAMP
+       ELSE a.RECORD_BEGIN_TIMESTAMP  END DESC  ) = 1
+) WHERE STATUS_NAME in ('Open', 'Reopened')
+
+--)))
+  
+--SELECT * FROM feature_snapshot;
+union 
+SELECT *  
+  FROM
+feature_snapshot_stg1 A
+where ((A.ACCOUNTING_TIMESTAMP between '2022-10-01'and '2022-10-31 23:59:59')
+                                    OR (A.RECORD_BEGIN_TIMESTAMP between '2022-10-01'and '2022-10-31 23:59:59')) and a. status_name = 'Closed'
+QUALIFY ROW_NUMBER() OVER( PARTITION BY A.CLAIM_NUMBER,A.EXPOSURE_PUBLICID_NK, A.CLAIM_SYMBOL_CODE
+                         ORDER BY  CASE WHEN A.ACCOUNTING_TIMESTAMP <= '2022-10-31 23:59:59'THEN A.ACCOUNTING_TIMESTAMP
+  ELSE A.RECORD_BEGIN_TIMESTAMP  END DESC   ) = 1)
+       )
+)
+
+--SELECT * FROM feature_snapshot; 
+ 
+select  
+'2021-02-28'AS SNAP_DATE,
+a.CLAIM_PUBLICID_NK,
+a.CLAIM_NUMBER,
+a.EXPOSURE_PUBLICID_NK,
+a.S160_COVERAGE_CODE,
+a.CLAIM_SYMBOL_CODE,
+a.CREATE_TIMESTAMP,
+a.CLOSE_TIMESTAMP,
+a.REOPEN_TIMESTAMP,
+NULL as PRIOR_CLOSE_TIMESTAMP,
+NULL as PRIOR_REOPEN_TIMESTAMP,
+a.PENDING_OR_CLOSED,
+a.STATUS_NAME,
+a.RESERVE_TYPE_NAME,
+a.FEATURE_RESERVE_STATUS_CODE,
+NULL as DCC_PAYMENT_CURRENT_MONTH_AMOUNT,
+NULL as DCC_PAYMENT_SINCE_LAST_REOPEN_AMOUNT,
+NULL as DCC_PAYMENT_SINCE_INCEPTION_AMOUNT,
+a.NEW_REPORTED_COUNT,
+--b.NEW_REOPENED_REPORTED_COUNT_1 as NEW_REOPENED_REPORTED_COUNT,
+A.NEW_REOPENED_REPORTED_COUNT,
+a.NEW_CLOSED_COUNT--,
+--b.PENDING_COUNT,
+--CONVERT_TIMEZONE('UTC', 'America/New_York', SYSDATE()) as LOAD_TIMESTAMP,
+--'ATLAS' as RECORD_SOURCE,
+--{{run_id()}} as GDH_ETL_RUN_ID
+
+from feature_snapshot a;  
+
+use secondary roles all;
+
+select SUM(NEW_REOPENED_REPORTED_COUNT) 
+from PD_PRESENTATION.PRODUCT_V2.CLAIM_FEATURE_TIMELINE
+WHERE MONTH(REOPEN_TIMESTAMP)= 02 AND YEAR(REOPEN_TIMESTAMP) = 2021
+and NEW_REOPENED_REPORTED_COUNT = 1; --68274
+
+select DISTINCT STATUS_NAME
+from "PD_USERSCHEMAS"."_BASHAMI"."NEW_REPORTED_COUNT_TEST";
+--WHERE MONTH(REOPEN_TIMESTAMP)= 02 AND YEAR(REOPEN_TIMESTAMP) = 2021
+where NEW_REOPENED_REPORTED_COUNT_1 = 1 
+LIMIT 10; --67172
+
+select * 
+from PD_PRESENTATION.PRODUCT_V2.ATLAS_CLAIM_FEATURE_MONTHLY
+--WHERE MONTH(REOPEN_TIMESTAMP)= 02 AND YEAR(REOPEN_TIMESTAMP) = 2021
+where NEW_REOPENED_REPORTED_COUNT = 1
+AND SNAP_DATE = '2021-02-28';
+
+select * from pd_presentation.product_v2.claim_feature_timeline
+where claim_number = '0803908060000001' and exposure_publicid_NK = 'cc:908470261' and claim_symbol_code = 'DPR'
+and MONTH(REOPEN_TIMESTAMP) = 10 AND YEAR(REOPEN_TIMESTAMP) = 2022 order by record_begin_timestamp --Shows new reopened reported count in October 2022
+;
+select * from
+pd_presentation.product_v2.atlas_claim_feature_monthly
+where claim_number = '0656485760000001' and exposure_publicid_NK = 'cc:890900614' and claim_symbol_code = 'APD'
+and snap_date = '2021-02-28';
+
+
+select *
+,CASE WHEN  /*REOPEN_TIMESTAMP between '2022-10-01'and '2022-10-31 23:59:59'THEN*/ record_begin_timestamp  <=  '2022-10-31 23:59:59' then MAX(NEW_REOPENED_REPORTED_COUNT) OVER (PARTITION BY  CLAIM_NUMBER,EXPOSURE_PUBLICID_NK, 
+    CLAIM_SYMBOL_CODE,YEAR(REOPEN_TIMESTAMP), MONTH(REOPEN_TIMESTAMP), REOPEN_TIMESTAMP) ELSE 0 END AS NEW_REOPENED_REPORTED_COUNT_1
+    ,RANK () OVER (PARTITION BY  CLAIM_NUMBER,EXPOSURE_PUBLICID_NK, --QUALIFY ROW_NUMBER()
+    CLAIM_SYMBOL_CODE order by NEW_REOPENED_REPORTED_COUNT desc) AS REOPEN_ORDER 
+    from  pd_presentation.product_v2.claim_feature_timeline
+   where record_begin_timestamp  <=  '2022-10-31 23:59:59'
+   and claim_number = '0656485760000001' and exposure_publicid_NK = 'cc:890900614' and claim_symbol_code = 'APD';
+
+
+select * from
+pd_presentation.product_v2.claim_feature_timeline
+where claim_number = '0803908060000001' and exposure_publicid_NK = 'cc:908470261' and claim_symbol_code = 'DPR' order by record_begin_timestamp;
