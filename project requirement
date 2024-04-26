@@ -1,16 +1,5 @@
 
-/*{{ config(
-    materialized='incremental',
-    post_hook = "{{ incr_update_atlas_feature_close_reopen_timestamp() }}"
-    ) }}
 
-set '2022-10-01'= '2022-10-31'
-set '2022-10-31 23:59:59'= '2022-10-31 23:59:59'*/
-use pd_userschemas;
-use SCHEMA _BASHAMI;
-
-
---CREATE OR REPLACE TABLE NEW_REPORTED_COUNT_TEST AS 
 with feature_cumulative_payments as (
 select distinct
 A.CLAIM_PUBLICID_NK,
