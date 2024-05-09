@@ -1,49 +1,29 @@
-{%- macro reopen_update (strt_date,monthstoload) -%}
-{% for i in range(0,monthstoload) %}
-{{ log ("starting update process", info=true) }}
+{%- macro reopen_update(strt_date, monthstoload) -%}
+{% for i in range(0, monthstoload) %}
+{{ log("starting update process for month " ~ i, info=true) }}
+{% set month_date = "to_date(dateadd(month, " ~ i ~ ", '" ~ strt_date ~ "'), 'YYYY-MM-DD')" %}
+{{ log('Formatted date for month ' ~ i ~ ': ' ~  month_date, info=true) }}
 {% set query %}
-         update   pd_presentation_dev.losses_product_v2_clone.atlas_claim_feature_monthly  B
-         set B.NEW_REOPENED_REPORTED_COUNT = NVL(A.NEW_REOPENED_REPORTED_COUNT,B.NEW_REOPENED_REPORTED_COUNT) 
-
-FROM 
- (select * from 
- (select  CLAIM_NUMBER,EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE, min(last_day(reopen_timestamp)) as min_reopen_snap_date,
-  REOPEN_TIMESTAMP, 1 as NEW_REOPENED_REPORTED_COUNT
- from pd_presentation_dev.losses_product_v2_clone.claim_feature_timeline
- where status_name = 'Reopened' and new_reopened_reported_count = 1
- group by CLAIM_NUMBER,EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE,REOPEN_TIMESTAMP)
-  where min_reopen_snap_date = to_date(dateadd(month, {{i}}, '{{strt_date}}'))
-  {{ log('Formatted date: ' ~  month_date, info=true) }}
- ) AS A
- WHERE B.SNAP_DATE    =    A.min_reopen_snap_date AND   
-       A.CLAIM_NUMBER = B.CLAIM_NUMBER AND
-       A.EXPOSURE_PUBLICID_NK = B.EXPOSURE_PUBLICID_NK AND 
-       A.CLAIM_SYMBOL_CODE = B.CLAIM_SYMBOL_CODE AND 
-       B.STATUS_NAME = 'Closed' AND 
-       B.REOPEN_TIMESTAMP > A.REOPEN_TIMESTAMP
+    UPDATE pd_presentation_dev.losses_product_v2_clone.atlas_claim_feature_monthly B
+    SET B.NEW_REOPENED_REPORTED_COUNT = NVL(A.NEW_REOPENED_REPORTED_COUNT, B.NEW_REOPENED_REPORTED_COUNT)
+    FROM (
+        SELECT * FROM (
+            SELECT CLAIM_NUMBER, EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE, 
+                   MIN(last_day(reopen_timestamp)) AS min_reopen_snap_date,
+                   REOPEN_TIMESTAMP, 1 AS NEW_REOPENED_REPORTED_COUNT
+            FROM pd_presentation_dev.losses_product_v2_clone.claim_feature_timeline
+            WHERE status_name = 'Reopened' AND new_reopened_reported_count = 1
+            GROUP BY CLAIM_NUMBER, EXPOSURE_PUBLICID_NK, CLAIM_SYMBOL_CODE, REOPEN_TIMESTAMP
+        ) 
+        WHERE min_reopen_snap_date = {{ month_date }}
+    ) AS A
+    WHERE B.SNAP_DATE = A.min_reopen_snap_date AND   
+          A.CLAIM_NUMBER = B.CLAIM_NUMBER AND
+          A.EXPOSURE_PUBLICID_NK = B.EXPOSURE_PUBLICID_NK AND 
+          A.CLAIM_SYMBOL_CODE = B.CLAIM_SYMBOL_CODE AND 
+          B.STATUS_NAME = 'Closed' AND 
+          B.REOPEN_TIMESTAMP > A.REOPEN_TIMESTAMP
 {% endset %}
-    {% do run_query(query) %}
+{{ run_query(query) }}
 {% endfor %}
 {%- endmacro -%}
-
-
-
-22:01:19  Formatted date: 
-22:01:20  starting update process
-22:01:20  Formatted date: 
-22:01:21  starting update process
-22:01:21  Formatted date: 
-22:01:22  starting update process
-22:01:22  Formatted date: 
-22:01:22  starting update process
-22:01:22  Formatted date: 
-22:01:23  starting update process
-22:01:23  Formatted date: 
-22:01:24  starting update process
-22:01:24  Formatted date: 
-22:01:25  starting update process
-22:01:25  Formatted date: 
-22:01:25  starting update process
-22:01:25  Formatted date: 
-22:01:26  Error sending message, disabling tracking
-
