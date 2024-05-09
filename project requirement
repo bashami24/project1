@@ -25,3 +25,25 @@ FROM
     {% do run_query(query) %}
 {% endfor %}
 {%- endmacro -%}
+
+
+
+22:01:19  Formatted date: 
+22:01:20  starting update process
+22:01:20  Formatted date: 
+22:01:21  starting update process
+22:01:21  Formatted date: 
+22:01:22  starting update process
+22:01:22  Formatted date: 
+22:01:22  starting update process
+22:01:22  Formatted date: 
+22:01:23  starting update process
+22:01:23  Formatted date: 
+22:01:24  starting update process
+22:01:24  Formatted date: 
+22:01:25  starting update process
+22:01:25  Formatted date: 
+22:01:25  starting update process
+22:01:25  Formatted date: 
+22:01:26  Error sending message, disabling tracking
+
