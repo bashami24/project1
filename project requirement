@@ -1,26 +1,30 @@
 EXECUTE IMMEDIATE '
-  var startDate = new Date("2022-10-01");
-  var endDate = new Date("2024-04-30");
-  var currentDate = new Date(startDate);
-  while (currentDate <= endDate) {
-    var monthStartDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    var monthEndDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-    var formattedMonthStartDate = monthStartDate.toISOString().slice(0, 10);
-    var formattedMonthEndDate = monthEndDate.toISOString().slice(0, 10);
+  SET startDate = TO_DATE(''2022-10-01'', ''YYYY-MM-DD'');
+  SET endDate = TO_DATE(''2024-04-30'', ''YYYY-MM-DD'');
+  SET currentDate = startDate;
+  WHILE (currentDate <= endDate) DO
+    SET monthEndDate = LAST_DAY(currentDate);
+    SET formattedMonthEndDate = TO_CHAR(monthEndDate, ''YYYY-MM-DD'');
     
-    var table1Query = "SELECT columns FROM my_db.my_schema.table1 WHERE date BETWEEN '''" + formattedMonthStartDate + "''' AND '''" + formattedMonthEndDate + "''' GROUP BY 1,2,3;";
-    var table2Query = "SELECT columns FROM my_db.my_schema.table2 WHERE date BETWEEN '''" + formattedMonthStartDate + "''' AND '''" + formattedMonthEndDate + "''' GROUP BY 1,2,3;";
-    var finalQuery = "WITH table1 AS (" + table1Query + "), table2 AS (" + table2Query + ") SELECT a.*, b.* FROM table1 a LEFT JOIN table2 b WHERE conditions;";
+    SET query = ''SELECT * FROM your_table WHERE date_column = '' || QUOTE_LITERAL(formattedMonthEndDate) || '';'';
     
-    try {
-      var resultSet = snowflake.execute({ sqlText: finalQuery });
-      // Process the resultSet for the current month
-      // For example, log the results or perform further operations
-    } catch (err) {
-      // Handle any errors that occur during execution
-      // For example, you can log the error
-    }
+    -- Execute the query and process the result set
+    TRY
+      SET rs = snowflake.execute({ sqlText: query });
+      -- Process the result set here, for example, log the results
+      WHILE rs.next() DO
+        -- Log each row of the result set
+        -- For example:
+        -- var row = rs.getRow();
+        -- LOG(row);
+      END WHILE;
+    CATCH (err)
+      -- Handle any errors that occur during execution
+      -- For example, log the error
+      -- LOG(err);
+    END TRY;
     
-    currentDate.setMonth(currentDate.getMonth() + 1); // Move to the next month
-  }
+    -- Move to the next month
+    currentDate = DATEADD(''MONTH'', 1, currentDate);
+  END WHILE;
 ';
