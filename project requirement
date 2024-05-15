@@ -1,12 +1,26 @@
-There are 2 unused configuration paths:
-- models.presentation.uwrequest
-- models.presentation.commercial.commercial_policy.fix
-
-22:16:28  starting update process for month 0
-22:16:28  Formatted date for month 0: to_date(dateadd(month, 0, '2018-02-28'), 'YYYY-MM-DD')
-22:16:29  Encountered an error while running operation: Database Error
-  000939 (22023): SQL compilation error: error line 12 at position 37
-  too many arguments for function [TO_DATE(DATE_ADDMONTHSTOTIMESTAMP(0, TO_TIMESTAMP_NTZ('2018-02-28')), 'YYYY-MM-DD')] expected 1, got 2
-22:16:29  Error sending message, disabling tracking
-##[error]Cmd.exe exited with code '1'.
-Finishing: DBT Compile
+EXECUTE IMMEDIATE '
+  var startDate = new Date("2022-10-01");
+  var endDate = new Date("2024-04-30");
+  var currentDate = new Date(startDate);
+  while (currentDate <= endDate) {
+    var monthStartDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    var monthEndDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+    var formattedMonthStartDate = monthStartDate.toISOString().slice(0, 10);
+    var formattedMonthEndDate = monthEndDate.toISOString().slice(0, 10);
+    
+    var table1Query = "SELECT columns FROM my_db.my_schema.table1 WHERE date BETWEEN '" + formattedMonthStartDate + "' AND '" + formattedMonthEndDate + "' GROUP BY 1,2,3;";
+    var table2Query = "SELECT columns FROM my_db.my_schema.table2 WHERE date BETWEEN '" + formattedMonthStartDate + "' AND '" + formattedMonthEndDate + "' GROUP BY 1,2,3;";
+    var finalQuery = "WITH table1 AS (" + table1Query + "), table2 AS (" + table2Query + ") SELECT a.*, b.* FROM table1 a LEFT JOIN table2 b WHERE conditions;";
+    
+    try {
+      var resultSet = snowflake.execute({ sqlText: finalQuery });
+      // Process the resultSet for the current month
+      // For example, log the results or perform further operations
+    } catch (err) {
+      // Handle any errors that occur during execution
+      // For example, you can log the error
+    }
+    
+    currentDate.setMonth(currentDate.getMonth() + 1); // Move to the next month
+  }
+';
