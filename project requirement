@@ -8,8 +8,8 @@ EXECUTE IMMEDIATE '
     var formattedMonthStartDate = monthStartDate.toISOString().slice(0, 10);
     var formattedMonthEndDate = monthEndDate.toISOString().slice(0, 10);
     
-    var table1Query = "SELECT columns FROM my_db.my_schema.table1 WHERE date BETWEEN '" + formattedMonthStartDate + "' AND '" + formattedMonthEndDate + "' GROUP BY 1,2,3;";
-    var table2Query = "SELECT columns FROM my_db.my_schema.table2 WHERE date BETWEEN '" + formattedMonthStartDate + "' AND '" + formattedMonthEndDate + "' GROUP BY 1,2,3;";
+    var table1Query = "SELECT columns FROM my_db.my_schema.table1 WHERE date BETWEEN '''" + formattedMonthStartDate + "''' AND '''" + formattedMonthEndDate + "''' GROUP BY 1,2,3;";
+    var table2Query = "SELECT columns FROM my_db.my_schema.table2 WHERE date BETWEEN '''" + formattedMonthStartDate + "''' AND '''" + formattedMonthEndDate + "''' GROUP BY 1,2,3;";
     var finalQuery = "WITH table1 AS (" + table1Query + "), table2 AS (" + table2Query + ") SELECT a.*, b.* FROM table1 a LEFT JOIN table2 b WHERE conditions;";
     
     try {
