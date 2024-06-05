@@ -3,3 +3,16 @@
   File "c:\users\a249614\dbt1\lib\site-packages\dbt_common\utils\connection.py", line 35, in connection_exception_retry
     raise ConnectionError("External connection exception occurred: " + str(exc))
 dbt_common.exceptions.connection.ConnectionError: External connection exception occurred: HTTPSConnectionPool(host='hub.getdbt.com', port=443): Max retries exceeded with url: /api/v1/index.json (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1125)')))
+name: 'presentation'
+version: '1.1.1'
+config-version: 2
+profile: 'presentation'
+
+require-dbt-version: [">=1.0.0", "<1.9.0"]
+
+model-paths: ["models"]
+analysis-paths: ["analysis"]
+test-paths: ["tests"]
+seed-paths: ["data"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
