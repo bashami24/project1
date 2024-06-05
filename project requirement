@@ -1,30 +1,5 @@
-EXECUTE IMMEDIATE '
-  SET startDate = TO_DATE(''2022-10-01'', ''YYYY-MM-DD'');
-  SET endDate = TO_DATE(''2024-04-30'', ''YYYY-MM-DD'');
-  SET currentDate = startDate;
-  WHILE (currentDate <= endDate) DO
-    SET monthEndDate = LAST_DAY(currentDate);
-    SET formattedMonthEndDate = TO_CHAR(monthEndDate, ''YYYY-MM-DD'');
-    
-    SET query = ''SELECT * FROM your_table WHERE date_column = '' || QUOTE_LITERAL(formattedMonthEndDate) || '';'';
-    
-    -- Execute the query and process the result set
-    TRY
-      SET rs = snowflake.execute({ sqlText: query });
-      -- Process the result set here, for example, log the results
-      WHILE rs.next() DO
-        -- Log each row of the result set
-        -- For example:
-        -- var row = rs.getRow();
-        -- LOG(row);
-      END WHILE;
-    CATCH (err)
-      -- Handle any errors that occur during execution
-      -- For example, log the error
-      -- LOG(err);
-    END TRY;
-    
-    -- Move to the next month
-    currentDate = DATEADD(''MONTH'', 1, currentDate);
-  END WHILE;
-';
+
+  [Previous line repeated 2 more times]
+  File "c:\users\a249614\dbt1\lib\site-packages\dbt_common\utils\connection.py", line 35, in connection_exception_retry
+    raise ConnectionError("External connection exception occurred: " + str(exc))
+dbt_common.exceptions.connection.ConnectionError: External connection exception occurred: HTTPSConnectionPool(host='hub.getdbt.com', port=443): Max retries exceeded with url: /api/v1/index.json (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1125)')))
