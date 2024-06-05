@@ -16,3 +16,13 @@ test-paths: ["tests"]
 seed-paths: ["data"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
+ource-paths: ["models"]
+...
+sources:
+  - name: my_source
+    tables:
+      - name: my_table
+    meta:
+      dbt:
+        ssl:
+          ssl_cert: /path/to/ca-bundle.crt
